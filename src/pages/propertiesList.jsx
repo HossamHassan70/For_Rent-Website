@@ -1,24 +1,30 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProperties } from '../MyStore/actions/fetchProperties';
-import { ListGroup } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import LoadingScreen from './loadingScreen'
+import './propertiesList.css';
 
 const PropertiesList = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.properties.error);
   const loading = useSelector((state) => state.properties.loading);
   const properties = useSelector((state) => state.properties.properties.products);
-//   console.log(properties)
+  // console.log(properties)
   useEffect(() => {
     dispatch(fetchProperties());
   }, [dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <LoadingScreen />
+      </>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className='error-page text-danger'>{error}</div>;
   }
 
   if (!properties) {
@@ -26,26 +32,42 @@ const PropertiesList = () => {
   }
 
   return (
-    <div>
-      <h2>Properties List</h2>
-      <ListGroup>
+    <Container fluid className='mt-3'>
+      <h1 className='mb-2'><span className='text-info'>Properties</span> List</h1>
+      <Row>
         {properties.map(product => (
-          <ListGroup.Item key={product.id}>
-            <div>
-              <img src={product.thumbnail} alt={product.title} style={{ width: '100px', marginRight: '10px' }} />
-              <div>
-                <h4>{product.title}</h4>
-                <p>Brand: {product.brand}</p>
-                <p>Description: {product.description}</p>
-                <p>Price: ${product.price}</p>
-                <p>Rating: {product.rating}</p>
-                <p>Stock: {product.stock}</p>
-              </div>
-            </div>
-          </ListGroup.Item>
+          <Col key={product.id} md={12} lg={6}>
+
+            <Card className='mb-3'>
+              <Card.Body>
+                <Row>
+
+                  <Col xs={6}>
+                    <div className="card-img-container position-relative">
+                      <img className='prop-image' src={product.thumbnail} alt={product.title} />
+                      <div className="favorites-icon position-absolute">
+                        <i className="far fa-heart text-light"></i>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col xs={6}>
+                    <Card.Title className='prop-title'>{product.title}</Card.Title>
+                    <hr className='my-2' />
+                    <Card.Text className='mb-3'>Brand: {product.brand}</Card.Text>
+                    <Card.Text className='mb-3'>Price: {product.price} EGP</Card.Text>
+                    <Card.Text className='mb-3'>Rating: {product.rating} <i className="fas fa-star text-warning"></i></Card.Text>
+                    <Button variant="outline-info" size="sm">More Details</Button>
+                  </Col>
+
+                </Row>
+              </Card.Body>
+            </Card>
+
+          </Col>
         ))}
-      </ListGroup>
-    </div>
+      </Row>
+    </Container>
   );
 };
 
