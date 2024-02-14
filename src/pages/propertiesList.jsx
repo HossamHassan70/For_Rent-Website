@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProperties } from '../MyStore/actions/fetchProperties';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import LoadingScreen from './loadingScreen'
 import './propertiesList.css';
+import Pagination from 'react-js-pagination';
 
 const PropertiesList = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,17 @@ const PropertiesList = () => {
   const loading = useSelector((state) => state.properties.loading);
   const properties = useSelector((state) => state.properties.properties.products);
   // console.log(properties)
+  
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [propertiesPerPage] = useState(10);
+  const indexOfLastProperty = currentPage * propertiesPerPage;
+  const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
+  const currentProperties = properties && properties.slice(indexOfFirstProperty, indexOfLastProperty);
+
   useEffect(() => {
     dispatch(fetchProperties());
   }, [dispatch]);
@@ -35,7 +47,7 @@ const PropertiesList = () => {
     <Container fluid className='mt-3'>
       <h1 className='mb-2'><span className='text-info'>Properties</span> List</h1>
       <Row>
-        {properties.map(product => (
+        {currentProperties.map(product => (
           <Col key={product.id} md={12} lg={6}>
 
             <Card className='mb-3'>
@@ -47,6 +59,9 @@ const PropertiesList = () => {
                       <img className='prop-image' src={product.thumbnail} alt={product.title} />
                       <div className="favorites-icon position-absolute">
                         <i className="far fa-heart text-light"></i>
+                      </div>
+                      <div className="menu-icon position-absolute">
+                        <i className="fas fa-ellipsis-v text-light"></i>
                       </div>
                     </div>
                   </Col>
@@ -67,6 +82,16 @@ const PropertiesList = () => {
           </Col>
         ))}
       </Row>
+      <div className='d-flex justify-content-center'>
+        <Pagination
+          activePage={currentPage}
+          itemsCountPerPage={propertiesPerPage}
+          totalItemsCount={properties.length}
+          onChange={handlePageChange}
+          itemClass='page-item'
+          linkClass='page-link'
+        />
+      </div>
     </Container>
   );
 };
