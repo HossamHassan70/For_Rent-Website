@@ -1,9 +1,16 @@
-import PropertiesList from "./pages/propertiesList";
+import PropertiesList from './pages/propertiesList';
+import Navbar from './Components/Navbar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <>
-      <PropertiesList />
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<PropertiesList />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
