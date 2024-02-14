@@ -37,11 +37,22 @@ body {
 
 .favorites-icon {
     top: 10px;
-    right: 10px;
-    font-size: 1.25rem;
+    right: 45px;
+    font-size: 1.20rem;
     position: absolute;
     background-color: #797977ad;
     border-radius: 50%;
     padding: 1px 6px;
+    cursor: pointer;
+}
+
+.menu-icon {
+    top: 10px;
+    right: 10px;
+    font-size: 1.20rem;
+    position: absolute;
+    background-color: #797977ad;
+    border-radius: 50%;
+    padding: 1px 12px;
     cursor: pointer;
 }
