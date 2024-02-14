@@ -1,9 +1,9 @@
-import PropertiesList from './pages/propertiesList';
+import PropertiesList from "./pages/propertiesList";
 
 function App() {
   return (
     <>
-    <PropertiesList />
+      <PropertiesList />
     </>
   );
 }
