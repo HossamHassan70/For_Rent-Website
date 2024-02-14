@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import LoginSchema from "../schemas/login";
 import AlertCom from "../Components/alert";
+import "../pages/errors.css";
 
 export default function LoginPre() {
   let locally = JSON.parse(localStorage.getItem("Account Storage") || "[]");
@@ -112,7 +113,7 @@ export default function LoginPre() {
             <Col xs={12} lg={6}>
               <div className="container d-flex flex-column  gap-3 pt-3">
                 <div className="d-flex flex-column">
-                  <h2 className="m-0 align-self-start"> Login to ShopName </h2>
+                  <h2 className="m-0 align-self-start"> Login to ForRent </h2>
                   <p className="m-0 align-self-start">
                     Enter Your Details Below
                   </p>
@@ -160,7 +161,7 @@ export default function LoginPre() {
                   </Form.Group>
 
                   <div className="container d-flex justify-content-center align-content-center gap-3">
-                    <BtnsCo btnType="submit" btnCo="danger" btnText="Login" />
+                    <BtnsCo btnType="submit" btnCo="primary" btnText="Login" />
                     <BtnsCo
                       btnCo="light"
                       btnText="Forget Your password"

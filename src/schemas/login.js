@@ -9,12 +9,12 @@ const LoginSchema = yup.object().shape({
     .string()
     .email("Please Enter a Valid Email")
     .required("Must Add Email")
-    .matches(loginPat, "Email Doesnt Meet Req"),
+    .matches(loginPat, "Email Doesnt Meet Requirments"),
   password: yup
     .string()
     .min(8)
     .max(20)
-    .matches(passwordRegex, "Password Req Error")
+    .matches(passwordRegex, "Password Requirments Error")
     .required("Password Must Match")
     .required("Must Fill this Field"),
 });
