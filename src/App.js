@@ -1,8 +1,8 @@
-import PropertiesList from "./pages/propertiesList";
 import Navbar from "./Components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import LoginPre from "./pages/login";
 import SignUp from "./pages/register";
+import LoginPre from "./pages/login";
+import PropertiesList from './pages/propertiesList';
 
 function App() {
   return (
@@ -10,7 +10,9 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<SignUp />} />
+          <Route path="/login" element={<LoginPre />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/popertieslist" element={<PropertiesList />} />
         </Routes>
       </BrowserRouter>
     </>
