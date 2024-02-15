@@ -170,7 +170,7 @@ export default function LoginPre() {
                   </div>
 
                   <p className="pt-3">
-                    Didn't Register Yet? <Link to="/signup">Signup</Link>
+                    Didn't Register Yet? <Link to="/register">Signup</Link>
                   </p>
                 </Form>
               </div>
