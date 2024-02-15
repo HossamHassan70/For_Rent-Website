@@ -187,8 +187,10 @@ export default function LoginPre() {
 
       {isLoggedin && (
         <>
-          <p>Welome {sessionLogin[0].email}</p>
-          <BtnsCo btnAct={logoutFun} btnCo="danger" btnText="logout" />
+          <div className="pt-3">
+            <p>Welome {sessionLogin[0].email}</p>
+            <BtnsCo btnAct={logoutFun} btnCo="danger" btnText="logout" />
+          </div>
         </>
       )}
     </>
