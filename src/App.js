@@ -4,6 +4,7 @@ import SignUp from "./pages/register";
 import LoginPre from "./pages/login";
 import Footer from "./Components/Footer";
 import HomePage from "./pages/homePage";
+import PropertyView from './pages/view property';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPre />} />
           <Route path="/register" element={<SignUp />} />
+          <Route path="/property/:id" element={<PropertyView />} />
         </Routes>
         {/* <Footer /> */}
       </BrowserRouter>
@@ -22,3 +24,5 @@ function App() {
 }
 
 export default App;
+
+
