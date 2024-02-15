@@ -17,7 +17,6 @@ export default function SignUp() {
 
   const [isSucess, setIsSucess] = useState(false);
   let history = useNavigate();
-  console.log(history);
   const { values, errors, handleChange, handleSubmit, touched, handleBlur } =
     useFormik({
       initialValues: {
@@ -175,7 +174,7 @@ export default function SignUp() {
                     btnStyle=""
                   />
                   <p>
-                    Already Have An Account? <Link to={"/signin"}>SignIn</Link>{" "}
+                    Already Have An Account? <Link to={"/login"}>SignIn</Link>{" "}
                   </p>
                 </div>
               </Form>
