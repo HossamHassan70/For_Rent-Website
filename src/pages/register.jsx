@@ -52,7 +52,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Container className="d-flex justify-content-center align-items-center vh-100 pt-4">
         <Row className="d-flex justify-content-center align-items-center vh-100">
           <Col xs={12} lg={6}>
             <Image
@@ -61,10 +61,10 @@ export default function SignUp() {
               className="img-fluid position-relative"
               style={{ maxWidth: "auto", height: "auto" }}
             />
-            <div className="cs-posti position-absolute">
+            {/* <div className="cs-posti position-absolute">
               <p className="text-white">Hello </p>
               <p>Slogan Here</p>
-            </div>
+            </div> */}
           </Col>
 
           <Col xs={12} lg={6}>
