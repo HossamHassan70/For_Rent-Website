@@ -17,7 +17,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/property/:id" element={<PropertyView />} />
         </Routes>
-        {/* <Footer /> */}
+        <Footer />
       </BrowserRouter>
     </>
   );
