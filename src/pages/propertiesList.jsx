@@ -72,7 +72,7 @@ const PropertiesList = () => {
                     <Card.Text className='mb-3'>Brand: {product.brand}</Card.Text>
                     <Card.Text className='mb-3'>Price: {product.price} EGP</Card.Text>
                     <Card.Text className='mb-3'>Rating: {product.rating} <i className="fas fa-star text-warning"></i></Card.Text>
-                    <Button variant="outline-info" size="sm">More Details</Button>
+                    <Button variant="outline-info" size="sm">More Details</Button> 
                   </Col>
 
                 </Row>
