@@ -92,7 +92,7 @@ export default function LoginPre() {
           <Row className="d-flex justify-content-center align-items-center vh-100">
             <Col xs={12} lg={6}>
               <Image
-                src="https://img.freepik.com/free-vector/login-concept-illustration_114360-739.jpg"
+                src="https://www.rjtravelagency.com/wp-content/uploads/2023/07/Cairo-Egypt.jpg"
                 rounded
                 className="col img-fluid"
               />
@@ -161,10 +161,16 @@ export default function LoginPre() {
                   </Form.Group>
 
                   <div className="container d-flex justify-content-center align-content-center gap-3">
-                    <BtnsCo btnType="submit" btnCo="primary" btnText="Login" />
                     <BtnsCo
-                      btnCo="light"
+                      btnType="submit"
+                      btnCo="primary"
+                      btnCs={{ backgroundColor: "#008f97" }}
+                      btnText="Login"
+                    />
+                    <BtnsCo
+                      btnCo="primary"
                       btnText="Forget Your password"
+                      btnCs={{ backgroundColor: "#008f97" }}
                       btnStyle=""
                     />
                   </div>

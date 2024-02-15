@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import ValidSchema from "../schemas/reg";
 import "../pages/errors.css";
 import AlertCom from "../Components/alert";
+import "../pages/register.css";
 
 export default function SignUp() {
   let accounts = JSON.parse(localStorage.getItem("Account Storage") || "[]");
@@ -55,11 +56,15 @@ export default function SignUp() {
         <Row className="d-flex justify-content-center align-items-center vh-100">
           <Col xs={12} lg={6}>
             <Image
-              src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-135.jpg"
+              src="https://images.pexels.com/photos/3873677/pexels-photo-3873677.jpeg?cs=srgb&dl=pexels-thais-cordeiro-3873677.jpg&fm=jpg"
               rounded
-              className="img-fluid"
+              className="img-fluid position-relative"
               style={{ maxWidth: "auto", height: "auto" }}
             />
+            <div className="cs-posti position-absolute">
+              <p className="text-white">Hello </p>
+              <p>Slogan Here</p>
+            </div>
           </Col>
 
           <Col xs={12} lg={6}>
@@ -166,7 +171,12 @@ export default function SignUp() {
                   )}
                 </Form.Group>
                 <div className="container d-flex justify-conent-center flex-column gap-3">
-                  <BtnsCo btnType="submit" btnCo="primary" btnText="SignUp" />
+                  <BtnsCo
+                    btnType="submit"
+                    btnCs={{ backgroundColor: "#008f97" }}
+                    btnCo="primary"
+                    btnText="SignUp"
+                  />
                   <BtnsCo
                     btnCo="secondary"
                     btnLogo="fab fa-google"
