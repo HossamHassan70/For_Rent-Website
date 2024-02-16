@@ -48,7 +48,7 @@ const PropertiesList = () => {
       <h3 className='mb-2'><b><span style={{ color: '#008f97' }}>NEWLY</span> ADDED</b></h3>
       <Row>
         {currentProperties.map(product => (
-          <Col key={product.id} md={12} lg={6}>
+          <Col key={product.id} xs={12} lg={6}>
 
             <Card className='mb-3'>
               <Card.Body>
