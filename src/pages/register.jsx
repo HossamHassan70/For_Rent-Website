@@ -52,7 +52,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Container className="d-flex justify-content-center align-items-center pt-4">
         <Row className="d-flex  align-items-center">
           <Col xs={12} lg={6}>
             <Image
