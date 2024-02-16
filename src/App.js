@@ -1,4 +1,4 @@
-import Navbar from "./Components/Navbar";
+import NavigationBar from "./Components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/register";
 import LoginPre from "./pages/login";
@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <NavigationBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPre />} />
@@ -24,5 +24,3 @@ function App() {
 }
 
 export default App;
-
-

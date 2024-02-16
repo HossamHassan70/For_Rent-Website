@@ -1,173 +1,77 @@
 import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import CategoryList from './CategoryList';
 
-const Categories = () => (
-  <div className="container mt-5">
-     <style>
-      {`
-        .category-link {
-          text-decoration: none;
-          color: #3b97ba;
-          transition: border-bottom 0.3s ease;
-        }
+const Categories = () => {
+  const popularSearches = [
+    'Apartments for rent in Egypt',
+    'Apartment for sale in Egypt',
+    'Houses for rent in Egypt',
+    'Houses for sale in Egypt',
+    'Land for sale in Egypt',
+    'Property for sale in Egypt',
+  ];
 
-        .category-link:hover {
-          border-bottom: 1px solid #3b97ba;
-        }
-      `}
-    </style>
-    <div className="row">
-      <div className="col-md-3 text-start">
-        <h6>POPULAR SEARCHES</h6>
-        <ul className="list-unstyled">
-          <li>
-            <a href="#" className="category-link">
-              Apartments for rent in Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartment for sale in Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Houses for rent in Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Houses for sale in Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Land for sale in Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Property for sale in Egypt
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className="col-md-3 text-start">
-        <h6>POPULAR AREAS</h6>
-        <ul className="list-unstyled">
-          <li>
-            <a href="#" className="category-link">
-              Apartments for rent in Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartments for sale in Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartments for sale in New Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartments for rent in New Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Villas for rent in Gouna
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartment for rent Zamalek
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Katameya Heights Villas
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className="col-md-3 text-start">
-        <h6>TRENDING AREAS</h6>
-        <ul className="list-unstyled">
-          <li>
-            <a href="#" className="category-link">
-              Villa for rent in New Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-            Villa for sale in New Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartments for rent in Maadi
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-            Apartments for sale in Maadi
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-             Apartments for rent in Alexandria 
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-            Apartments for sale in Alexandria 
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className="col-md-3 text-start">
-        <h6>TRENDING SEARCHES</h6>
-        <ul className="list-unstyled">
-          <li>
-            <a href="#" className="category-link">
-              Studios for rent in Cairo
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Al Rehab city Apartments for sale
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Madinaty Villa for sale
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Apartments for sale in Hurghada
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Rent in Marassi North Coast
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Rent in North Coast Egypt
-            </a>
-          </li>
-          <li>
-            <a href="#" className="category-link">
-              Commercial properites for sale
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-);
+  const popularAreas = [
+    'Apartments for rent in Cairo',
+    'Apartments for sale in Cairo',
+    'Apartments for sale in New Cairo',
+    'Apartments for rent in New Cairo',
+    'Villas for rent in Gouna',
+    'Apartment for rent Zamalek',
+    'Katameya Heights Villas',
+  ];
+
+  const trendingAreas = [
+    'Villa for rent in New Cairo',
+    'Villa for sale in New Cairo',
+    'Apartments for rent in Maadi',
+    'Apartments for sale in Maadi',
+    'Apartments for rent in Alexandria',
+    'Apartments for sale in Alexandria',
+  ];
+
+  const trendingSearches = [
+    'Studios for rent in Cairo',
+    'Al Rehab city Apartments for sale',
+    'Madinaty Villa for sale',
+    'Apartments for sale in Hurghada',
+    'Rent in Marassi North Coast',
+    'Rent in North Coast Egypt',
+    'Commercial properties for sale',
+  ];
+
+  return (
+    <Container className="mt-5">
+      <style>
+        {`
+          .category-link {
+            text-decoration: none;
+            color: #3b97ba;
+            transition: border-bottom 0.3s ease;
+          }
+
+          .category-link:hover {
+            border-bottom: 1px solid #3b97ba;
+          }
+        `}
+      </style>
+      <Row>
+        <Col md={6} lg={3} className="text-start">
+          <CategoryList title="POPULAR SEARCHES" items={popularSearches} />
+        </Col>
+        <Col md={6} lg={3} className="text-start">
+          <CategoryList title="POPULAR AREAS" items={popularAreas} />
+        </Col>
+        <Col md={6} lg={3} className="text-start">
+          <CategoryList title="TRENDING AREAS" items={trendingAreas} />
+        </Col>
+        <Col md={6} lg={3} className="text-start">
+          <CategoryList title="TRENDING SEARCHES" items={trendingSearches} />
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 
 export default Categories;
