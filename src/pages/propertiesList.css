@@ -68,3 +68,14 @@ body {
 .pagination .page-link {
     padding: 5px 15px;
 }
+
+.more-details {
+    background-color: #FFF !important;
+    color: #008f97 !important;
+}
+
+.more-details:hover {
+    background-color: #008f97 !important;
+    color: #FFF !important;
+    border: #FFF 1px solid !important;
+}
