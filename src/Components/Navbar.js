@@ -1,33 +1,26 @@
 import React from "react";
+import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const NavigationBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark fixed-top" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-      <div className="container">
-        <Link to="/" className="navbar-brand">
-          FORENT
-        </Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                <b>Login</b>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/register" className="nav-link">
-                <b>Signup</b>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <Navbar expand="lg" fixed="top" bg="dark" variant="dark">
+      <Navbar.Brand as={Link} to="/" style={{ marginLeft: "100px" }}>
+        FORENT
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="navbarNav" />
+      <Navbar.Collapse id="navbarNav" className="justify-content-end">
+        <Nav>
+          <Nav.Link as={Link} to="/login">
+            <b>Login</b>
+          </Nav.Link>
+          <Nav.Link as={Link} to="/register">
+            <b>Signup</b>
+          </Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default NavigationBar;
