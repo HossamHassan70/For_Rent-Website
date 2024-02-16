@@ -12,7 +12,7 @@ const PropertiesList = () => {
   const loading = useSelector((state) => state.properties.loading);
   const properties = useSelector((state) => state.properties.properties.products);
   // console.log(properties)
-  
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -45,7 +45,7 @@ const PropertiesList = () => {
 
   return (
     <Container fluid className='mt-3'>
-      <h1 className='mb-2'><span className='text-info'>Properties</span> List</h1>
+      <h3 className='mb-2'><b><span className='text-primary'>NEWLY</span> ADDED</b></h3>
       <Row>
         {currentProperties.map(product => (
           <Col key={product.id} md={12} lg={6}>
@@ -60,19 +60,21 @@ const PropertiesList = () => {
                       <div className="favorites-icon position-absolute">
                         <i className="far fa-heart text-light"></i>
                       </div>
-                      <div className="menu-icon position-absolute">
-                        <i className="fas fa-ellipsis-v text-light"></i>
-                      </div>
                     </div>
                   </Col>
 
                   <Col xs={6}>
-                    <Card.Title className='prop-title'>{product.title}</Card.Title>
-                    <hr className='my-2' />
-                    <Card.Text className='mb-3'>Brand: {product.brand}</Card.Text>
-                    <Card.Text className='mb-3'>Price: {product.price} EGP</Card.Text>
-                    <Card.Text className='mb-3'>Rating: {product.rating} <i className="fas fa-star text-warning"></i></Card.Text>
-                    <Button variant="outline-info" size="sm">More Details</Button> 
+                    <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
+                      <span>{product.title}</span>
+                      <span>55408</span>
+                    </Card.Title>
+                    <Card.Text className='price d-flex justify-content-between'>
+                      <span>Price: ${product.price}</span>
+                      <span>7.25% CAP</span>
+                    </Card.Text>
+                    {/* <Card.Text>Rating: {product.rating} <i className="fas fa-star text-warning"></i></Card.Text> */}
+                    <Card.Text className='mx-2 since'>4 days ago</Card.Text>
+                    <Button variant="outline-primary"><b>More Details</b></Button>
                   </Col>
 
                 </Row>
@@ -84,6 +86,7 @@ const PropertiesList = () => {
       </Row>
       <div className='d-flex justify-content-center'>
         <Pagination
+          className="pagination"
           activePage={currentPage}
           itemsCountPerPage={propertiesPerPage}
           totalItemsCount={properties.length}
