@@ -52,13 +52,13 @@ export default function SignUp() {
 
   return (
     <>
-      <Container className="d-flex justify-content-center align-items-center  pt-4">
-        <Row className="d-flex justify-content-center align-items-center ">
+      <Container className="d-flex justify-content-center align-items-center vh-100">
+        <Row className="d-flex  align-items-center">
           <Col xs={12} lg={6}>
             <Image
               src="https://images.pexels.com/photos/4915533/pexels-photo-4915533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               rounded
-              className="img-fluid position-relative object-fit-cover"
+              className="img-fluid position-relative "
               style={{ maxWidth: "auto", height: "auto" }}
             />
             {/* <div className="cs-posti position-absolute">
