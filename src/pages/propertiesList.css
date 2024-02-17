@@ -72,6 +72,7 @@ body {
 .more-details {
     background-color: #FFF !important;
     color: #008f97 !important;
+    border: #008f97 1px solid !important;
 }
 
 .more-details:hover {

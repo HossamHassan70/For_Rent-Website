@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProperties } from '../MyStore/actions/fetchProperties';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import LoadingScreen from './loadingScreen'
 import './propertiesList.css';
 import Pagination from 'react-js-pagination';
+import { Link } from 'react-router-dom';
 
 const PropertiesList = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,9 @@ const PropertiesList = () => {
                     </Card.Text>
                     {/* <Card.Text>Rating: {product.rating} <i className="fas fa-star text-warning"></i></Card.Text> */}
                     <Card.Text className='mx-2 since'>4 days ago</Card.Text>
-                    <Button className='more-details'><b>More Details</b></Button>
+                    <Link to={`/property/${product.id}`}>
+                      <button className='btn more-details'><b>More Details</b></button>
+                    </Link>
                   </Col>
 
                 </Row>
