@@ -31,6 +31,10 @@ const ValidSchema = yup.object().shape({
     .min(3, "Name must be at Least 3 Letters")
     .max(15, "Name must be Maximum 15 Letters")
     .required("Must Fill this Field"),
+  role: yup.string().required("Please select a member type"),
+  termsCheckbox: yup
+    .boolean()
+    .oneOf([true], "Terms and Conditions must be accepted"),
 });
 
 export default ValidSchema;
