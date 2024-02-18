@@ -68,12 +68,10 @@ export default function SignUp() {
           </div>
         </Col>
         <Col xs={12} lg={6}>
-          <div className="container pt-3">
-            <h1> Create Your Account </h1>
-            <Form onSubmit={handleSubmit}>
+          <div className="container pt-5">
+            <h1 className="text-center"> Create Your Account </h1>
+            <Form className="container p-3" onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label> Username</Form.Label>
-
                 <Form.Control
                   value={values.username}
                   onBlur={handleBlur}
@@ -91,7 +89,6 @@ export default function SignUp() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>FullName</Form.Label>
                 <Form.Control
                   value={values.fullname}
                   onBlur={handleBlur}
@@ -109,7 +106,6 @@ export default function SignUp() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Email address</Form.Label>
                 <Form.Control
                   value={values.email}
                   onBlur={handleBlur}
@@ -125,13 +121,13 @@ export default function SignUp() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label htmlFor="inputPassword5">Password</Form.Label>
                 <Form.Control
                   value={values.password}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   type="password"
                   id="password"
+                  placeholder="Password"
                   aria-describedby="passwordHelpBlock"
                   className={
                     errors.password && touched.password ? "input-error" : ""
@@ -140,21 +136,14 @@ export default function SignUp() {
                 {errors.password && touched.password && (
                   <p className="error"> {errors.password} </p>
                 )}
-                <Form.Text id="passwordHelpBlock" muted>
-                  Your password must be 8-20 characters long, contain letters
-                  and numbers, and must not contain spaces, special characters,
-                  or emoji.
-                </Form.Text>
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label htmlFor="repeatPassword">
-                  Confirm Password
-                </Form.Label>
                 <Form.Control
                   value={values.repeatPassword}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  placeholder="Confirm Password"
                   type="password"
                   id="repeatPassword"
                   aria-describedby="passwordHelpBlock"
@@ -189,16 +178,21 @@ export default function SignUp() {
                 <div className="pt-3">
                   <Form.Check
                     type="checkbox"
-                    label="I accept Terms and Conditions"
                     id="termsCheckbox"
+                    label="I accept Terms and Conditions"
                     checked={values.termsCheckbox}
                     onChange={handleChange}
-                    isInvalid={!!errors.termsCheckbox}
-                    style={{ color: "#008f97" }}
+                    isInvalid={!!errors.termsCheckbox && touched.termsCheckbox}
+                    className={
+                      errors.termsCheckbox && touched.termsCheckbox
+                        ? "input-error"
+                        : ""
+                    }
                   />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.termsCheckbox}
-                  </Form.Control.Feedback>
+
+                  {errors.termsCheckbox && touched.termsCheckbox && (
+                    <p className="error">{errors.termsCheckbox}</p>
+                  )}
                 </div>
               </Form.Group>
               <div className="container d-flex justify-conent-center flex-column gap-3">
