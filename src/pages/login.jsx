@@ -123,7 +123,6 @@ export default function LoginPre() {
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Email address</Form.Label>
                   <Form.Control
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -140,13 +139,13 @@ export default function LoginPre() {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label htmlFor="inputPassword5">Password</Form.Label>
                   <Form.Control
                     value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     type="password"
                     id="password"
+                    placeholder="Password"
                     aria-describedby="passwordHelpBlock"
                     className={
                       errors.password && touched.password ? "input-error" : ""

@@ -70,7 +70,7 @@ export default function SignUp() {
         <Col xs={12} lg={6}>
           <div className="container pt-5">
             <h1 className="text-center"> Create Your Account </h1>
-            <Form className="container p-3" onSubmit={handleSubmit}>
+            <Form className="container" onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <Form.Control
                   value={values.username}
