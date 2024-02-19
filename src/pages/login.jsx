@@ -17,6 +17,7 @@ export default function LoginPre() {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   let history = useNavigate();
+
   const { handleSubmit, values, errors, handleBlur, touched, handleChange } =
     useFormik({
       initialValues: {
@@ -25,10 +26,28 @@ export default function LoginPre() {
       },
       validationSchema: LoginSchema,
 
+      // onSubmit: (event) => {
+      //   if (findAccount(values.email, values.password)) {
+      //     console.log("Found");
+      //     sessionLogin.push(values);
+      //     sessionStorage.setItem("login", JSON.stringify(sessionLogin));
+      //     setIsError(false);
+      //     handleRefresh();
+      //     history("/");
+      //   } else {
+      //     console.log("ERROR");
+      //     setIsError(true);
+      //   }
+      // },
       onSubmit: (event) => {
-        if (findAccount(values.email, values.password)) {
+        const { email, password } = values;
+        const foundAccount = locally.find(
+          (item) => item.email === email && item.password === password
+        );
+
+        if (foundAccount) {
           console.log("Found");
-          sessionLogin.push(values);
+          sessionLogin.push(foundAccount);
           sessionStorage.setItem("login", JSON.stringify(sessionLogin));
           setIsError(false);
           handleRefresh();
