@@ -1,8 +1,47 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Nav, NavItem, NavLink, Row } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './userProfile.css';
 import { useParams } from 'react-router-dom';
+import Rev from '../Components/reviews';
+import PropertiesTiles from '../Components/propertiesTiles';
+
+const Emails = ({ userId }) => {
+  const [emails, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/posts`);
+        setPosts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [userId]);
+
+  return (
+    <div>
+      {loading ? (
+        <p>Loading posts...</p>
+      ) : (
+        <ul className="email-list">
+          {emails.map(email => (
+            <li key={email.id} className="email-item">
+              <h3 className="email-title">{email.title}</h3>
+              <p className="email-body">{email.body}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 const Posts = ({ userId }) => {
   const [posts, setPosts] = useState([]);
@@ -11,8 +50,8 @@ const Posts = ({ userId }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/posts`);
-        setPosts(response.data);
+        const response = await axios.get(`https://dummyjson.com/users/${userId}/posts`);
+        setPosts(response.data.posts);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -55,11 +94,33 @@ const UserProfile = () => {
       });
   }, [userId]);
 
+  // Handling middle column navbar
+  const [activeNavItem, setActiveNavItem] = useState('posts');
+
+  const handleNavItemClicked = (item) => {
+    setActiveNavItem(item);
+  };
+
+  const renderContent = () => {
+    switch (activeNavItem) {
+      case 'posts':
+        return <Posts userId={userId} />;
+      case 'emails':
+        return <Emails userId={userId} />;
+      case 'reviews':
+        return <Rev />;
+      default:
+        return null;
+    }
+  };
+
+
   return (
     <Container fluid className='mt-3'>
       <Row>
+        {/* left column */}
         <Col sm={12} md={4} xl={3}>
-          <h3 className='col-name'>User Detail</h3>
+          <h4 className='col-name'>User Detail</h4>
           <div className="user-details-container d-flex justify-content-center">
             {userData ? (
               <div>
@@ -97,18 +158,66 @@ const UserProfile = () => {
           </div>
         </Col>
 
+        {/* middle column */}
         <Col sm={12} md={8} xl={5}>
-          <h3 className='col-name'>Activities</h3>
+          <h4 className='col-name'>Activities</h4>
+
+          <Nav className='custom-nav user-details-container d-flex justify-content-around' tabs>
+
+            <NavItem>
+              <NavLink
+                className={activeNavItem === 'posts' ? 'active' : ''}
+                onClick={() => handleNavItemClicked('posts')}
+              >
+                Posts
+              </NavLink>
+            </NavItem>
+
+            <NavItem>
+              <NavLink
+                className={activeNavItem === 'emails' ? 'active' : ''}
+                onClick={() => handleNavItemClicked('emails')}
+              >
+                Emails
+              </NavLink>
+            </NavItem>
+
+            <NavItem>
+              <NavLink
+                className={activeNavItem === 'reviews' ? 'active' : ''}
+                onClick={() => handleNavItemClicked('reviews')}
+              >
+                My Reviews
+              </NavLink>
+            </NavItem>
+
+          </Nav>
+
           <div className="user-details-container d-flex justify-content-center">
-            <Posts userId={userId} />
+            {renderContent()}
+          </div>
+
+        </Col>
+
+        {/* right column */}
+        <Col sm={12} md={12} xl={4}>
+          <h4 className='col-name'>Properties</h4>
+          <div className="user-details-container text-center">
+            <table>
+              <thead>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Owner</th>
+                <th>Address</th>
+                <th>Actions</th>
+              </thead>
+              {Array.from({ length: 20 }).map((_, index) => (
+                <PropertiesTiles key={index} />
+              ))}
+            </table>
           </div>
         </Col>
 
-        <Col sm={12} md={12} xl={4}>
-          <h3 className='col-name'>Properties</h3>
-          <div className="user-details-container d-flex justify-content-center">
-          </div>
-        </Col>
       </Row>
     </Container>
   );
