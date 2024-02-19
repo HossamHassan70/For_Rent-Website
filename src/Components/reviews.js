@@ -221,7 +221,7 @@ export default function Rev(props) {
           <div className="d-flex gap-1">
             <div>
               <p className="m-0">{rev.Fullname}</p>
-              {editingReviewId === rev.id ? ( 
+              {editingReviewId === rev.id ? (
                 <Form.Control
                   value={editedReviewText}
                   onChange={(e) => setEditedReviewText(e.target.value)}
@@ -238,7 +238,6 @@ export default function Rev(props) {
             <p className="m-0">{rev.Rate}</p>
           </div>
 
-          {/* Render edit and delete buttons */}
           {sessionLogin[0].fullname === rev.Fullname && (
             <BtnsCo
               btnAct={() => deleteRev(rev.id)}
@@ -249,7 +248,7 @@ export default function Rev(props) {
           )}
           {sessionLogin[0].fullname === rev.Fullname && (
             <>
-              {editingReviewId === rev.id ? ( // Check if currently editing this review
+              {editingReviewId === rev.id ? (
                 <BtnsCo
                   btnAct={() => editRev(rev.id)}
                   btnType="submit"
@@ -258,8 +257,7 @@ export default function Rev(props) {
                 />
               ) : (
                 <BtnsCo
-                  btnAct={() => setEditingReviewId(rev.id)} // Set editing state for this review
-                  btnType="submit"
+                  btnAct={() => setEditingReviewId(rev.id)}
                   btnCo="primary"
                   btnText="edit"
                 />
