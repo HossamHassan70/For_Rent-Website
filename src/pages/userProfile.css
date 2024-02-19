@@ -1,0 +1,66 @@
+body {
+    background-color: #f3f3f9;
+}
+
+.user-details-container {
+    margin-top: 20px;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.col-name {
+    color: #495057;
+    font-weight: 600;
+}
+
+.img-thumbnail {
+    width: 50%;
+}
+
+.profile-icon {
+    color: #0ab39c;
+    background-color: #d4f2ee;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.title {
+    color: #495057;
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.sub-title {
+    color: #9599ad;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.information-content .flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.information-content .flex-container p {
+    margin: 10px 0;
+}
+
+.post-list {
+    list-style: none;
+    padding: 0;
+}
+
+.post-item {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.post-title {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.post-body {
+    color: #878a99;
+}
