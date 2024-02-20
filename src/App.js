@@ -4,8 +4,8 @@ import SignUp from "./pages/register";
 import LoginPre from "./pages/login";
 import Footer from "./Components/Footer";
 import HomePage from "./pages/homePage";
-import PropertyView from "./pages/ViewProperty";
-
+import PropertyView from './pages/ViewProperty';
+import UserProfile from "./pages/userProfile";
 
 function App() {
   return (
@@ -17,8 +17,7 @@ function App() {
           <Route path="/login" element={<LoginPre />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/property/:id" element={<PropertyView />} />
-        
-   
+          <Route path="/user/:userId" element={<UserProfile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

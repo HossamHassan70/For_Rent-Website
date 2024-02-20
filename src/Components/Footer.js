@@ -17,7 +17,7 @@ function Footer() {
                                 <p className="mb-3">
                                 Elevate your rental experience with FORENT. Find, lease, and enjoy your new home hassle-free.
                                 </p>
-                                <div className="copyright" style={{ marginTop: "90px" }}>
+                                <div className="copyright">
                                     <div>
                                         &copy; 2024 -{" "}
                                         <span className="text-black">
