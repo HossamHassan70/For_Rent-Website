@@ -22,6 +22,12 @@ body {
     background-color: #d4f2ee;
     padding: 8px;
     border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.profile-icon:hover {
+    color: #097e6e;
 }
 
 .title {
@@ -46,21 +52,76 @@ body {
     margin: 10px 0;
 }
 
-.post-list {
+.post-list,
+.email-list {
     list-style: none;
     padding: 0;
 }
 
-.post-item {
+.post-item,
+.email-item {
     padding: 20px;
     margin-bottom: 20px;
 }
 
-.post-title {
+.post-title,
+.email-title {
     font-size: 1.3rem;
     color: #333;
 }
 
 .post-body {
     color: #878a99;
+}
+
+.custom-nav {
+    background-color: #ffffff;
+    padding: 0 10px;
+}
+
+.custom-nav .nav-link {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.custom-nav .nav-link.active {
+    color: #0ab39c;
+}
+
+
+table {
+    width: 80%;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th {
+    color: #333;
+    padding: 5px;
+}
+
+tbody td {
+    padding: 10px;
+    color: #525252;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+    font-weight: 600;
+}
+
+tbody td i {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #646464;
+    font-size: 0.8rem;
+    transition: 0.3s ease;
+}
+
+tbody td i:hover {
+    color: #0ab39c;
 }
