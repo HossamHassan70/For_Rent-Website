@@ -1,6 +1,6 @@
 import React from "react";
 
-import backgroundImage from "../images/image3.jpeg";
+import backgroundImage from "../images/image.png";
 
 const HeroSection = () => {
   return (
