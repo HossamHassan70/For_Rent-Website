@@ -54,4 +54,3 @@ function PropertyView() {
 }
 
 export default PropertyView;
-
