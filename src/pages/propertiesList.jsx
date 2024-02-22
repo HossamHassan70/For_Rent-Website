@@ -12,7 +12,7 @@ const PropertiesList = () => {
   const error = useSelector((state) => state.properties.error);
   const loading = useSelector((state) => state.properties.loading);
   const properties = useSelector((state) => state.properties.properties.products);
-  // console.log(properties)
+   //console.log(properties)
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
