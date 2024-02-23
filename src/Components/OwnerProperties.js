@@ -6,11 +6,12 @@ const OwnerProperties = () => {
     const [properties, setProperties] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const propertiesPerPage = 8;
+    const totalPages = Math.ceil(properties.length / propertiesPerPage);
     useEffect(() => {
         axios.get('https://dummyjson.com/products?limit=100')
             .then(response => {
                 const data = response.data;
-                setProperties(data.products); 
+                setProperties(data.products);
             })
             .catch(error => console.error(error));
     }, []);
@@ -19,6 +20,50 @@ const OwnerProperties = () => {
     const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
     const currentProperties = properties.slice(indexOfFirstProperty, indexOfLastProperty);
     const paginate = pageNumber => setCurrentPage(pageNumber);
+    const getPaginationItems = () => {
+        const pageNumbers = [];
+        const maxPagesToShow = 3;
+
+        const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+        let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+        let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+        if (totalPages <= maxPagesToShow) {
+            startPage = 1;
+            endPage = totalPages;
+        } else if (currentPage <= halfMaxPagesToShow) {
+            endPage = maxPagesToShow;
+        } else if (currentPage >= totalPages - halfMaxPagesToShow) {
+            startPage = totalPages - maxPagesToShow + 1;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+        }
+
+        return pageNumbers;
+    };
+    const renderPaginationItems = () => {
+        return getPaginationItems().map((pageNumber, index) => (
+            <Pagination.Item key={index + 1} active={pageNumber === currentPage} onClick={() => paginate(pageNumber)}>
+                {pageNumber}
+            </Pagination.Item>
+        ));
+    };
+
+    const handlePrevClick = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextClick = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+
     return (
         <div>
             <Container>
@@ -49,13 +94,11 @@ const OwnerProperties = () => {
                         ))}
                     </tbody>
                 </Table>
-                <div className="d-flex justify-content-end">
+                <div className='d-flex justify-content-end'>
                     <Pagination>
-                        {Array.from({ length: Math.ceil(properties.length / propertiesPerPage) }).map((_, index) => (
-                            <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </Pagination.Item>
-                        ))}
+                        <Pagination.Prev onClick={handlePrevClick} />
+                        {renderPaginationItems()}
+                        <Pagination.Next onClick={handleNextClick} />
                     </Pagination>
                 </div>
             </Container>
