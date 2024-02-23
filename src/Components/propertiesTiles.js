@@ -1,4 +1,3 @@
-
 const getRandomProperty = () => {
     const properties = [
         'Luxury Apartment in Downtown',

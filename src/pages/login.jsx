@@ -26,19 +26,6 @@ export default function LoginPre() {
       },
       validationSchema: LoginSchema,
 
-      // onSubmit: (event) => {
-      //   if (findAccount(values.email, values.password)) {
-      //     console.log("Found");
-      //     sessionLogin.push(values);
-      //     sessionStorage.setItem("login", JSON.stringify(sessionLogin));
-      //     setIsError(false);
-      //     handleRefresh();
-      //     history("/");
-      //   } else {
-      //     console.log("ERROR");
-      //     setIsError(true);
-      //   }
-      // },
       onSubmit: (event) => {
         const { email, password } = values;
         const foundAccount = locally.find(

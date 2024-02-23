@@ -4,7 +4,8 @@ import axios from 'axios';
 import './userProfile.css';
 import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
-import PropertiesTiles from '../Components/propertiesTiles';
+import OwnerProfile from './OwnerProfile';
+import OwnerProperties from '../Components/OwnerProperties';
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -109,6 +110,8 @@ const UserProfile = () => {
         return <Emails userId={userId} />;
       case 'reviews':
         return <Rev />;
+      case 'requests':
+        return <OwnerProfile />;
       default:
         return null;
     }
@@ -191,6 +194,15 @@ const UserProfile = () => {
               </NavLink>
             </NavItem>
 
+            <NavItem>
+              <NavLink
+                className={activeNavItem === 'requests' ? 'active' : ''}
+                onClick={() => handleNavItemClicked('requests')}
+              >
+                My Requests
+              </NavLink>
+            </NavItem>
+
           </Nav>
 
           <div className="user-details-container d-flex justify-content-center">
@@ -199,23 +211,11 @@ const UserProfile = () => {
 
         </Col>
 
+
         {/* right column */}
         <Col sm={12} md={12} xl={4}>
           <h4 className='col-name'>Properties</h4>
-          <div className="user-details-container text-center">
-            <table>
-              <thead>
-                <th>Property</th>
-                <th>Type</th>
-                <th>Owner</th>
-                <th>Address</th>
-                <th>Actions</th>
-              </thead>
-              {Array.from({ length: 20 }).map((_, index) => (
-                <PropertiesTiles key={index} />
-              ))}
-            </table>
-          </div>
+          <OwnerProperties />
         </Col>
 
       </Row>

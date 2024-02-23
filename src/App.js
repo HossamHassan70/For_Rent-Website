@@ -4,7 +4,7 @@ import SignUp from "./pages/register";
 import LoginPre from "./pages/login";
 import Footer from "./Components/Footer";
 import HomePage from "./pages/homePage";
-import PropertyView from './pages/view property';
+import PropertyView from './pages/ViewProperty';
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties"
 
