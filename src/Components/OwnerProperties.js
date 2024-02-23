@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Table, Pagination } from 'react-bootstrap';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const OwnerProperties = () => {
     const [properties, setProperties] = useState([]);
@@ -39,7 +38,7 @@ const OwnerProperties = () => {
     };
 
     useEffect(() => {
-        axios.get('https://dummyjson.com/products')
+        axios.get('https://dummyjson.com/products?limit=100')
             .then(response => {
                 const data = response.data;
                 const groupedProperties = groupPropertiesByCategory(data.products);
@@ -50,7 +49,7 @@ const OwnerProperties = () => {
                 setSelectedCategory(randomCategory);
             })
             .catch(error => console.error(error));
-    }, []);
+    });
 
     const indexOfLastProperty = currentPage * propertiesPerPage;
     const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -62,8 +61,8 @@ const OwnerProperties = () => {
 
     return (
         <div>
-            <Container className="d-flex flex-column align-items-center mt-5" style={{ height: '100vh' }}>
-                <Table striped bordered hover style={{ width: '80%' }}>
+            <Container>
+                <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>Property</th>
@@ -83,8 +82,8 @@ const OwnerProperties = () => {
                                 <td>{property.category}</td>
                                 <td>{property.description}</td>
                                 <td>
-                                    <i className="bi bi-pencil" style={{ marginRight: '8px', cursor: 'pointer' }}></i>
-                                    <i className="bi bi-trash" style={{ cursor: 'pointer' }}></i>
+                                    <i className="mx-2 fas fa-pen"></i>
+                                    <i className="fas fa-trash"></i>
                                 </td>
                             </tr>
                         ))}
