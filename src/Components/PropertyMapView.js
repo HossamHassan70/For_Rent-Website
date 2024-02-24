@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { useLocation } from 'react-router-dom';

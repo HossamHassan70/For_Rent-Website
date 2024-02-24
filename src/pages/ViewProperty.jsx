@@ -1,22 +1,23 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button, Tab, Tabs, Table, Image } from 'react-bootstrap';
-import PropertyMapView from '../Components/ PropertyMapView';
-import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Tab, Tabs, Table, Image } from 'react-bootstrap';
+// import PropertyMapView from '../Components/ PropertyMapView';
+// import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import './ViewProperty.css';
+import Rev from './../Components/reviews';
 
 
 const PropertyView = () => {
-  const propertyLocation = [51.5074, -0.1278]; // Replace with your actual property location
-  const navigate = useNavigate(); // Add 'useNavigate' hook to enable navigation
+  // const propertyLocation = [51.5074, -0.1278]; // Replace with your actual property location
+  // const navigate = useNavigate(); // Add 'useNavigate' hook to enable navigation
   const propertyId = useParams();
   const [propertyInfo, setpropertyInfo] = useState({})
 
-  const handleClick = () => {
-    navigate('/PropertyMapView', { state: { propertyLocation } });
-  };
+  // const handleClick = () => {
+  //   navigate('/PropertyMapView', { state: { propertyLocation } });
+  // };
 
   useEffect(() => {
     axios(`https://dummyjson.com/products/${propertyId.id}`)
@@ -178,7 +179,7 @@ const PropertyView = () => {
           </Card>
 
         </Col>
-        <Col xs={12} md={5}>
+        {/* <Col xs={12} md={5}>
         </Col>
         <Col xs={12} md={5}>
           <Card>
@@ -188,8 +189,9 @@ const PropertyView = () => {
             </Card.Body>
             < PropertyMapView />
           </Card>
-        </Col>
+        </Col> */}
       </Row>
+      <Rev />
 
     </Container>
   );

@@ -117,8 +117,6 @@ const UserProfile = () => {
         return <Rev />;
       case 'requests':
         return <OwnerProfile />;
-      case 'requests':
-        return <OwnerProfile />;
       default:
         return null;
     }
