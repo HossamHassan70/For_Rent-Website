@@ -58,6 +58,9 @@ const PropertyView = () => {
   };
   }; 
   
+    navigate("/PropertyMapView", { state: { propertyLocation } });
+  };
+
   useEffect(() => {
     axios(`https://dummyjson.com/products/${propertyId.id}`)
       .then((res) => {
@@ -98,7 +101,7 @@ const PropertyView = () => {
     <Col xs={12} md={5}>
     {propertyInfo && (
       <div>
-       <Card id="IMAGE" className="d-flex flex-column align-items-center">
+      <Card id="IMAGE" className="d-flex flex-column align-items-center">
   <div className="prop-image-container">
     <Image className="prop-image" src={propertyInfo.thumbnail} alt={propertyInfo.title} thumbnail />
   </div>
@@ -213,7 +216,6 @@ const PropertyView = () => {
             <Card.Body>
               <Tabs defaultActiveKey="home" transition={false} id="noanim-tab-example" className="mb-3">
                 <Tab eventKey="property overview" title="Property Overview">
-                  <Table>
                   <Table>
                     <thead>
                       <tr>
