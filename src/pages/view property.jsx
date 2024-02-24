@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./view property.css";
-import Footer from "../Components/Footer";
 import { useParams } from "react-router-dom";
 import Rev from "../Components/reviews";
 
@@ -55,3 +53,4 @@ function PropertyView() {
 }
 
 export default PropertyView;
+
