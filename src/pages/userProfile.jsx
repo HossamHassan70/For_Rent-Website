@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
 import OwnerProfile from './OwnerProfile';
 import OwnerProperties from '../Components/OwnerProperties';
+import LoadingScreen from './loadingScreen';
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -29,7 +30,9 @@ const Emails = ({ userId }) => {
   return (
     <div>
       {loading ? (
-        <p>Loading posts...</p>
+        <>
+          <LoadingScreen />
+        </>
       ) : (
         <ul className="email-list">
           {emails.map(email => (
@@ -66,7 +69,9 @@ const Posts = ({ userId }) => {
   return (
     <div>
       {loading ? (
-        <p>Loading posts...</p>
+        <>
+          <LoadingScreen />
+        </>
       ) : (
         <ul className="post-list">
           {posts.map(post => (
@@ -205,7 +210,7 @@ const UserProfile = () => {
 
           </Nav>
 
-          <div className="user-details-container d-flex justify-content-center">
+          <div>
             {renderContent()}
           </div>
 
