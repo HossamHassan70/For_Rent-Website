@@ -77,6 +77,8 @@ export default function Rev(props) {
         Reviews: revs,
         Fullname: sessionLogin[0].fullname,
       });
+      setRevs("");
+      SetStars("");
 
       loadData();
       console.log("Post successful");
