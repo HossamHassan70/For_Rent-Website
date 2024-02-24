@@ -8,7 +8,7 @@ const OwnerProperties = () => {
     const propertiesPerPage = 8;
     const totalPages = Math.ceil(properties.length / propertiesPerPage);
     useEffect(() => {
-        axios.get('https://dummyjson.com/products?limit=100')
+        axios.get('https://dummyjson.com/products')
             .then(response => {
                 const data = response.data;
                 setProperties(data.products);
