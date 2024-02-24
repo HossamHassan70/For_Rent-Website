@@ -89,20 +89,6 @@ body {
     color: #0ab39c;
 }
 
-
-table {
-    width: 80%;
-}
-
-thead {
-    background-color: #f2f2f2;
-}
-
-th {
-    color: #333;
-    padding: 5px;
-}
-
 tbody td {
     padding: 10px;
     color: #525252;
@@ -110,12 +96,11 @@ tbody td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 90px;
+    max-width: 80px;
     font-weight: 600;
 }
 
 tbody td i {
-    margin: 0 5px;
     cursor: pointer;
     color: #646464;
     font-size: 0.8rem;

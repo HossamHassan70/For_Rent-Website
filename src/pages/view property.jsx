@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./view property.css";
+// import "./view property.css";
 import { useParams } from "react-router-dom";
 import Rev from "../Components/reviews";
 
