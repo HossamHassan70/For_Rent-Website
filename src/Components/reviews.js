@@ -152,10 +152,9 @@ export default function Rev(props) {
         <>
           <div className="border-bottom pb-3 pt-3" key={rev.id}>
             <p className="m-0">
-              Client Name:{" "}
               <span
                 className="p-1 rounded"
-                style={{ backgroundColor: "#d4f2ee" }}
+                style={{ backgroundColor: "#b4eee6" }}
               >
                 {rev.Fullname}
               </span>
