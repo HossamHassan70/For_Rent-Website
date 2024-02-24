@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../pages/review.css";
+import "../pages/css/review.css";
 import ReactStarsS from "./rate";
 
 export default function Rev(props) {

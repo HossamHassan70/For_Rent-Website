@@ -1,7 +1,7 @@
 import { Col, Container, Nav, NavItem, NavLink, Row } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './userProfile.css';
+import './css/userProfile.css';
 import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
 import OwnerProfile from './OwnerProfile';
@@ -117,6 +117,8 @@ const UserProfile = () => {
         return <Rev />;
       case 'requests':
         return <OwnerProfile />;
+      case 'requests':
+        return <OwnerProfile />;
       default:
         return null;
     }
@@ -217,9 +219,11 @@ const UserProfile = () => {
         </Col>
 
 
+
         {/* right column */}
         <Col sm={12} md={12} xl={4}>
           <h4 className='col-name'>Properties</h4>
+          <OwnerProperties />
           <OwnerProperties />
         </Col>
 
