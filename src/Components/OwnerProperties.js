@@ -67,7 +67,7 @@ const OwnerProperties = () => {
     return (
         <div>
             <Container>
-                <Table striped bordered hover>
+                <Table striped bordered hover className='text-center mt-3'>
                     <thead>
                         <tr>
                             <th>Property</th>
@@ -87,14 +87,14 @@ const OwnerProperties = () => {
                                 <td>{property.category}</td>
                                 <td>{property.description}</td>
                                 <td>
-                                    <i className="mx-2 fas fa-pen"></i>
-                                    <i className="fas fa-trash"></i>
+                                    <i className="mx-3 fas fa-pen"></i>
+                                    <i className="mx-3 fas fa-trash"></i>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-                <div className='d-flex justify-content-end'>
+                <div className='d-flex justify-content-center'>
                     <Pagination>
                         <Pagination.Prev onClick={handlePrevClick} />
                         {renderPaginationItems()}
