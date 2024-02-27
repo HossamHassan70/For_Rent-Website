@@ -8,8 +8,9 @@ const OwnerRequests = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [showRejectModal, setShowRejectModal] = useState(false); // State for showing the reject modal
-  const [selectedRequestId, setSelectedRequestId] = useState(null); // State to store the selected request ID
+  // modal states
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("")
 
   useEffect(() => {
@@ -32,10 +33,12 @@ const OwnerRequests = () => {
     fetchPropertyRequests();
   }, [page]);
 
+  // for pagination
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
+  // Accept Button
   const handleAccept = async (id) => {
     try {
       const requestToUpdate = propertyRequests.find(request => request.id === id);
@@ -45,6 +48,8 @@ const OwnerRequests = () => {
         is_rejected: false
       };
       await axios.put(`https://retoolapi.dev/KqGq4M/request/${id}`, updatedRequest);
+
+      // to update the page to show changes
       setPropertyRequests(prevRequests => {
         return prevRequests.map(request => {
           if (request.id === id) {
@@ -58,17 +63,20 @@ const OwnerRequests = () => {
     }
   };
 
+  // reject button to open the modal (open modal)
   const handleReject = (id) => {
     setSelectedRequestId(id);
     setShowRejectModal(true);
   };
 
+  // reject button in modal (close modal)
   const handleCloseRejectModal = () => {
     setShowRejectModal(false);
     setSelectedRequestId(null);
     setRejectionReason("");
   };
 
+  // handle rejection in the modal
   const handleSubmitRejectModal = async () => {
     try {
       const requestToUpdate = propertyRequests.find(request => request.id === selectedRequestId);
@@ -76,9 +84,12 @@ const OwnerRequests = () => {
         ...requestToUpdate,
         is_accepted: false,
         is_rejected: true,
+        // to add rejection reason to api
         rejection_reason: rejectionReason
       };
       await axios.put(`https://retoolapi.dev/KqGq4M/request/${selectedRequestId}`, updatedRequest);
+
+      // to update the page to show changes
       setPropertyRequests(prevRequests => {
         return prevRequests.map(request => {
           if (request.id === selectedRequestId) {
@@ -93,6 +104,7 @@ const OwnerRequests = () => {
     }
   };
 
+  // reset button change all requests status to pending
   const handleResetStatus = async () => {
     try {
       const updatedRequests = [];
@@ -105,6 +117,8 @@ const OwnerRequests = () => {
         await axios.put(`https://retoolapi.dev/KqGq4M/request/${request.id}`, updatedRequest);
         updatedRequests.push(updatedRequest);
       }
+
+      // to update the page to show changes
       setPropertyRequests(updatedRequests);
     } catch (error) {
       console.error('Error resetting status:', error);
@@ -132,12 +146,12 @@ const OwnerRequests = () => {
             {request.is_accepted ? (
               <Badge bg="success">Accepted</Badge>
             ) : request.is_rejected ? (
-              <div>
+              <>
                 <Badge bg="danger">Rejected</Badge>
                 {request.rejection_reason && (
                   <span> - {request.rejection_reason}</span>
                 )}
-              </div>
+              </>
             ) : (
               <Badge bg="secondary">Pending</Badge>
             )}
@@ -161,6 +175,7 @@ const OwnerRequests = () => {
           Next
         </Button>
       </div>
+      <Button variant="danger" onClick={handleResetStatus}>Reset All Status</Button>
 
       {/* reject modal */}
       <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
@@ -187,7 +202,6 @@ const OwnerRequests = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Button variant="danger" onClick={handleResetStatus}>Reset All Status</Button>
     </>
   );
 };
