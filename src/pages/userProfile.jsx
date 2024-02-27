@@ -5,8 +5,8 @@ import './css/userProfile.css';
 import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
 import OwnerProfile from './OwnerProfile';
-import OwnerProperties from '../Components/OwnerProperties';
 import LoadingScreen from './loadingScreen';
+import OwnerRequests from '../Components/ownerRequests';
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -118,7 +118,7 @@ const UserProfile = () => {
       case 'requests':
         return <OwnerProfile />;
       case 'properties':
-        return <OwnerProperties />;
+        return <OwnerRequests />;
       default:
         return null;
     }

@@ -3,8 +3,7 @@ import axios from 'axios';
 import { Form, Button, Card } from 'react-bootstrap';
 
 
-const OwnerProfile = () => {
-  const [postId, setPostId] = useState(1); // Default postId is 1
+const OwnerRequests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,11 +12,11 @@ const OwnerProfile = () => {
   useEffect(() => {
     const fetchPropertyRequests = async () => {
       try {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/comments`, {
+        const response = await axios.get(`https://retoolapi.dev/4yQUkm/request`, {
           params: {
             postId: postId,
             _page: page,
-            _limit: 10 // Number of comments per page
+            _limit: 10
           }
         });
         setPropertyRequests(response.data);
@@ -57,9 +56,8 @@ const OwnerProfile = () => {
       {propertyRequests && propertyRequests.map(request => (
         <Card key={request.id}>
           <Card.Body>
-            <Card.Title>{request.name}</Card.Title>
+            <Card.Title>{request.timestamp}</Card.Title>
             <Card.Text>{request.body}</Card.Text>
-            {/* Display other relevant request details */}
           </Card.Body>
         </Card>
       ))}
@@ -75,4 +73,4 @@ const OwnerProfile = () => {
   );
 };
 
-export default OwnerProfile;
+export default OwnerRequests;
