@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Form, Button, Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 
 
 const OwnerRequests = () => {
@@ -14,7 +14,6 @@ const OwnerRequests = () => {
       try {
         const response = await axios.get(`https://retoolapi.dev/4yQUkm/request`, {
           params: {
-            postId: postId,
             _page: page,
             _limit: 10
           }
@@ -28,11 +27,7 @@ const OwnerRequests = () => {
     };
 
     fetchPropertyRequests();
-  }, [postId, page]);
-
-  const handlePostIdChange = (event) => {
-    setPostId(event.target.value);
-  };
+  }, [page]);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -49,10 +44,6 @@ const OwnerRequests = () => {
   return (
     <div>
       <h2>Property Requests</h2>
-      <Form.Group>
-        <Form.Label>Post ID:</Form.Label>
-        <Form.Control type="number" value={postId} onChange={handlePostIdChange} />
-      </Form.Group>
       {propertyRequests && propertyRequests.map(request => (
         <Card key={request.id}>
           <Card.Body>

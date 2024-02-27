@@ -4,7 +4,7 @@ import axios from 'axios';
 import './css/userProfile.css';
 import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
-import OwnerProfile from './OwnerProfile';
+import OwnerProperties from '../Components/OwnerProperties';
 import LoadingScreen from './loadingScreen';
 import OwnerRequests from '../Components/ownerRequests';
 
@@ -116,9 +116,9 @@ const UserProfile = () => {
       case 'reviews':
         return <Rev />;
       case 'requests':
-        return <OwnerProfile />;
-      case 'properties':
         return <OwnerRequests />;
+      case 'properties':
+        return <OwnerProperties />;
       default:
         return null;
     }
