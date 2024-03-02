@@ -12,6 +12,8 @@ const OwnerRequests = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("")
+  // Acceptance alert
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchPropertyRequests = async () => {
@@ -47,9 +49,10 @@ const OwnerRequests = () => {
         is_accepted: true,
         is_rejected: false
       };
+
       await axios.put(`https://retoolapi.dev/KqGq4M/request/${id}`, updatedRequest);
 
-      // to update the page to show changes
+      // Update the state to reflect the changes
       setPropertyRequests(prevRequests => {
         return prevRequests.map(request => {
           if (request.id === id) {
@@ -58,6 +61,35 @@ const OwnerRequests = () => {
           return request;
         });
       });
+
+      // Send email
+      // axios.post(
+      //   'https://api.mailgun.net/v3/sandbox5eabe84416c54a1f9f6d31af332beeda.mailgun.org/messages',
+      //   {
+      //     from: 'Mailgun Sandbox <postmaster@sandbox5eabe84416c54a1f9f6d31af332beeda.mailgun.org>',
+      //     to: 'Kerollos Samy <kerollossamy9908@gmail.com>',
+      //     subject: 'Request Accepted',
+      //     text: `Your request with ID ${id} has been accepted.`,
+      //   },
+      //   {
+      //     auth: {
+      //       username: 'api',
+      //       password: '80c74246fdf01bf7883b979e7f83873c-b7b36bc2-806c1120',
+      //     },
+      //   }
+      // ).then(response => {
+      //   console.log('Email sent successfully:', response.data);
+      // }).catch(error => {
+      //   console.error('Error sending email:', error.response.data);
+      // });
+
+      // Display alert
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 4000);
+
     } catch (error) {
       console.error('Error accepting request:', error);
     }
@@ -135,6 +167,15 @@ const OwnerRequests = () => {
 
   return (
     <>
+      {/* Acceptance alert */}
+      <div style={{ position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)', zIndex: '1000', width: '50%', textAlign: 'center', fontWeight: '600' }}>
+        {showAlert && (
+          <div className="alert alert-success show" role="alert">
+            We've notified the client about your accept via email
+          </div>
+        )}
+      </div>
+
       {/* Requests list */}
       {propertyRequests.map(request => (
         <Card className='mt-3' key={request.id} style={{ marginBottom: '10px' }}>
