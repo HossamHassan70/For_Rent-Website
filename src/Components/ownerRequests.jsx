@@ -62,26 +62,62 @@ const OwnerRequests = () => {
         });
       });
 
+      // re_LR4MU4KL_C6HLi5tBLien6wvaeRQXWaYG api key
+      // How to fix CORS Error
       // Send email
-      // axios.post(
-      //   'https://api.mailgun.net/v3/sandbox5eabe84416c54a1f9f6d31af332beeda.mailgun.org/messages',
-      //   {
-      //     from: 'Mailgun Sandbox <postmaster@sandbox5eabe84416c54a1f9f6d31af332beeda.mailgun.org>',
-      //     to: 'Kerollos Samy <kerollossamy9908@gmail.com>',
-      //     subject: 'Request Accepted',
-      //     text: `Your request with ID ${id} has been accepted.`,
-      //   },
-      //   {
-      //     auth: {
-      //       username: 'api',
-      //       password: '80c74246fdf01bf7883b979e7f83873c-b7b36bc2-806c1120',
-      //     },
-      //   }
-      // ).then(response => {
-      //   console.log('Email sent successfully:', response.data);
-      // }).catch(error => {
-      //   console.error('Error sending email:', error.response.data);
-      // });
+      // const resend = new Resend('re_LR4MU4KL_C6HLi5tBLien6wvaeRQXWaYG');
+
+      // resend.emails.send({
+      //   from: 'onboarding@resend.dev',
+      //   to: 'kerollossamy9908@gmail.com',
+      //   subject: 'Your request has been accepted',
+      //   html: `
+      //     <html>
+      //       <head>
+      //         <style>
+      //           body {
+      //             font-family: Arial, sans-serif;
+      //             background-color: #f4f4f4;
+      //             padding: 20px;
+      //           }
+      //           .container {
+      //             background-color: #fff;
+      //             padding: 20px;
+      //             border-radius: 5px;
+      //             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      //           }
+      //           h1 {
+      //             color: #333;
+      //           }
+      //           p {
+      //             color: #555;
+      //           }
+      //         </style>
+      //       </head>
+      //       <body>
+      //         <div class="container">
+      //           <h1>Your Request Has Been Accepted</h1>
+      //           <p>
+      //             Dear Client,
+      //           </p>
+      //           <p>
+      //             We are pleased to inform you that your request has been accepted. You can expect further updates soon.
+      //           </p>
+      //           <p>
+      //             Regards,<br>
+      //             Onboarding Team
+      //           </p>
+      //         </div>
+      //       </body>
+      //     </html>
+      //   `
+      // })
+      //   .then(response => {
+      //     console.log('Email sent successfully:', response);
+      //   })
+      //   .catch(error => {
+      //     console.error('Error sending email:', error);
+      //   });
 
       // Display alert
       setShowAlert(true);
