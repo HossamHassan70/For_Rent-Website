@@ -1,7 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button ,Tab ,Tabs,Table,Image} from 'react-bootstrap';
-import PropertyMapView from '../Components/ PropertyMapView';
-import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card,Tab ,Tabs,Table,Image} from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,15 +8,10 @@ import './ViewProperty.css';
 
 
 const PropertyView = () => {
-  const propertyLocation = [51.5074, -0.1278]; // Replace with your actual property location
-  const navigate = useNavigate(); // Add 'useNavigate' hook to enable navigation
   const propertyId = useParams();
   const [propertyInfo, setpropertyInfo] = useState({})
   
-  
-  const handleClick = () => {
-    navigate('/PropertyMapView', { state: { propertyLocation } });
-  }; 
+
   
   useEffect(() => {
     axios(`https://dummyjson.com/products/${propertyId.id}`)
@@ -57,10 +50,10 @@ const PropertyView = () => {
   
     <Row>
       
-    <Col xs={12} md={5}>
+    <Col >
     {propertyInfo && (
       <div>
-       <Card id="IMAGE" className="d-flex flex-column align-items-center">
+       <Card>
   <div className="prop-image-container">
     <Image className="prop-image" src={propertyInfo.thumbnail} alt={propertyInfo.title} thumbnail />
   </div>
@@ -90,7 +83,7 @@ const PropertyView = () => {
       </div>
     )}
   </Col>
-      <Col xs={12} md={5}>
+      <Col >
       <Card>
               <Card.Body>
                 <Card.Title className="display-5 mb-2">
@@ -100,16 +93,19 @@ const PropertyView = () => {
                   <b>Category:</b> {propertyInfo.category}
                 </Card.Text>
               </Card.Body>
+           
+                
+                
+               
             </Card>
-            <Card>
+              <Card>
+              <Card.Header> price</Card.Header>
               <Card.Body>
-                <Card.Title>Price</Card.Title>
-                <Card.Text>Sacramento, CA 95823</Card.Text>
-                <Card.Text className="mb-2">
-                  ${propertyInfo.price}
-                </Card.Text>
+                <Card.Text>${propertyInfo.price}</Card.Text>
+               
               </Card.Body>
             </Card>
+
          
             <Card>
             <Card.Header>Property Description:</Card.Header>
@@ -179,19 +175,23 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
      
+          <Card>
+              <Card.Header>Location:</Card.Header>
+              <Card.Body>
+             <Card.Title>
+             City Name : 
+             </Card.Title>
+              <Card.Title>
+             Streat Name : 
+                
+              </Card.Title>
+              </Card.Body>
+
+               <Card.Footer></Card.Footer>
+            </Card>
+      </Col>
+   
     
-      </Col>
-      <Col xs={12} md={5}>
-    </Col>
-    <Col xs={12} md={5}>
-        <Card>
-          <Card.Header>Location</Card.Header>
-          <Card.Body>
-            <Button onClick={handleClick}>View Property on Map</Button>
-          </Card.Body>
-          < PropertyMapView  />
-        </Card>
-      </Col>
     </Row>
   
   </Container>
