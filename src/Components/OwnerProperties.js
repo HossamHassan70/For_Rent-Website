@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Table, Pagination, Form, Button } from 'react-bootstrap';
+import { Container, Table, Pagination, Form, Button , Modal } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 
 const OwnerProperties = () => {
   const [properties, setProperties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [propertyId, setPropertyId] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
+  const handleCloseConfirmation = () => setShowConfirmation(false);
+  const handleShowConfirmation = (id) => {
+    setPropertyId(id);
+    setShowConfirmation(true);
+  };
 
+  
   useEffect(() => {
     axios
       .get('https://dummyjson.com/products')
@@ -140,7 +147,11 @@ const OwnerProperties = () => {
     setPropertyId(null);
     form.reset();
   };
-
+  const handleDeleteConfirmation = () => {
+    deleteProperty(propertyId);
+    setPropertyId(null);
+    setShowConfirmation(false);
+  };
   const handleEdit = (property) => {
     setPropertyId(property.id);
     const form = document.getElementById('propertyForm');
@@ -185,7 +196,7 @@ const OwnerProperties = () => {
                   </Button>{' '}
                   <Button
                     variant="danger"
-                    onClick={() => deleteProperty(property.id)}
+                    onClick={() => handleShowConfirmation(property.id)}
                   >
                     Delete
                   </Button>
@@ -206,29 +217,43 @@ const OwnerProperties = () => {
         <Form id="propertyForm" onSubmit={propertyId ? handleUpdate : handleSubmit }>
           <Form.Group className="mb-3" controlId="formTitle">
             <Form.Label>Title</Form.Label>
-            <Form.Control type="text" name="title" placeholder="Enter title" />
+            <Form.Control type="text" name="title" placeholder="Enter title" required />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBrand">
             <Form.Label>Brand</Form.Label>
-            <Form.Control type="text" name="brand" placeholder="Enter brand" />
+            <Form.Control type="text" name="brand" placeholder="Enter brand" required/>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formPrice">
             <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price" placeholder="Enter price" />
+            <Form.Control type="number" name="price" placeholder="Enter price" required/>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formCategory">
             <Form.Label>Category</Form.Label>
-            <Form.Control type="text" name="category" placeholder="Enter category" />
+            <Form.Control type="text" name="category" placeholder="Enter category"  required/>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formDescription">
             <Form.Label>Description</Form.Label>
-            <Form.Control as="textarea" name="description" placeholder="Enter description" />
+            <Form.Control as="textarea" name="description" placeholder="Enter description" required/>
           </Form.Group>
           <Button variant="primary" type="submit">
             {propertyId ? 'Update Property' : 'Add Property'}
           </Button>
         </Form>
       </div>
+      <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this property?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseConfirmation}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirmation}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
