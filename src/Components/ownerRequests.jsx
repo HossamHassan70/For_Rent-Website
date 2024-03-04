@@ -62,64 +62,27 @@ const OwnerRequests = () => {
         });
       });
 
-      // re_LR4MU4KL_C6HLi5tBLien6wvaeRQXWaYG api key
-      // How to fix CORS Error
       // Send email
-      // const resend = new Resend('re_LR4MU4KL_C6HLi5tBLien6wvaeRQXWaYG');
+      const serviceId = 'service_21hdjtz';
+      const templateId = 'template_8dnvcxh';
+      const publicKey = 'xr6_cNCqHsf9TrFPu';
+      const data = {
+        service_id: serviceId,
+        template_id: templateId,
+        user_id: publicKey,
+        // template_params: {
+        //   from_name: name,
+        //   from_email: email,
+        //   to_name: 'Web Wizard',
+        //   message: message,
+        // }
+      };
 
-      // resend.emails.send({
-      //   from: 'onboarding@resend.dev',
-      //   to: 'kerollossamy9908@gmail.com',
-      //   subject: 'Your request has been accepted',
-      //   html: `
-      //     <html>
-      //       <head>
-      //         <style>
-      //           body {
-      //             font-family: Arial, sans-serif;
-      //             background-color: #f4f4f4;
-      //             padding: 20px;
-      //           }
-      //           .container {
-      //             background-color: #fff;
-      //             padding: 20px;
-      //             border-radius: 5px;
-      //             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      //           }
-      //           h1 {
-      //             color: #333;
-      //           }
-      //           p {
-      //             color: #555;
-      //           }
-      //         </style>
-      //       </head>
-      //       <body>
-      //         <div class="container">
-      //           <h1>Your Request Has Been Accepted</h1>
-      //           <p>
-      //             Dear Client,
-      //           </p>
-      //           <p>
-      //             We are pleased to inform you that your request has been accepted. You can expect further updates soon.
-      //           </p>
-      //           <p>
-      //             Regards,<br>
-      //             Onboarding Team
-      //           </p>
-      //         </div>
-      //       </body>
-      //     </html>
-      //   `
-      // })
-      //   .then(response => {
-      //     console.log('Email sent successfully:', response);
-      //   })
-      //   .catch(error => {
-      //     console.error('Error sending email:', error);
-      //   });
+      // Send the email using EmailJS
+      const res = await axios.post("https://api.emailjs.com/api/v1.0/email/send", data);
+      console.log(res.data);
 
-      // Display alert
+      // Display alert when accept button is clicked
       setShowAlert(true);
 
       setTimeout(() => {
