@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Table, Pagination, Form, Button , Modal } from 'react-bootstrap';
-import Badge from 'react-bootstrap/Badge';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Container,
+  Table,
+  Pagination,
+  Form,
+  Button,
+  Modal,
+} from "react-bootstrap";
+import Badge from "react-bootstrap/Badge";
 
 const OwnerProperties = () => {
   const [properties, setProperties] = useState([]);
@@ -16,10 +23,9 @@ const OwnerProperties = () => {
     setShowConfirmation(true);
   };
 
-  
   useEffect(() => {
     axios
-      .get('https://dummyjson.com/products')
+      .get("https://dummyjson.com/products")
       .then((response) => {
         const data = response.data;
         setProperties(data.products);
@@ -86,7 +92,7 @@ const OwnerProperties = () => {
 
   const addProperty = (newProperty) => {
     axios
-      .post('https://dummyjson.com/products/add', newProperty)
+      .post("https://dummyjson.com/products/add", newProperty)
       .then((response) => {
         setProperties((properties) => [...properties, response.data]);
       })
@@ -121,7 +127,7 @@ const OwnerProperties = () => {
     event.preventDefault();
     const form = event.target;
     const newProperty = {
-      id: Date.now(), 
+      id: Date.now(),
       title: form.title.value,
       brand: form.brand.value,
       price: form.price.value,
@@ -154,7 +160,7 @@ const OwnerProperties = () => {
   };
   const handleEdit = (property) => {
     setPropertyId(property.id);
-    const form = document.getElementById('propertyForm');
+    const form = document.getElementById("propertyForm");
     form.title.value = property.title;
     form.brand.value = property.brand;
     form.price.value = property.price;
@@ -185,7 +191,9 @@ const OwnerProperties = () => {
                 <td>{property.title}</td>
                 <td>{property.brand}</td>
                 <td>{property.price}</td>
-               <td><Badge variant="primary">{property.category}</Badge></td>
+                <td>
+                  <Badge variant="primary">{property.category}</Badge>
+                </td>
                 <td>{property.description}</td>
                 <td>
                   <Button
@@ -193,7 +201,7 @@ const OwnerProperties = () => {
                     onClick={() => handleEdit(property)}
                   >
                     Edit
-                  </Button>{' '}
+                  </Button>{" "}
                   <Button
                     variant="danger"
                     onClick={() => handleShowConfirmation(property.id)}
@@ -211,32 +219,60 @@ const OwnerProperties = () => {
           <Pagination.Next onClick={handleNextClick} />
         </Pagination>
         <h1>
-        <Badge bg="primary">Add/Edit Property</Badge>
-</h1>
+          <Badge bg="primary">Add/Edit Property</Badge>
+        </h1>
 
-        <Form id="propertyForm" onSubmit={propertyId ? handleUpdate : handleSubmit }>
+        <Form
+          id="propertyForm"
+          onSubmit={propertyId ? handleUpdate : handleSubmit}
+        >
           <Form.Group className="mb-3" controlId="formTitle">
             <Form.Label>Title</Form.Label>
-            <Form.Control type="text" name="title" placeholder="Enter title" required />
+            <Form.Control
+              type="text"
+              name="title"
+              placeholder="Enter title"
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBrand">
             <Form.Label>Brand</Form.Label>
-            <Form.Control type="text" name="brand" placeholder="Enter brand" required/>
+            <Form.Control
+              type="text"
+              name="brand"
+              placeholder="Enter brand"
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formPrice">
             <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price" placeholder="Enter price" required/>
+            <Form.Control
+              type="number"
+              name="price"
+              placeholder="Enter price"
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formCategory">
             <Form.Label>Category</Form.Label>
-            <Form.Control type="text" name="category" placeholder="Enter category"  required/>
+            <Form.Control
+              type="text"
+              name="category"
+              placeholder="Enter category"
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formDescription">
             <Form.Label>Description</Form.Label>
-            <Form.Control as="textarea" name="description" placeholder="Enter description" required/>
+            <Form.Control
+              as="textarea"
+              name="description"
+              placeholder="Enter description"
+              required
+            />
           </Form.Group>
           <Button variant="primary" type="submit">
-            {propertyId ? 'Update Property' : 'Add Property'}
+            {propertyId ? "Update Property" : "Add Property"}
           </Button>
         </Form>
       </div>
