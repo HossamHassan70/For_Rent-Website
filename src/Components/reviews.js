@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../pages/review.css";
+import "../pages/css/review.css";
 import ReactStarsS from "./rate";
 
 export default function Rev(props) {
@@ -28,14 +30,57 @@ export default function Rev(props) {
     SetStars(e.target.value);
   };
 
+  // const createRev = async () => {
+  //   try {
+  //     await axios.post("https://api-generator.retool.com/mO7BTB/data", {
+  //       Rate: stars,
+  //       fName: sessionLogin[0].fullname,
+  //       Reviews: revs,
+  //       Fullname: sessionLogin[0].fullname,
+  //     });
+
+  //     loadData();
+  //     console.log("Post successful");
+  //   } catch (error) {
+  //     console.error("Error posting review:", error);
+  //   }
+  // };
+
   const createRev = async () => {
     try {
+      if (!revs.trim()) {
+        console.error("Review cannot be empty");
+
+        return;
+      }
+
+      if (!stars) {
+        console.error("Please provide a rating");
+
+        return;
+      }
+
+      if (isNaN(stars)) {
+        console.error("Rating must be a number");
+
+        return;
+      }
+
+      const rating = parseFloat(stars);
+      if (rating < 1 || rating > 5) {
+        console.error("Rating must be between 1 and 5");
+
+        return;
+      }
+
       await axios.post("https://api-generator.retool.com/mO7BTB/data", {
-        Rate: stars,
+        Rate: rating,
         fName: sessionLogin[0].fullname,
         Reviews: revs,
         Fullname: sessionLogin[0].fullname,
       });
+      setRevs("");
+      SetStars("");
 
       loadData();
       console.log("Post successful");
@@ -105,8 +150,15 @@ export default function Rev(props) {
       <h3>Reviews({revNum})</h3>
       {reviews.map((rev) => (
         <>
-          <div className="border-bottom pt-3" key={rev.id}>
-            <p className="m-0">Client Name: {rev.Fullname}</p>
+          <div className="border-bottom pb-3 pt-3" key={rev.id}>
+            <p className="m-0">
+              <span
+                className="p-1 rounded"
+                style={{ backgroundColor: "#b4eee6" }}
+              >
+                {rev.Fullname}
+              </span>
+            </p>
             <div className="d-flex justify-content-between flex-wrap align-items-center">
               {editingReviewId === rev.id ? (
                 <Form.Control
@@ -280,14 +332,6 @@ export default function Rev(props) {
           </div>
 
           <div className="d-flex ">
-            {/* <BtnsCo
-              btnAct={createRev}
-              btnType="submit"
-              btnCs={{ backgroundColor: "#008f97" }}
-              btnCo="primary"
-              btnText="Add"
-            /> */}
-            {/* <i class="fa-solid fa-plus"></i> */}
             {reviews.length > 0 && <p className="m-0">{reviews[0].ratings}</p>}
           </div>
         </div>

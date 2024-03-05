@@ -6,8 +6,6 @@ import Footer from "./Components/Footer";
 import HomePage from "./pages/homePage";
 import PropertyView from './pages/ViewProperty';
 import UserProfile from "./pages/userProfile";
-import OwnerProperties from "./Components/OwnerProperties"
-
 function App() {
   return (
     <>
@@ -19,7 +17,6 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/property/:id" element={<PropertyView />} />
           <Route path="/user/:userId" element={<UserProfile />} />
-          <Route path="/OwnerProperties" element={<OwnerProperties />} />
         </Routes>
         <Footer />
       </BrowserRouter>

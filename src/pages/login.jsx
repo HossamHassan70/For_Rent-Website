@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import BtnsCo from "../Components/Btns";
@@ -8,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import LoginSchema from "../schemas/login";
 import AlertCom from "../Components/alert";
-import "../pages/errors.css";
+import "../pages/css/errors.css";
 
 export default function LoginPre() {
   let locally = JSON.parse(localStorage.getItem("Account Storage") || "[]");

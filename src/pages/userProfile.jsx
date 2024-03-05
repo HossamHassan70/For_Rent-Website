@@ -1,11 +1,12 @@
 import { Col, Container, Nav, NavItem, NavLink, Row } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './userProfile.css';
+import './css/userProfile.css';
 import { useParams } from 'react-router-dom';
 import Rev from '../Components/reviews';
-import OwnerProfile from './OwnerProfile';
 import OwnerProperties from '../Components/OwnerProperties';
+import LoadingScreen from './loadingScreen';
+import OwnerRequests from '../Components/ownerRequests';
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -29,7 +30,9 @@ const Emails = ({ userId }) => {
   return (
     <div>
       {loading ? (
-        <p>Loading posts...</p>
+        <>
+          <LoadingScreen />
+        </>
       ) : (
         <ul className="email-list">
           {emails.map(email => (
@@ -66,7 +69,9 @@ const Posts = ({ userId }) => {
   return (
     <div>
       {loading ? (
-        <p>Loading posts...</p>
+        <>
+          <LoadingScreen />
+        </>
       ) : (
         <ul className="post-list">
           {posts.map(post => (
@@ -111,7 +116,9 @@ const UserProfile = () => {
       case 'reviews':
         return <Rev />;
       case 'requests':
-        return <OwnerProfile />;
+        return <OwnerRequests />;
+      case 'properties':
+        return <OwnerProperties />;
       default:
         return null;
     }
@@ -122,13 +129,18 @@ const UserProfile = () => {
     <Container fluid className='mt-3'>
       <Row>
         {/* left column */}
-        <Col sm={12} md={4} xl={3}>
+        <Col sm={12} md={3}>
           <h4 className='col-name'>User Detail</h4>
           <div className="user-details-container d-flex justify-content-center">
             {userData ? (
               <div>
                 <div className="circle-image text-center">
-                  <img src={userData.image} alt="" className="rounded-circle img-thumbnail" />
+                  <img
+                    src={userData.image}
+                    alt="Profile"
+                    className="rounded-circle img-thumbnail"
+                    onError={(e) => { e.target.src = 'src/images/blank_profile.png' }}
+                  />
                   <p className='title'>{userData.firstName}</p>
                   <p className='sub-title'>{userData.university}</p>
                 </div>
@@ -156,13 +168,13 @@ const UserProfile = () => {
 
               </div>
             ) : (
-              <p>Loading user data...</p>
+              <LoadingScreen />
             )}
           </div>
         </Col>
 
-        {/* middle column */}
-        <Col sm={12} md={8} xl={5}>
+        {/* right column */}
+        <Col sm={12} md={9}>
           <h4 className='col-name'>Activities</h4>
 
           <Nav className='custom-nav user-details-container d-flex justify-content-around' tabs>
@@ -203,19 +215,22 @@ const UserProfile = () => {
               </NavLink>
             </NavItem>
 
+
+            <NavItem>
+              <NavLink
+                className={activeNavItem === 'properties' ? 'active' : ''}
+                onClick={() => handleNavItemClicked('properties')}
+              >
+                My Properties
+              </NavLink>
+            </NavItem>
+
           </Nav>
 
-          <div className="user-details-container d-flex justify-content-center">
+          <div>
             {renderContent()}
           </div>
 
-        </Col>
-
-
-        {/* right column */}
-        <Col sm={12} md={12} xl={4}>
-          <h4 className='col-name'>Properties</h4>
-          <OwnerProperties />
         </Col>
 
       </Row>

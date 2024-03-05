@@ -1,25 +1,24 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button ,Tab ,Tabs,Table,Image} from 'react-bootstrap';
-import PropertyMapView from '../Components/ PropertyMapView';
-import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Tab, Tabs, Table, Image } from 'react-bootstrap';
+// import PropertyMapView from '../Components/ PropertyMapView';
+// import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import './ViewProperty.css';
-
+import Rev from './../Components/reviews';
 
 
 const PropertyView = () => {
-  const propertyLocation = [51.5074, -0.1278]; // Replace with your actual property location
-  const navigate = useNavigate(); // Add 'useNavigate' hook to enable navigation
+  // const propertyLocation = [51.5074, -0.1278]; // Replace with your actual property location
+  // const navigate = useNavigate(); // Add 'useNavigate' hook to enable navigation
   const propertyId = useParams();
   const [propertyInfo, setpropertyInfo] = useState({})
-  
-  
-  const handleClick = () => {
-    navigate('/PropertyMapView', { state: { propertyLocation } });
-  }; 
-  
+
+  // const handleClick = () => {
+  //   navigate('/PropertyMapView', { state: { propertyLocation } });
+  // };
+
   useEffect(() => {
     axios(`https://dummyjson.com/products/${propertyId.id}`)
       .then((res) => {
@@ -37,12 +36,12 @@ const PropertyView = () => {
         image.classList.remove('focus');
       });
     }
-    
+
     // Add focus to the clicked image
     const clickedImage = document.querySelectorAll('.additional-image:not(.prop-image)')[index];
     if (clickedImage) {
       clickedImage.classList.add('focus');
-    
+
       // Display the clicked image in the prop-image section
       const propImage = document.querySelector('.prop-image');
       if (propImage) {
@@ -53,65 +52,65 @@ const PropertyView = () => {
   };
   return (
     <Container fluid>
-    <h1>Property Detail</h1>
-  
-    <Row>
-      
-    <Col xs={12} md={5}>
-    {propertyInfo && (
-      <div>
-       <Card id="IMAGE" className="d-flex flex-column align-items-center">
-  <div className="prop-image-container">
-    <Image className="prop-image" src={propertyInfo.thumbnail} alt={propertyInfo.title} thumbnail />
-  </div>
+      <h1>Property Detail</h1>
 
-  <Card.Title className="display-5 mb-4 text-center">
-    Additional Images
-  </Card.Title>
-  <Card.Body>
-    {propertyInfo.images && propertyInfo.images.length > 0 ? (
-      <div className="image-thumbnails">
-        {propertyInfo.images.map((image, index) => (
-          <div key={index} className="image-thumbnail">
-            <Image
-              id={`image-${index}`}
-              className="additional-image"
-              src={image}
-              alt={`Image ${index + 1}`}
-              onClick={() => handleImageClick(index)}
-              tabIndex={0}
-            />
-          </div>
-        ))}
-      </div>
-    ) : null}
-  </Card.Body>
-</Card>
-      </div>
-    )}
-  </Col>
-      <Col xs={12} md={5}>
-      <Card>
-              <Card.Body>
-                <Card.Title className="display-5 mb-2">
-                  {propertyInfo.title}
+      <Row>
+
+        <Col xs={12} md={5}>
+          {propertyInfo && (
+            <div>
+              <Card id="IMAGE" className="d-flex flex-column align-items-center">
+                <div className="prop-image-container">
+                  <Image className="prop-image" src={propertyInfo.thumbnail} alt={propertyInfo.title} thumbnail />
+                </div>
+
+                <Card.Title className="display-5 mb-4 text-center">
+                  Additional Images
                 </Card.Title>
-                <Card.Text className="mb-2">
-                  <b>Category:</b> {propertyInfo.category}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body>
-                <Card.Title>Price</Card.Title>
-                <Card.Text>Sacramento, CA 95823</Card.Text>
-                <Card.Text className="mb-2">
-                  ${propertyInfo.price}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-         
-            <Card>
+                <Card.Body>
+                  {propertyInfo.images && propertyInfo.images.length > 0 ? (
+                    <div className="image-thumbnails">
+                      {propertyInfo.images.map((image, index) => (
+                        <div key={index} className="image-thumbnail">
+                          <Image
+                            id={`image-${index}`}
+                            className="additional-image"
+                            src={image}
+                            alt={`Image ${index + 1}`}
+                            onClick={() => handleImageClick(index)}
+                            tabIndex={0}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </Card.Body>
+              </Card>
+            </div>
+          )}
+        </Col>
+        <Col xs={12} md={5}>
+          <Card>
+            <Card.Body>
+              <Card.Title className="display-5 mb-2">
+                {propertyInfo.title}
+              </Card.Title>
+              <Card.Text className="mb-2">
+                <b>Category:</b> {propertyInfo.category}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Body>
+              <Card.Title>Price</Card.Title>
+              <Card.Text>Sacramento, CA 95823</Card.Text>
+              <Card.Text className="mb-2">
+                ${propertyInfo.price}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+
+          <Card>
             <Card.Header>Property Description:</Card.Header>
             <Card.Body>
               <Tabs defaultActiveKey="home" transition={false} id="noanim-tab-example" className="mb-3">
@@ -178,23 +177,23 @@ const PropertyView = () => {
               </Tabs>
             </Card.Body>
           </Card>
-     
-    
-      </Col>
-      <Col xs={12} md={5}>
-    </Col>
-    <Col xs={12} md={5}>
-        <Card>
-          <Card.Header>Location</Card.Header>
-          <Card.Body>
-            <Button onClick={handleClick}>View Property on Map</Button>
-          </Card.Body>
-          < PropertyMapView  />
-        </Card>
-      </Col>
-    </Row>
-  
-  </Container>
+
+        </Col>
+        {/* <Col xs={12} md={5}>
+        </Col>
+        <Col xs={12} md={5}>
+          <Card>
+            <Card.Header>Location</Card.Header>
+            <Card.Body>
+              <Button onClick={handleClick}>View Property on Map</Button>
+            </Card.Body>
+            < PropertyMapView />
+          </Card>
+        </Col> */}
+      </Row>
+      <Rev />
+
+    </Container>
   );
 };
 
