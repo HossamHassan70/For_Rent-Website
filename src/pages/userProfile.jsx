@@ -91,7 +91,7 @@ const Posts = ({ userId }) => {
 };
 
 const UserProfile = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
   const { userId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [editedUserData, setEditedUserData] = useState({});
@@ -123,14 +123,16 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`https://dummyjson.com/users/${userId}`)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://dummyjson.com/users/${userId}`);
         setUserData(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching user data:", error);
-      });
+      }
+    };
+
+    fetchData();
   }, [userId]);
 
   // Handling middle column navbar
@@ -191,49 +193,83 @@ const UserProfile = () => {
 
                 <h5 className="sub-title my-2">Edit Information</h5>
                 <div className="information-content pt-2">
-                  <div className="flex-container">
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={editedUserData.firstName}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={editedUserData.lastName}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="maidenName"
-                      value={editedUserData.maidenName}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="email"
-                      value={editedUserData.email}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="address"
-                      value={editedUserData.address?.address}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="city"
-                      value={editedUserData.address?.city}
-                      onChange={handleInputChange}
-                    />
-                    <input
-                      type="text"
-                      name="phone"
-                      value={editedUserData.phone}
-                      onChange={handleInputChange}
-                    />
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label htmlFor="firstName">First Name:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="firstName"
+                            value={editedUserData.firstName}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="lastName">Last Name:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="lastName"
+                            value={editedUserData.lastName}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="maidenName">Maiden Name:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="maidenName"
+                            value={editedUserData.maidenName}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label htmlFor="email">Email:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="email"
+                            value={editedUserData.email}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="address">Address:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="address"
+                            value={editedUserData.address?.address}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="city">City:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="city"
+                            value={editedUserData.address?.city}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="phone">Phone:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="phone"
+                            value={editedUserData.phone}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
