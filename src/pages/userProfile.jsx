@@ -1,12 +1,12 @@
-import { Col, Container, Nav, NavItem, NavLink, Row } from 'react-bootstrap';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './css/userProfile.css';
-import { useParams } from 'react-router-dom';
-import Rev from '../Components/reviews';
-import OwnerProperties from '../Components/OwnerProperties';
-import LoadingScreen from './loadingScreen';
-import OwnerRequests from '../Components/ownerRequests';
+import { Col, Container, Nav, NavItem, NavLink, Row } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./css/userProfile.css";
+import { useParams } from "react-router-dom";
+import Rev from "../Components/reviews";
+import OwnerProperties from "../Components/OwnerProperties";
+import LoadingScreen from "./loadingScreen";
+import OwnerRequests from "../Components/ownerRequests";
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -15,11 +15,13 @@ const Emails = ({ userId }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}/posts`);
+        const response = await axios.get(
+          `https://jsonplaceholder.typicode.com/users/${userId}/posts`
+        );
         setPosts(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
         setLoading(false);
       }
     };
@@ -35,7 +37,7 @@ const Emails = ({ userId }) => {
         </>
       ) : (
         <ul className="email-list">
-          {emails.map(email => (
+          {emails.map((email) => (
             <li key={email.id} className="email-item">
               <h3 className="email-title">{email.title}</h3>
               <p className="email-body">{email.body}</p>
@@ -54,11 +56,13 @@ const Posts = ({ userId }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`https://dummyjson.com/users/${userId}/posts`);
+        const response = await axios.get(
+          `https://dummyjson.com/users/${userId}/posts`
+        );
         setPosts(response.data.posts);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
         setLoading(false);
       }
     };
@@ -74,7 +78,7 @@ const Posts = ({ userId }) => {
         </>
       ) : (
         <ul className="post-list">
-          {posts.map(post => (
+          {posts.map((post) => (
             <li key={post.id} className="post-item">
               <h3 className="post-title">{post.title}</h3>
               <p className="post-body">{post.body}</p>
@@ -89,19 +93,48 @@ const Posts = ({ userId }) => {
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const { userId } = useParams();
+  const [editMode, setEditMode] = useState(false);
+  const [editedUserData, setEditedUserData] = useState({});
+
+  const handleEditClick = () => {
+    setEditMode(true);
+    setEditedUserData({ ...userData });
+  };
+
+  const handleSaveClick = () => {
+    // Call the API to update user information
+    axios
+      .put(`https://dummyjson.com/users/${userId}`, editedUserData)
+      .then((response) => {
+        setUserData(response.data);
+        setEditMode(false);
+      })
+      .catch((error) => {
+        console.error("Error updating user data:", error);
+      });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   useEffect(() => {
-    axios.get(`https://dummyjson.com/users/${userId}`)
-      .then(response => {
+    axios
+      .get(`https://dummyjson.com/users/${userId}`)
+      .then((response) => {
         setUserData(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
       });
   }, [userId]);
 
   // Handling middle column navbar
-  const [activeNavItem, setActiveNavItem] = useState('posts');
+  const [activeNavItem, setActiveNavItem] = useState("posts");
 
   const handleNavItemClicked = (item) => {
     setActiveNavItem(item);
@@ -109,44 +142,121 @@ const UserProfile = () => {
 
   const renderContent = () => {
     switch (activeNavItem) {
-      case 'posts':
+      case "posts":
         return <Posts userId={userId} />;
-      case 'emails':
+      case "emails":
         return <Emails userId={userId} />;
-      case 'reviews':
+      case "reviews":
         return <Rev />;
-      case 'requests':
+      case "requests":
         return <OwnerRequests />;
-      case 'properties':
+      case "properties":
         return <OwnerProperties />;
       default:
         return null;
     }
   };
 
-
   return (
-    <Container fluid className='mt-3'>
+    <Container fluid className="mt-3">
       <Row>
-        {/* left column */}
         <Col sm={12} md={3}>
-          <h4 className='col-name'>User Detail</h4>
+          <h4 className="col-name">User Detail</h4>
           <div className="user-details-container d-flex justify-content-center">
-            {userData ? (
+            {editMode ? (
               <div>
                 <div className="circle-image text-center">
                   <img
-                    src={userData.image}
+                    src={editedUserData.image}
                     alt="Profile"
                     className="rounded-circle img-thumbnail"
-                    onError={(e) => { e.target.src = 'src/images/blank_profile.png' }}
+                    onError={(e) => {
+                      e.target.src = "src/images/blank_profile.png";
+                    }}
                   />
-                  <p className='title'>{userData.firstName}</p>
-                  <p className='sub-title'>{userData.university}</p>
+                  <p className="title">{userData.firstName}</p>
+                  <p className="sub-title">{userData.university}</p>
                 </div>
 
                 <div className="my-3 text-center icons-container">
-                  <i className="profile-icon my-1 mx-2 far fa-edit"></i>
+                  <i
+                    className="profile-icon my-1 mx-2 far fa-save"
+                    onClick={handleSaveClick}
+                  ></i>
+                  <i
+                    className="profile-icon my-1 mx-2 far fa-window-close"
+                    onClick={() => setEditMode(false)}
+                  ></i>
+                </div>
+
+                <h5 className="sub-title my-2">Edit Information</h5>
+                <div className="information-content pt-2">
+                  <div className="flex-container">
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={editedUserData.firstName}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={editedUserData.lastName}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="maidenName"
+                      value={editedUserData.maidenName}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="email"
+                      value={editedUserData.email}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="address"
+                      value={editedUserData.address?.address}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="city"
+                      value={editedUserData.address?.city}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="phone"
+                      value={editedUserData.phone}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="circle-image text-center">
+                  <img
+                    src={userData?.image}
+                    alt="Profile"
+                    className="rounded-circle img-thumbnail"
+                    onError={(e) => {
+                      e.target.src = "src/images/blank_profile.png";
+                    }}
+                  />
+                  <p className="title">{userData.firstName}</p>
+                  <p className="sub-title">{userData.university}</p>
+                </div>
+
+                <div className="my-3 text-center icons-container">
+                  <i
+                    className="profile-icon my-1 mx-2 far fa-edit"
+                    onClick={handleEditClick}
+                  ></i>
                   <i className="profile-icon my-1 mx-2 far fa-envelope"></i>
                   <i className="profile-icon my-1 mx-2 fas fa-phone-alt"></i>
                   <i className="profile-icon my-1 mx-2 fas fa-plus"></i>
@@ -154,35 +264,47 @@ const UserProfile = () => {
                   <i className="profile-icon my-1 mx-2 far fa-calendar"></i>
                 </div>
 
-                <h5 className='sub-title my-2'>Information</h5>
+                <h5 className="sub-title my-2">Information</h5>
                 <div className="information-content pt-2">
                   <div className="flex-container">
-                    <p><b>Full name: &#160;</b> {userData.firstName} {userData.lastName}, {userData.maidenName}</p>
-                    <p><b>Email: &#160;</b> {userData.email}</p>
-                    <p><b>City: &#160;</b> {userData.address.address}</p>
-                    <p><b>Region: &#160;</b> {userData.address.city}</p>
-                    <p><b>Phone: &#160;</b> {userData.phone}</p>
-                    <p><b>Created at: &#160;</b> 15 Dec, 2023</p>
+                    <p>
+                      <b>Full name: &#160;</b> {userData?.firstName}{" "}
+                      {userData?.lastName}, {userData?.maidenName}
+                    </p>
+                    <p>
+                      <b>Email: &#160;</b> {userData?.email}
+                    </p>
+                    <p>
+                      <b>City: &#160;</b> {userData?.address?.address}
+                    </p>
+                    <p>
+                      <b>Region: &#160;</b> {userData?.address?.city}
+                    </p>
+                    <p>
+                      <b>Phone: &#160;</b> {userData?.phone}
+                    </p>
+                    <p>
+                      <b>Created at: &#160;</b> 15 Dec, 2023
+                    </p>
                   </div>
                 </div>
-
               </div>
-            ) : (
-              <LoadingScreen />
             )}
           </div>
         </Col>
 
         {/* right column */}
         <Col sm={12} md={9}>
-          <h4 className='col-name'>Activities</h4>
+          <h4 className="col-name">Activities</h4>
 
-          <Nav className='custom-nav user-details-container d-flex justify-content-around' tabs>
-
+          <Nav
+            className="custom-nav user-details-container d-flex justify-content-around"
+            tabs
+          >
             <NavItem>
               <NavLink
-                className={activeNavItem === 'posts' ? 'active' : ''}
-                onClick={() => handleNavItemClicked('posts')}
+                className={activeNavItem === "posts" ? "active" : ""}
+                onClick={() => handleNavItemClicked("posts")}
               >
                 Posts
               </NavLink>
@@ -190,8 +312,8 @@ const UserProfile = () => {
 
             <NavItem>
               <NavLink
-                className={activeNavItem === 'emails' ? 'active' : ''}
-                onClick={() => handleNavItemClicked('emails')}
+                className={activeNavItem === "emails" ? "active" : ""}
+                onClick={() => handleNavItemClicked("emails")}
               >
                 Emails
               </NavLink>
@@ -199,8 +321,8 @@ const UserProfile = () => {
 
             <NavItem>
               <NavLink
-                className={activeNavItem === 'reviews' ? 'active' : ''}
-                onClick={() => handleNavItemClicked('reviews')}
+                className={activeNavItem === "reviews" ? "active" : ""}
+                onClick={() => handleNavItemClicked("reviews")}
               >
                 My Reviews
               </NavLink>
@@ -208,31 +330,25 @@ const UserProfile = () => {
 
             <NavItem>
               <NavLink
-                className={activeNavItem === 'requests' ? 'active' : ''}
-                onClick={() => handleNavItemClicked('requests')}
+                className={activeNavItem === "requests" ? "active" : ""}
+                onClick={() => handleNavItemClicked("requests")}
               >
                 My Requests
               </NavLink>
             </NavItem>
 
-
             <NavItem>
               <NavLink
-                className={activeNavItem === 'properties' ? 'active' : ''}
-                onClick={() => handleNavItemClicked('properties')}
+                className={activeNavItem === "properties" ? "active" : ""}
+                onClick={() => handleNavItemClicked("properties")}
               >
                 My Properties
               </NavLink>
             </NavItem>
-
           </Nav>
 
-          <div>
-            {renderContent()}
-          </div>
-
+          <div>{renderContent()}</div>
         </Col>
-
       </Row>
     </Container>
   );
