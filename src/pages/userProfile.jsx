@@ -35,9 +35,6 @@ const Emails = ({ userId }) => {
         <>
           <LoadingScreen />
         </>
-        <>
-          <LoadingScreen />
-        </>
       ) : (
         <ul className="email-list">
           {emails.map((email) => (
@@ -76,9 +73,6 @@ const Posts = ({ userId }) => {
   return (
     <div>
       {loading ? (
-        <>
-          <LoadingScreen />
-        </>
         <>
           <LoadingScreen />
         </>
@@ -131,7 +125,9 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://dummyjson.com/users/${userId}`);
+        const response = await axios.get(
+          `https://dummyjson.com/users/${userId}`
+        );
         setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
