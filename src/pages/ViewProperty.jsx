@@ -36,6 +36,7 @@ const PropertyView = () => {
       });
     }
 
+
     // Add focus to the clicked image
     const clickedImage = document.querySelectorAll(
       ".additional-image:not(.prop-image)"

@@ -6,6 +6,10 @@ import backgroundImage from "../images/image4.jpg";
 // import { searchAction } from "../MyStore/actions/searchAction";
 import Search from "./SearchComponent";
 
+// import { useDispatch, useSelector } from "react-redux";
+// import { searchAction } from "../MyStore/actions/searchAction";
+import Search from "./SearchComponent";
+
 
 
 const HeroSection = () => {

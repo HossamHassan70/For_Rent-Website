@@ -35,6 +35,9 @@ const Emails = ({ userId }) => {
         <>
           <LoadingScreen />
         </>
+        <>
+          <LoadingScreen />
+        </>
       ) : (
         <ul className="email-list">
           {emails.map((email) => (
@@ -73,6 +76,9 @@ const Posts = ({ userId }) => {
   return (
     <div>
       {loading ? (
+        <>
+          <LoadingScreen />
+        </>
         <>
           <LoadingScreen />
         </>
