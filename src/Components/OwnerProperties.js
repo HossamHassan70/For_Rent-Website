@@ -7,20 +7,33 @@ import {
   Form,
   Button,
   Modal,
+  Badge,
 } from "react-bootstrap";
-import Badge from "react-bootstrap/Badge";
 
 const OwnerProperties = () => {
   const [properties, setProperties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [propertyId, setPropertyId] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editPropertyData, setEditPropertyData] = useState(null);
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
   const handleCloseConfirmation = () => setShowConfirmation(false);
+  const [formErrors, setFormErrors] = useState({});
+
   const handleShowConfirmation = (id) => {
     setPropertyId(id);
     setShowConfirmation(true);
+  };
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditPropertyData(null);
+  };
+  const handleShowForm = (id) => {
+    const property = properties.find((property) => property.id === id);
+    setEditPropertyData(property);
+    setShowForm(true);
   };
 
   useEffect(() => {
@@ -70,6 +83,7 @@ const OwnerProperties = () => {
       .delete(`https://dummyjson.com/products/${id}`)
       .then((response) => {
         setProperties(properties.filter((property) => property.id !== id));
+        handleCloseConfirmation();
       })
       .catch((error) => console.error(error));
   };
@@ -86,6 +100,7 @@ const OwnerProperties = () => {
             return property;
           })
         );
+        handleCloseForm();
       })
       .catch((error) => console.error(error));
   };
@@ -95,6 +110,7 @@ const OwnerProperties = () => {
       .post("https://dummyjson.com/products/add", newProperty)
       .then((response) => {
         setProperties((properties) => [...properties, response.data]);
+        handleCloseForm();
       })
       .catch((error) => console.error(error));
   };
@@ -126,169 +142,152 @@ const OwnerProperties = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
-    const newProperty = {
-      id: Date.now(),
+    const updatedProperty = {
       title: form.title.value,
       brand: form.brand.value,
       price: form.price.value,
       category: form.category.value,
       description: form.description.value,
     };
-    addProperty(newProperty);
-    form.reset();
-  };
 
-  const handleUpdate = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const id = propertyId;
-    const updatedPropertyData = {
-      title: form.title.value,
-      brand: form.brand.value,
-      price: form.price.value,
-      category: form.category.value,
-      description: form.description.value,
-    };
-    editProperty(id, updatedPropertyData);
-    setPropertyId(null);
-    form.reset();
+    if (editPropertyData) {
+      editProperty(editPropertyData.id, updatedProperty);
+    } else {
+     addProperty(updatedProperty);
+    }
   };
-  const handleDeleteConfirmation = () => {
-    deleteProperty(propertyId);
-    setPropertyId(null);
-    setShowConfirmation(false);
-  };
-  const handleEdit = (property) => {
-    setPropertyId(property.id);
-    const form = document.getElementById("propertyForm");
-    form.title.value = property.title;
-    form.brand.value = property.brand;
-    form.price.value = property.price;
-    form.category.value = property.category;
-    form.description.value = property.description;
-  };
+  
 
   return (
     <Container>
-      <h1>
+        <h1>
         <Badge bg="primary">My Properties</Badge>
       </h1>
-      <div>
-        <Table striped bordered hover variant="light">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Brand</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Actions</th>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentProperties.map((property) => (
+            <tr key={property.id}>
+              <td>{property.title}</td>
+              <td>{property.brand}</td>
+              <td>{property.price}</td>
+              <td> <Badge variant="primary">{property.category}</Badge></td>
+              <td>{property.description}</td>
+              <td>
+      <Button variant="success" onClick={() => setShowForm(true)}>
+        Add
+      </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => handleShowForm(property.id)}
+                >
+                  Edit
+                </Button>{" "}
+              
+                <Button
+                  variant="danger"
+                  onClick={() => handleShowConfirmation(property.id)}
+                >
+                  Delete
+                </Button>
+              </td>
+               
             </tr>
-          </thead>
-          <tbody>
-            {currentProperties.map((property) => (
-              <tr key={property.id}>
-                <td>{property.title}</td>
-                <td>{property.brand}</td>
-                <td>{property.price}</td>
-                <td>
-                  <Badge variant="primary">{property.category}</Badge>
-                </td>
-                <td>{property.description}</td>
-                <td>
-                  <Button
-                    variant="success"
-                    onClick={() => handleEdit(property)}
-                  >
-                    Edit
-                  </Button>{" "}
-                  <Button
-                    variant="danger"
-                    onClick={() => handleShowConfirmation(property.id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Pagination>
-          <Pagination.Prev onClick={handlePrevClick} />
-          {renderPaginationItems()}
-          <Pagination.Next onClick={handleNextClick} />
-        </Pagination>
-        <h1>
-          <Badge bg="primary">Add/Edit Property</Badge>
-        </h1>
+          ))}
+        </tbody>
+      </Table>
+      <Pagination>
+        <Pagination.Prev onClick={handlePrevClick} />
+        {renderPaginationItems()}
+        <Pagination.Next onClick={handleNextClick} />
+      </Pagination>
 
-        <Form
-          id="propertyForm"
-          onSubmit={propertyId ? handleUpdate : handleSubmit}
-        >
-          <Form.Group className="mb-3" controlId="formTitle">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              placeholder="Enter title"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBrand">
-            <Form.Label>Brand</Form.Label>
-            <Form.Control
-              type="text"
-              name="brand"
-              placeholder="Enter brand"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formPrice">
-            <Form.Label>Price</Form.Label>
-            <Form.Control
-              type="number"
-              name="price"
-              placeholder="Enter price"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formCategory">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              name="category"
-              placeholder="Enter category"
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="description"
-              placeholder="Enter description"
-              required
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            {propertyId ? "Update Property" : "Add Property"}
-          </Button>
-        </Form>
-      </div>
+     
       <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Deletion</Modal.Title>
+          <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this property?</Modal.Body>
+        <Modal.Body>
+          Are you sure you want to delete this property?
+        </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCloseConfirmation}>
+          <Button variant="secondary" onClick={handleCloseConfirmation}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleDeleteConfirmation}>
+          <Button
+            variant="danger"
+            onClick={() => deleteProperty(propertyId)}
+          >
             Delete
           </Button>
         </Modal.Footer>
+      </Modal>
+
+     
+      <Modal show={showForm} onHide={handleCloseForm}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {editPropertyData ? "Edit Property" : "Add Property"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="title">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                defaultValue={editPropertyData ? editPropertyData.title : ""}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="brand">
+              <Form.Label>Brand</Form.Label>
+              <Form.Control
+                type="text"
+                defaultValue={editPropertyData ? editPropertyData.brand : ""}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="price">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                defaultValue={editPropertyData ? editPropertyData.price : ""}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="category">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                defaultValue={editPropertyData ? editPropertyData.category : ""}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="description">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                defaultValue={
+                  editPropertyData ? editPropertyData.description : ""
+                }
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              {editPropertyData ? "Save Changes" : "Add Property"}
+            </Button>
+          </Form>
+        </Modal.Body>
       </Modal>
     </Container>
   );
