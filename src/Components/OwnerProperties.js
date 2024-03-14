@@ -17,23 +17,30 @@ const OwnerProperties = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editPropertyData, setEditPropertyData] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
   const handleCloseConfirmation = () => setShowConfirmation(false);
-  const [formErrors, setFormErrors] = useState({});
+  const handleCloseSuccessModal = () => setShowSuccessModal(false);
 
   const handleShowConfirmation = (id) => {
     setPropertyId(id);
     setShowConfirmation(true);
   };
+
   const handleCloseForm = () => {
     setShowForm(false);
     setEditPropertyData(null);
+    setFormErrors({});
   };
+
   const handleShowForm = (id) => {
     const property = properties.find((property) => property.id === id);
     setEditPropertyData(property);
     setShowForm(true);
+    setFormErrors({});
   };
 
   useEffect(() => {
@@ -111,6 +118,7 @@ const OwnerProperties = () => {
       .then((response) => {
         setProperties((properties) => [...properties, response.data]);
         handleCloseForm();
+        setShowSuccessModal(true);
       })
       .catch((error) => console.error(error));
   };
@@ -151,18 +159,49 @@ const OwnerProperties = () => {
     };
 
     if (editPropertyData) {
-      editProperty(editPropertyData.id, updatedProperty);
+      editProperty(editPropertyData.id,updatedProperty);
     } else {
-     addProperty(updatedProperty);
+      addProperty(updatedProperty);
     }
   };
-  
+
+  const validateForm = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const errors = {};
+
+    if (!form.title.value) {
+      errors.title = "Title is required";
+    }
+
+    if (!form.brand.value) {
+      errors.brand = "Brand is required";
+    }
+
+    if (!form.price.value) {
+      errors.price = "Price is required";
+    } else if (isNaN(form.price.value)) {
+      errors.price = "Price must be a number";
+    }
+
+    if (!form.category.value) {
+      errors.category = "Category is required";
+    }
+
+    if (!form.description.value) {
+      errors.description = "Description is required";
+    }
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleSubmit(event);
+    }
+  };
 
   return (
     <Container>
-        <h1>
-        <Badge bg="primary">My Properties</Badge>
-      </h1>
+     <h1><Badge >Owner Properties</Badge></h1>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -183,16 +222,12 @@ const OwnerProperties = () => {
               <td> <Badge variant="primary">{property.category}</Badge></td>
               <td>{property.description}</td>
               <td>
-      <Button variant="success" onClick={() => setShowForm(true)}>
-        Add
-      </Button>
                 <Button
                   variant="primary"
                   onClick={() => handleShowForm(property.id)}
                 >
                   Edit
                 </Button>{" "}
-              
                 <Button
                   variant="danger"
                   onClick={() => handleShowConfirmation(property.id)}
@@ -200,7 +235,6 @@ const OwnerProperties = () => {
                   Delete
                 </Button>
               </td>
-               
             </tr>
           ))}
         </tbody>
@@ -210,8 +244,9 @@ const OwnerProperties = () => {
         {renderPaginationItems()}
         <Pagination.Next onClick={handleNextClick} />
       </Pagination>
-
-     
+      <Button variant="success" onClick={() => setShowForm(true)}>
+        Add New Property
+      </Button>
       <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
@@ -223,55 +258,56 @@ const OwnerProperties = () => {
           <Button variant="secondary" onClick={handleCloseConfirmation}>
             Cancel
           </Button>
-          <Button
-            variant="danger"
-            onClick={() => deleteProperty(propertyId)}
-          >
+          <Button variant="danger" onClick={() => deleteProperty(propertyId)}>
             Delete
           </Button>
         </Modal.Footer>
       </Modal>
-
-     
       <Modal show={showForm} onHide={handleCloseForm}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {editPropertyData ? "Edit Property" : "Add Property"}
-          </Modal.Title>
+          <Modal.Title>{editPropertyData ? "Edit" : "Add"} Property</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={validateForm}>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
                 defaultValue={editPropertyData ? editPropertyData.title : ""}
-                required
               />
+              {formErrors.title && (
+                <Badge bg="danger">{formErrors.title}</Badge>
+              )}
             </Form.Group>
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
                 type="text"
                 defaultValue={editPropertyData ? editPropertyData.brand : ""}
-                required
               />
+              {formErrors.brand && (
+                <Badge bg="danger">{formErrors.brand}</Badge>
+              )}
             </Form.Group>
             <Form.Group controlId="price">
               <Form.Label>Price</Form.Label>
               <Form.Control
-                type="number"
+                type="text"
                 defaultValue={editPropertyData ? editPropertyData.price : ""}
-                required
               />
+              {formErrors.price && (
+                <Badge bg="danger">{formErrors.price}</Badge>
+              )}
             </Form.Group>
             <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
                 type="text"
                 defaultValue={editPropertyData ? editPropertyData.category : ""}
-                required
               />
+              {formErrors.category && (
+                <Badge bg="danger">{formErrors.category}</Badge>
+              )}
             </Form.Group>
             <Form.Group controlId="description">
               <Form.Label>Description</Form.Label>
@@ -282,12 +318,28 @@ const OwnerProperties = () => {
                   editPropertyData ? editPropertyData.description : ""
                 }
               />
+              {formErrors.description && (
+                <Badge bg="danger">{formErrors.description}</Badge>
+              )}
             </Form.Group>
             <Button variant="primary" type="submit">
               {editPropertyData ? "Save Changes" : "Add Property"}
             </Button>
           </Form>
         </Modal.Body>
+      </Modal>
+      <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Property Added Successfully</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Congratulations! The property has been added successfully.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseSuccessModal}>
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </Container>
   );
