@@ -1,660 +1,240 @@
-// /* eslint-disable no-unused-vars */
-// /* eslint-disable react-hooks/exhaustive-deps */
-// import Form from "react-bootstrap/Form";
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import "../pages/css/review.css";
-// import ReactStarsS from "./rate";
-// import BtnsCo from "./Btns";
+import React, { useState, useEffect } from 'react';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchReviews, addReview, editReview, deleteReview } from '../MyStore/actions/reviews';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import '../pages/css/reviewsList.css';
+import LoadingScreen from './../pages/loadingScreen';
+import { Modal, Button, Form } from 'react-bootstrap';
 
-// export default function Rev(props) {
-//   const [reviews, setReviews] = useState([]);
-//   const [revs, setRevs] = useState("");
-//   const [sessionLogin, setSessionLogin] = useState([]);
-//   const [editingReviewId, setEditingReviewId] = useState(null);
-//   const [editedReviewText, setEditedReviewText] = useState("");
-//   const [revNum, setRevNum] = useState("");
-//   const [stars, SetStars] = useState();
-//   const [deleteR, setDeleteR] = useState(false);
-
-//   useEffect(() => {
-//     revNumber();
-//   }, [reviews]);
-
-//   const revNumber = () => {
-//     setRevNum(reviews.length);
-//   };
-//   const onChangeH = (e) => {
-//     setRevs(e.target.value);
-//   };
-
-//   const onChangeR = (e) => {
-//     SetStars(e.target.value);
-//   };
-
-//   // const createRev = async () => {
-//   //   try {
-//   //     await axios.post("https://api-generator.retool.com/mO7BTB/data", {
-//   //       Rate: stars,
-//   //       fName: sessionLogin[0].fullname,
-//   //       Reviews: revs,
-//   //       Fullname: sessionLogin[0].fullname,
-//   //     });
-
-//   //     loadData();
-//   //     console.log("Post successful");
-//   //   } catch (error) {
-//   //     console.error("Error posting review:", error);
-//   //   }
-//   // };
-
-//   const createRev = async () => {
-//     try {
-//       if (!revs.trim()) {
-//         console.error("Review cannot be empty");
-
-//         return;
-//       }
-
-//       if (!stars) {
-//         console.error("Please provide a rating");
-
-//         return;
-//       }
-
-//       if (isNaN(stars)) {
-//         console.error("Rating must be a number");
-
-//         return;
-//       }
-
-//       const rating = parseFloat(stars);
-//       if (rating < 1 || rating > 5) {
-//         console.error("Rating must be between 1 and 5");
-
-//         return;
-//       }
-
-//       await axios.post("https://api-generator.retool.com/mO7BTB/data", {
-//         Rate: rating,
-//         fName: sessionLogin[0].fullname,
-//         Reviews: revs,
-//         Fullname: sessionLogin[0].fullname,
-//       });
-//       setRevs("");
-//       SetStars("");
-
-//       loadData();
-//       console.log("Post successful");
-//     } catch (error) {
-//       console.error("Error posting review:", error);
-//     }
-//   };
-
-//   const loadData = async () => {
-//     try {
-//       const res = await axios.get(
-//         "https://api-generator.retool.com/mO7BTB/data"
-//       );
-//       setReviews(res.data);
-//       revNumber();
-//     } catch (error) {
-//       console.error("Error loading data:", error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     let sessionLogin = JSON.parse(sessionStorage.getItem("login") || "[]");
-//     setSessionLogin(sessionLogin);
-//     console.log(sessionLogin);
-//   }, []);
-
-//   useEffect(() => {
-//     loadData();
-//   }, [sessionLogin]);
-
-//   const deleteRev = async (id) => {
-//     try {
-//       // await axios.delete(`https://api-generator.retool.com/mO7BTB/data/${id}`);
-//       setDeleteR(true);
-//     } catch (error) {
-//       console.error("Error deleting review:", error);
-//     }
-//   };
-
-//   const ConfdeleteRev = async (id) => {
-//     try {
-//       console.log(id);
-//       await axios.delete(`https://api-generator.retool.com/mO7BTB/data/${id}`);
-//       loadData();
-//       revNumber();
-//       console.log("Delete successful");
-//     } catch (error) {
-//       console.error("Error deleting review:", error);
-//     }
-//   };
-
-//   const editRev = async (id) => {
-//     try {
-//       await axios.patch(`https://api-generator.retool.com/mO7BTB/data/${id}`, {
-//         Reviews: editedReviewText,
-//       });
-
-//       loadData();
-//       console.log("Edit successful");
-//       setEditingReviewId(null);
-//       setEditedReviewText("");
-//     } catch (error) {
-//       console.error("Error editing review:", error);
-//     }
-//   };
-//   const geneStars = (rating) => {
-//     let starsHTML = "";
-//     for (let i = 0; i < rating; i++) {
-//       starsHTML += '<i class="fa-solid fa-star"></i>';
-//     }
-//     return <div dangerouslySetInnerHTML={{ __html: starsHTML }} />;
-//   };
-
-//   return (
-//     <>
-//       <h3>Reviews({revNum})</h3>
-//       {/* {reviews.map((rev) => (
-//         <>
-//           <div className="border-bottom pb-3 pt-3" key={rev.id}>
-//             <p className="m-0">
-//               <span
-//                 className="p-1 rounded"
-//                 style={{ backgroundColor: "#b4eee6" }}
-//               >
-//                 {rev.Fullname}
-//               </span>
-//             </p>
-//             <div className="d-flex justify-content-between flex-wrap align-items-center">
-//               {editingReviewId === rev.id ? (
-//                 <Form.Control
-//                   value={editedReviewText}
-//                   onChange={(e) => setEditedReviewText(e.target.value)}
-//                   type="text"
-//                   placeholder="Edit Review"
-//                 />
-//               ) : (
-//                 <p className="m-0">Review: {rev.Reviews}</p>
-//               )}
-//               <div className="d-flex gap-3 align-items-center">
-//                 {editingReviewId === rev.id ? (
-//                   <i
-//                     onClick={() => editRev(rev.id)}
-//                     className="fa-solid fa-check"
-//                   ></i>
-//                 ) : (
-//                   <div className="d-flex align-items-center gap-2">
-//                     <p className="m-0">{geneStars(rev.Rate)}</p>
-//                     {sessionLogin &&
-//                       sessionLogin.length > 0 &&
-//                       sessionLogin[0].fullname === rev.Fullname && (
-//                         <i
-//                           onClick={() => deleteRev(rev.id)}
-//                           data-bs-toggle="modal"
-//                           data-bs-target="#staticBackdrop"
-//                           className="fa-solid fa-trash"
-//                         ></i>
-//                       )}
-//                     <div
-//                       class="modal fade"
-//                       id="staticBackdrop"
-//                       data-bs-backdrop="static"
-//                       data-bs-keyboard="false"
-//                       tabindex="-1"
-//                       aria-labelledby="staticBackdropLabel"
-//                       aria-hidden="true"
-//                     >
-//                       <div class="modal-dialog">
-//                         <div class="modal-content">
-//                           <div class="modal-header">
-//                             <h2
-//                               class="modal-title fs-5"
-//                               id="staticBackdropLabel"
-//                             >
-//                               Confirm Delete
-//                             </h2>
-//                             <button
-//                               type="button"
-//                               class="btn-close"
-//                               data-bs-dismiss="modal"
-//                               aria-label="Close"
-//                             ></button>
-//                           </div>
-//                           <div class="modal-body">
-//                             Are You Sure You want to delete this Review
-//                           </div>
-//                           <div class="modal-footer">
-//                             <BtnsCo
-//                               btnAct={() => ConfdeleteRev(rev.id)}
-//                               nameM="modal"
-//                               btnText="Delete"
-//                               btnCo="danger"
-//                             />
-//                             <BtnsCo
-//                               nameM="modal"
-//                               btnText="Cancel"
-//                               btnCo="primary"
-//                             />
-//                           </div>
-//                         </div>
-//                       </div>
-//                     </div>
-//                     {sessionLogin &&
-//                       sessionLogin.length > 0 &&
-//                       sessionLogin[0].fullname === rev.Fullname && (
-//                         <>
-//                           {editingReviewId === rev.id ? null : (
-//                             <i
-//                               onClick={() => setEditingReviewId(rev.id)}
-//                               className="fa-solid fa-pen-to-square"
-//                             ></i>
-//                           )}
-//                         </>
-//                       )}
-//                   </div>
-//                 )}
-//               </div>
-//             </div>
-//           </div>
-//         </>
-//       ))} */}
-//       {reviews.map((rev) => (
-//         <div className="border-bottom pb-3 pt-3" key={rev.id}>
-//           <p className="m-0">
-//             <span
-//               className="p-1 rounded"
-//               style={{ backgroundColor: "#b4eee6" }}
-//             >
-//               {rev.Fullname}
-//             </span>
-//           </p>
-//           <div className="d-flex justify-content-between flex-wrap align-items-center">
-//             {editingReviewId === rev.id ? (
-//               <Form.Control
-//                 value={editedReviewText}
-//                 onChange={(e) => setEditedReviewText(e.target.value)}
-//                 type="text"
-//                 placeholder="Edit Review"
-//               />
-//             ) : (
-//               <p className="m-0">Review: {rev.Reviews}</p>
-//             )}
-//             <div className="d-flex gap-3 align-items-center">
-//               {editingReviewId === rev.id ? (
-//                 <i
-//                   onClick={() => editRev(rev.id)}
-//                   className="fa-solid fa-check"
-//                 ></i>
-//               ) : (
-//                 <div className="d-flex align-items-center gap-2">
-//                   <p className="m-0">{geneStars(rev.Rate)}</p>
-//                   {sessionLogin &&
-//                     sessionLogin.length > 0 &&
-//                     sessionLogin[0].fullname === rev.Fullname && (
-//                       <i
-//                         onClick={() => setDeleteR(rev.id)}
-//                         data-bs-toggle="modal"
-//                         data-bs-target="#staticBackdrop"
-//                         className="fa-solid fa-trash"
-//                       ></i>
-//                     )}
-//                   {sessionLogin &&
-//                     sessionLogin.length > 0 &&
-//                     sessionLogin[0].fullname === rev.Fullname && (
-//                       <div
-//                         className="modal fade"
-//                         id={`staticBackdrop-${rev.id}`}
-//                         data-bs-backdrop="static"
-//                         data-bs-keyboard="false"
-//                         tabIndex="-1"
-//                         aria-labelledby={`staticBackdropLabel-${rev.id}`}
-//                         aria-hidden="true"
-//                       >
-//                         <div className="modal-dialog">
-//                           <div className="modal-content">
-//                             <div className="modal-header">
-//                               <h2
-//                                 className="modal-title fs-5"
-//                                 id={`staticBackdropLabel-${rev.id}`}
-//                               >
-//                                 Confirm Delete
-//                               </h2>
-//                               <button
-//                                 type="button"
-//                                 className="btn-close"
-//                                 data-bs-dismiss="modal"
-//                                 aria-label="Close"
-//                               ></button>
-//                             </div>
-//                             <div className="modal-body">
-//                               Are You Sure You want to delete this Review
-//                             </div>
-//                             <div className="modal-footer">
-//                               <BtnsCo
-//                                 btnAct={() => ConfdeleteRev(rev.id)}
-//                                 nameM="modal"
-//                                 btnText="Delete"
-//                                 btnCo="danger"
-//                               />
-//                               <BtnsCo
-//                                 nameM="modal"
-//                                 btnText="Cancel"
-//                                 btnCo="primary"
-//                               />
-//                             </div>
-//                           </div>
-//                         </div>
-//                       </div>
-//                     )}
-//                   {sessionLogin &&
-//                     sessionLogin.length > 0 &&
-//                     sessionLogin[0].fullname === rev.Fullname && (
-//                       <>
-//                         {editingReviewId === rev.id ? null : (
-//                           <i
-//                             onClick={() => setEditingReviewId(rev.id)}
-//                             className="fa-solid fa-pen-to-square"
-//                           ></i>
-//                         )}
-//                       </>
-//                     )}
-//                 </div>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       ))}
-
-//       {sessionLogin && sessionLogin.length > 0 ? (
-//         <div className="d-flex gap-2 pt-3 align-items-center ">
-//           <div className="d-flex flex-column gap-1 ">
-//             {sessionLogin && sessionLogin.length > 0 && (
-//               <p className="m-0">{sessionLogin[0].fullname}</p>
-//             )}
-//             <div className="d-flex align-items-center gap-2">
-//               <Form.Control
-//                 onChange={onChangeH}
-//                 value={revs}
-//                 type="text"
-//                 placeholder="Please Add Review"
-//               />
-
-//               <Form.Control
-//                 onChange={onChangeR}
-//                 value={stars}
-//                 type="text"
-//                 placeholder="Please Add Rate"
-//               />
-//               {/* <ReactStarsS /> */}
-//               <i class="fa-solid fa-plus" onClick={createRev}></i>
-//             </div>
-//           </div>
-
-//           <div className="d-flex ">
-//             {reviews.length > 0 && <p className="m-0">{reviews[0].ratings}</p>}
-//           </div>
-//         </div>
-//       ) : (
-//         <p>Please Login To add Review</p>
-//       )}
-//     </>
-//   );
-// }
-import Form from "react-bootstrap/Form";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import "../pages/css/review.css";
-import ReactStarsS from "./rate";
-import BtnsCo from "./Btns";
-
-export default function Rev(props) {
-  const [reviews, setReviews] = useState([]);
-  const [revs, setRevs] = useState("");
-  const [sessionLogin, setSessionLogin] = useState([]);
-  const [editingReviewId, setEditingReviewId] = useState(null);
-  const [editedReviewText, setEditedReviewText] = useState("");
-  const [revNum, setRevNum] = useState("");
-  const [stars, SetStars] = useState("");
-  const [deleteR, setDeleteR] = useState(false);
-  const [deleteId, setDeleteId] = useState(""); // New state to hold the id of the review to delete
+function ReviewsList() {
+  const dispatch = useDispatch();
+  const reviews = useSelector(state => state.reviews.reviews);
+  const isLoading = useSelector(state => state.reviews.loading);
+  const error = useSelector(state => state.reviews.error);
+  const [reviewId, setReviewId] = useState(null);
+  const [formData, setFormData] = useState({ title: '', rating: '', content: '' });
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    revNumber();
-  }, [reviews]);
+    dispatch(fetchReviews());
+  }, [dispatch]);
 
-  const revNumber = () => {
-    setRevNum(reviews.length);
+  const handleAddReview = () => {
+    setShowAddModal(true);
   };
 
-  const onChangeH = (e) => {
-    setRevs(e.target.value);
+  const handleEditReview = (review) => {
+    setReviewId(review.id);
+    setFormData({ title: review.title, rating: review.rating, content: review.content });
+    setShowEditModal(true);
   };
 
-  const onChangeR = (e) => {
-    SetStars(e.target.value);
+  const handleDeleteReview = (review) => {
+    setReviewId(review.id);
+    setShowDeleteModal(true);
   };
 
-  const createRev = async () => {
-    try {
-      if (!revs.trim()) {
-        console.error("Review cannot be empty");
-        return;
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setFormData({ title: '', rating: '', content: '' });
+    setFormErrors({});
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setFormData({ title: '', rating: '', content: '' });
+    setFormErrors({});
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
+  const handleFormChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddReviewSubmit = () => {
+    if (validateForm()) {
+      dispatch(addReview(formData));
+      setShowAddModal(false);
+      setFormData({ title: '', rating: '', content: '' });
+      setFormErrors({});
+    }
+  };
+
+  const handleEditReviewSubmit = () => {
+    if (validateForm()) {
+      dispatch(editReview(reviewId, formData));
+      setShowEditModal(false);
+      setFormData({ title: '', rating: '', content: '' });
+      setFormErrors({});
+    }
+  };
+
+  const validateForm = () => {
+    let errors = {};
+    if (!formData.title.trim()) {
+      errors.title = 'Title is required';
+    }
+    if (!formData.content.trim()) {
+      errors.content = 'Content is required';
+    }
+    if (!formData.rating || formData.rating < 1 || formData.rating > 5) {
+      errors.rating = 'Rating must be between 1 and 5';
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return formatDistanceToNow(date, { addSuffix: true });
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < rating) {
+        stars.push(<FontAwesomeIcon key={i} icon={faStar} className="star" style={{ color: '#f39c12' }} />);
+      } else {
+        stars.push(<FontAwesomeIcon key={i} icon={faStar} className="star" style={{ color: '#ccc' }} />);
       }
-
-      if (!stars) {
-        console.error("Please provide a rating");
-        return;
-      }
-
-      const rating = parseFloat(stars);
-      if (isNaN(rating) || rating < 1 || rating > 5) {
-        console.error("Rating must be a number between 1 and 5");
-        return;
-      }
-
-      await axios.post("https://api-generator.retool.com/mO7BTB/data", {
-        Rate: rating,
-        fName: sessionLogin[0].fullname,
-        Reviews: revs,
-        Fullname: sessionLogin[0].fullname,
-      });
-      setRevs("");
-      SetStars("");
-      loadData();
-      console.log("Post successful");
-    } catch (error) {
-      console.error("Error posting review:", error);
     }
-  };
-
-  const loadData = async () => {
-    try {
-      const res = await axios.get(
-        "https://api-generator.retool.com/mO7BTB/data"
-      );
-      setReviews(res.data);
-      revNumber();
-    } catch (error) {
-      console.error("Error loading data:", error);
-    }
-  };
-
-  useEffect(() => {
-    let sessionLogin = JSON.parse(sessionStorage.getItem("login") || "[]");
-    setSessionLogin(sessionLogin);
-    console.log(sessionLogin);
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [sessionLogin]);
-
-  const deleteRev = (id) => {
-    setDeleteR(true);
-    setDeleteId(id);
-  };
-
-  const ConfdeleteRev = async () => {
-    try {
-      console.log(deleteId);
-      await axios.delete(
-        `https://api-generator.retool.com/mO7BTB/data/${deleteId}`
-      );
-      loadData();
-      revNumber();
-      console.log("Delete successful");
-    } catch (error) {
-      console.error("Error deleting review:", error);
-    }
-    setDeleteR(false); 
-  };
-
-  const editRev = async (id) => {
-    try {
-      await axios.patch(`https://api-generator.retool.com/mO7BTB/data/${id}`, {
-        Reviews: editedReviewText,
-      });
-      loadData();
-      console.log("Edit successful");
-      setEditingReviewId(null);
-      setEditedReviewText("");
-    } catch (error) {
-      console.error("Error editing review:", error);
-    }
-  };
-
-  const geneStars = (rating) => {
-    let starsHTML = "";
-    for (let i = 0; i < rating; i++) {
-      starsHTML += '<i class="fa-solid fa-star"></i>';
-    }
-    return <div dangerouslySetInnerHTML={{ __html: starsHTML }} />;
+    return stars;
   };
 
   return (
     <>
-      <h3>Reviews({revNum})</h3>
-      {reviews.map((rev) => (
-        <div className="border-bottom pb-3 pt-3" key={rev.id}>
-          <p className="m-0">
-            <span
-              className="p-1 rounded"
-              style={{ backgroundColor: "#b4eee6" }}
-            >
-              {rev.Fullname}
-            </span>
-          </p>
-          <div className="d-flex justify-content-between flex-wrap align-items-center">
-            {editingReviewId === rev.id ? (
-              <Form.Control
-                value={editedReviewText}
-                onChange={(e) => setEditedReviewText(e.target.value)}
-                type="text"
-                placeholder="Edit Review"
-              />
-            ) : (
-              <p className="m-0">Review: {rev.Reviews}</p>
-            )}
-            <div className="d-flex gap-3 align-items-center">
-              {editingReviewId === rev.id ? (
-                <i
-                  onClick={() => editRev(rev.id)}
-                  className="fa-solid fa-check"
-                ></i>
-              ) : (
-                <div className="d-flex align-items-center gap-2">
-                  <p className="m-0">{geneStars(rev.Rate)}</p>
-                  {sessionLogin &&
-                    sessionLogin.length > 0 &&
-                    sessionLogin[0].fullname === rev.Fullname && (
-                      <i
-                        onClick={() => deleteRev(rev.id)} 
-                        data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"
-                        className="fa-solid fa-trash"
-                      ></i>
-                    )}
+      {isLoading && <LoadingScreen />}
+      {error && <p>{error}</p>}
+      {!isLoading && !error && (
+        <div>
+          <button className="btn btn-primary" onClick={handleAddReview}>
+            <FontAwesomeIcon icon={faPlus} /> Add New Review
+          </button>
+          {reviews.length === 0 ? (
+            <p className="no-reviews">No reviews available at the moment.</p>
+          ) : (
+            reviews.map(review => (
+              <div key={review.id} className="review-container mt-4">
+                <div className="review-header">
+                  <h2 className="review-title">{review.title}</h2>
+                  <p className="review-date">{formatDate(review.created_at)}</p>
                 </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-      <div
-        className={`modal fade ${deleteR ? "show" : ""}`} 
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2 className="modal-title fs-5" id="staticBackdropLabel">
-                Confirm Delete
-              </h2>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={() => setDeleteR(false)} 
-              ></button>
-            </div>
-            <div className="modal-body">
-              Are You Sure You want to delete this Review
-            </div>
-            <div className="modal-footer">
-              <BtnsCo
-                btnAct={ConfdeleteRev}
-                nameM="modal"
-                btnText="Delete"
-                btnCo="danger"
-              />
-              <BtnsCo nameM="modal" btnText="Cancel" btnCo="primary" />
-            </div>
-          </div>
-        </div>
-      </div>
-      {sessionLogin && sessionLogin.length > 0 ? (
-        <div className="d-flex gap-2 pt-3 align-items-center ">
-          <div className="d-flex flex-column gap-1 ">
-            {sessionLogin && sessionLogin.length > 0 && (
-              <p className="m-0">{sessionLogin[0].fullname}</p>
-            )}
-            <div className="d-flex align-items-center gap-2">
-              <Form.Control
-                onChange={onChangeH}
-                value={revs}
-                type="text"
-                placeholder="Please Add Review"
-              />
+                <p className="review-rating">{renderStars(review.rating)}</p>
+                <p className="review-content">{review.content}</p>
+                <p className="review-user">User ID: {review.user}</p>
+                <p className="review-property">Property ID: {review.property}</p>
 
-              <Form.Control
-                onChange={onChangeR}
-                value={stars}
-                type="text"
-                placeholder="Please Add Rate"
-              />
-              {/* <ReactStarsS /> */}
-              <i class="fa-solid fa-plus" onClick={createRev}></i>
-            </div>
-          </div>
+                {/* action buttons */}
+                <div className="review-actions">
+                  <button className="btn btn-info" onClick={() => handleEditReview(review)}>
+                    <FontAwesomeIcon icon={faEdit} /> Edit
+                  </button>
+                  <button className="btn btn-danger" onClick={() => handleDeleteReview(review)}>
+                    <FontAwesomeIcon icon={faTrash} /> Delete
+                  </button>
+                </div>
 
-          <div className="d-flex ">
-            {reviews.length > 0 && <p className="m-0">{reviews[0].ratings}</p>}
-          </div>
+              </div>
+            ))
+          )}
         </div>
-      ) : (
-        <p>Please Login To add Review</p>
       )}
+
+      {/* Add Modal */}
+      <Modal show={showAddModal} onHide={handleCloseAddModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text" name="title" value={formData.title} onChange={handleFormChange} placeholder="Enter title" />
+              {formErrors.title && <span className="text-danger">{formErrors.title}</span>}
+            </Form.Group>
+            <Form.Group controlId="formRating">
+              <Form.Label>Rating</Form.Label>
+              <Form.Control type="number" name="rating" value={formData.rating} onChange={handleFormChange} placeholder="Enter rating" />
+              {formErrors.rating && <span className="text-danger">{formErrors.rating}</span>}
+            </Form.Group>
+            <Form.Group controlId="formContent">
+              <Form.Label>Content</Form.Label>
+              <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
+              {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAddModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleAddReviewSubmit}>
+            Save Review
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Edit Modal */}
+      <Modal show={showEditModal} onHide={handleCloseEditModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text" name="title" value={formData.title} onChange={handleFormChange} placeholder="Enter title" />
+              {formErrors.title && <span className="text-danger">{formErrors.title}</span>}
+            </Form.Group>
+            <Form.Group controlId="formRating">
+              <Form.Label>Rating</Form.Label>
+              <Form.Control type="number" name="rating" value={formData.rating} onChange={handleFormChange} placeholder="Enter rating" />
+              {formErrors.rating && <span className="text-danger">{formErrors.rating}</span>}
+            </Form.Group>
+            <Form.Group controlId="formContent">
+              <Form.Label>Content</Form.Label>
+              <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
+              {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseEditModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleEditReviewSubmit}>
+            Update Review
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this review?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => { dispatch(deleteReview(reviewId)); setShowDeleteModal(false); }}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
+
+export default ReviewsList;
