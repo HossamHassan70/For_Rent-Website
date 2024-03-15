@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./css/userProfile.css";
 import { useParams } from "react-router-dom";
-import Rev from "../Components/reviews";
 import OwnerProperties from "../Components/OwnerProperties";
 import LoadingScreen from "./loadingScreen";
 import OwnerRequests from "../Components/ownerRequests";
+import ReviewsList from "../Components/reviews";
 
 const Emails = ({ userId }) => {
   const [emails, setPosts] = useState([]);
@@ -151,7 +151,7 @@ const UserProfile = () => {
       case "emails":
         return <Emails userId={userId} />;
       case "reviews":
-        return <Rev />;
+        return <ReviewsList />;
       case "requests":
         return <OwnerRequests />;
       case "properties":
