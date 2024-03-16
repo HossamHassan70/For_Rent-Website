@@ -11,8 +11,9 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import "./OwnerProperties.css";
+
 const OwnerProperties = () => {
-  const [properties, setproperties] = useState([]);
+  const [properties, setProperties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [propertyId, setPropertyId] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -20,29 +21,29 @@ const OwnerProperties = () => {
   const [editPropertyData, setEditPropertyData] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [image, setImage] = useState(null);
+  
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
+  
   const handleCloseConfirmation = () => setShowConfirmation(false);
   const handleCloseSuccessModal = () => setShowSuccessModal(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
+  
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
-
-
-
+  
   const handleShowConfirmation = (id) => {
     setPropertyId(id);
     setShowConfirmation(true);
   };
-
+  
   const handleCloseForm = () => {
     setShowForm(false);
     setEditPropertyData(null);
     setFormErrors({});
   };
-
+  
   const handleShowForm = (id) => {
     const property = properties.find((property) => property.id === id);
     setEditPropertyData(property);
@@ -52,53 +53,51 @@ const OwnerProperties = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/properties/")
-      .then((response) => {
-
-        setproperties(response.data);
+    .get("http://localhost:8000/properties/")
+    .then((response) => {
+      setProperties(response.data);
       })
-
       .catch((error) => console.error(error));
   }, []);
-  // console.log(properties)
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
   const currentProperties = properties.slice(
     indexOfFirstProperty,
     indexOfLastProperty
-  );
+    );
+    
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const getPaginationItems = () => {
-    const pageNumbers = [];
-    const maxPagesToShow = 3;
-    const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
-    let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
-    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-    if (totalPages <= maxPagesToShow) {
-      startPage = 1;
-      endPage = totalPages;
-    } else if (currentPage <= halfMaxPagesToShow) {
-      endPage = maxPagesToShow;
-    } else if (currentPage >= totalPages - halfMaxPagesToShow) {
-      startPage = totalPages - maxPagesToShow + 1;
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-
-    return pageNumbers;
-  };
+    const getPaginationItems = () => {
+      const pageNumbers = [];
+      const maxPagesToShow = 3;
+      const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+      let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+      let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+  
+      if (totalPages <= maxPagesToShow) {
+        startPage = 1;
+        endPage = totalPages;
+      } else if (currentPage <= halfMaxPagesToShow) {
+        endPage = maxPagesToShow;
+      } else if (currentPage >= totalPages - halfMaxPagesToShow) {
+        startPage = totalPages - maxPagesToShow + 1;
+      }
+  
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+  
+      return pageNumbers;
+    };
+  
 
   const deleteProperty = (id) => {
     axios
       .delete(`http://localhost:8000/properties/${id}/`)
       .then((response) => {
-        setproperties(properties.filter((property) => property.id !== id));
+        setProperties(properties.filter((property) => property.id !== id));
         handleCloseConfirmation();
       })
       .catch((error) => console.error(error));
@@ -108,7 +107,7 @@ const OwnerProperties = () => {
     axios
       .put(`http://localhost:8000/properties/${id}/`, updatedProperty)
       .then((response) => {
-        setproperties((properties) =>
+        setProperties((properties) =>
           properties.map((property) => {
             if (property.id === id) {
               return { ...property, ...updatedProperty };
@@ -120,18 +119,21 @@ const OwnerProperties = () => {
       })
       .catch((error) => console.error(error));
   };
+  const addProperty = async (newProperty) => {
+    try {
+      const response = await axios.post("http://localhost:8000/properties/", newProperty, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+  
+      console.log('Image uploaded successfully');
 
-  const addProperty = (newProperty) => {
-    axios
-      .post("http://localhost:8000/properties/", newProperty)
-      .then((response) => {
-        setproperties((properties) => [...properties, response.data]);
-        handleCloseForm();
-        setShowSuccessModal(true);
-      })
-      .catch((error) => console.error(error));
+      setProperties((properties) => [...properties, response.data]);
+      handleCloseForm();
+      setShowSuccessModal(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   const renderPaginationItems = () => {
     return getPaginationItems().map((pageNumber) => (
       <Pagination.Item
@@ -155,10 +157,12 @@ const OwnerProperties = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
+    const formData = new FormData(form);
+    formData.append("image", image);
+
     const updatedProperty = {
       title: form.title.value,
       address: form.address.value,
@@ -167,10 +171,8 @@ const OwnerProperties = () => {
       description: form.description.value,
       rooms: form.rooms.value,
       bathrooms: form.bathrooms.value,
-      type: form.type.value,
       owner: form.owner.value,
-      image: form.file,
-      availability: form.availability.value
+      availability: form.availability.value,
     };
 
     if (editPropertyData) {
@@ -237,8 +239,9 @@ const OwnerProperties = () => {
 
   return (
     <Container>
-      <h1> <Badge>My Properties </Badge></h1>
-      <div className="card-container">
+<h1 className="my-properties-heading">
+  <Badge bg="secondary">  My Properties</Badge>
+</h1>      <div className="card-container">
         {currentProperties.map((property) => (
           <Card key={property.id} className="property-card">
             <Card.Img variant="top" src={property.image} />
