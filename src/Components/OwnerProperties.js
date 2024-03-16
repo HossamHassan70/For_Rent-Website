@@ -22,28 +22,28 @@ const OwnerProperties = () => {
   const [formErrors, setFormErrors] = useState({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [image, setImage] = useState(null);
-  
+
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
-  
+
   const handleCloseConfirmation = () => setShowConfirmation(false);
   const handleCloseSuccessModal = () => setShowSuccessModal(false);
-  
+
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
-  
+
   const handleShowConfirmation = (id) => {
     setPropertyId(id);
     setShowConfirmation(true);
   };
-  
+
   const handleCloseForm = () => {
     setShowForm(false);
     setEditPropertyData(null);
     setFormErrors({});
   };
-  
+
   const handleShowForm = (id) => {
     const property = properties.find((property) => property.id === id);
     setEditPropertyData(property);
@@ -53,9 +53,9 @@ const OwnerProperties = () => {
 
   useEffect(() => {
     axios
-    .get("http://localhost:8000/properties/")
-    .then((response) => {
-      setProperties(response.data);
+      .get("http://localhost:8000/properties/")
+      .then((response) => {
+        setProperties(response.data);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -65,33 +65,33 @@ const OwnerProperties = () => {
   const currentProperties = properties.slice(
     indexOfFirstProperty,
     indexOfLastProperty
-    );
-    
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  );
 
-    const getPaginationItems = () => {
-      const pageNumbers = [];
-      const maxPagesToShow = 3;
-      const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
-      let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
-      let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-  
-      if (totalPages <= maxPagesToShow) {
-        startPage = 1;
-        endPage = totalPages;
-      } else if (currentPage <= halfMaxPagesToShow) {
-        endPage = maxPagesToShow;
-      } else if (currentPage >= totalPages - halfMaxPagesToShow) {
-        startPage = totalPages - maxPagesToShow + 1;
-      }
-  
-      for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-      }
-  
-      return pageNumbers;
-    };
-  
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const getPaginationItems = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 3;
+    const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+    let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+    if (totalPages <= maxPagesToShow) {
+      startPage = 1;
+      endPage = totalPages;
+    } else if (currentPage <= halfMaxPagesToShow) {
+      endPage = maxPagesToShow;
+    } else if (currentPage >= totalPages - halfMaxPagesToShow) {
+      startPage = totalPages - maxPagesToShow + 1;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return pageNumbers;
+  };
+
 
   const deleteProperty = (id) => {
     axios
@@ -103,14 +103,16 @@ const OwnerProperties = () => {
       .catch((error) => console.error(error));
   };
 
-  const editProperty = (id, updatedProperty) => {
+  const editProperty = (id, formData) => {
     axios
-      .put(`http://localhost:8000/properties/${id}/`, updatedProperty)
+      .put(`http://localhost:8000/properties/${id}/`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       .then((response) => {
         setProperties((properties) =>
           properties.map((property) => {
             if (property.id === id) {
-              return { ...property, ...updatedProperty };
+              return response.data;
             }
             return property;
           })
@@ -119,12 +121,13 @@ const OwnerProperties = () => {
       })
       .catch((error) => console.error(error));
   };
-  const addProperty = async (newProperty) => {
+
+  const addProperty = async (formData) => {
     try {
-      const response = await axios.post("http://localhost:8000/properties/", newProperty, {
+      const response = await axios.post("http://localhost:8000/properties/", formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-  
+
       console.log('Image uploaded successfully');
 
       setProperties((properties) => [...properties, response.data]);
@@ -134,6 +137,7 @@ const OwnerProperties = () => {
       console.error(error);
     }
   };
+
   const renderPaginationItems = () => {
     return getPaginationItems().map((pageNumber) => (
       <Pagination.Item
@@ -157,28 +161,26 @@ const OwnerProperties = () => {
       setCurrentPage(currentPage + 1);
     }
   };
+
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     formData.append("image", image);
-
-    const updatedProperty = {
-      title: form.title.value,
-      address: form.address.value,
-      price: form.price.value,
-      type: form.type.value,
-      description: form.description.value,
-      rooms: form.rooms.value,
-      bathrooms: form.bathrooms.value,
-      owner: form.owner.value,
-      availability: form.availability.value,
-    };
+    formData.append("title", form.title.value);
+    formData.append("address", form.address.value);
+    formData.append("price", form.price.value);
+    formData.append("type", form.type.value);
+    formData.append("description", form.description.value);
+    formData.append("rooms", form.rooms.value);
+    formData.append("bathrooms", form.bathrooms.value);
+    formData.append("owner", form.owner.value);
+    formData.append("availability", form.availability.value);
 
     if (editPropertyData) {
-      editProperty(editPropertyData.id, updatedProperty);
+      editProperty(editPropertyData.id, formData);
     } else {
-      addProperty(updatedProperty);
+      addProperty(formData);
     }
   };
 
@@ -239,9 +241,9 @@ const OwnerProperties = () => {
 
   return (
     <Container>
-<h1 className="my-properties-heading">
-  <Badge bg="secondary">  My Properties</Badge>
-</h1>      <div className="card-container">
+      <h1 className="my-properties-heading">
+        <Badge bg="secondary">  My Properties</Badge>
+      </h1>      <div className="card-container">
         {currentProperties.map((property) => (
           <Card key={property.id} className="property-card">
             <Card.Img variant="top" src={property.image} />
@@ -274,6 +276,7 @@ const OwnerProperties = () => {
         {renderPaginationItems()}
         <Pagination.Next onClick={handleNextClick} />
       </Pagination>
+
       <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
@@ -290,6 +293,7 @@ const OwnerProperties = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Modal show={showForm} onHide={handleCloseForm}>
         <Modal.Header closeButton>
           <Modal.Title>{editPropertyData ? "Edit" : "Add"} Property</Modal.Title>
@@ -432,9 +436,9 @@ const OwnerProperties = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-              <Button variant="success" onClick={() => setShowForm(true)}>
-                Add New Property
-              </Button>
+      <Button variant="success" onClick={() => setShowForm(true)}>
+        Add New Property
+      </Button>
     </Container>
   );
 };
