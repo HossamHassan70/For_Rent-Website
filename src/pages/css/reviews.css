@@ -35,7 +35,6 @@ body {
 
 .review-content {
     margin-left: 10px;
-    margin-bottom: 10px;
     font-size: 18px;
     color: #444;
 }
@@ -54,7 +53,6 @@ body {
 
 .create-review-button {
     margin-left: 10px;
-    margin-bottom: 20px;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #007bff;
