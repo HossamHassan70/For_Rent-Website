@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./ViewProperty.css";
-import Rev from "../Components/reviews";
+import ReviewsList from "../Components/reviews";
 
 const PropertyView = () => {
   const propertyId = useParams();
@@ -193,18 +193,11 @@ const PropertyView = () => {
               <Card.Title>City Name :</Card.Title>
               <Card.Title>Streat Name :</Card.Title>
             </Card.Body>
-
-            <Card.Footer></Card.Footer>
           </Card>
+
+          <h5 className="mt-4">Reviews:</h5>
+          <ReviewsList />
         </Col>
-        <div class="container pt-2">
-          <div class="row">
-            <div class="col">
-              <Rev />
-            </div>
-            <div class="col"></div>
-          </div>
-        </div>
       </Row>
     </Container>
   );
