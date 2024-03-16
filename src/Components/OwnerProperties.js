@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Container,
-  Table,
   Pagination,
   Form,
   Button,
   Modal,
   Badge,
+  Card,
+  ListGroup,
 } from "react-bootstrap";
-
+import "./OwnerProperties.css";
 const OwnerProperties = () => {
-  const [properties, setProperties] = useState([]);
+  const [properties, setproperties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [propertyId, setPropertyId] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -19,11 +20,17 @@ const OwnerProperties = () => {
   const [editPropertyData, setEditPropertyData] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
   const handleCloseConfirmation = () => setShowConfirmation(false);
   const handleCloseSuccessModal = () => setShowSuccessModal(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
+
+
 
   const handleShowConfirmation = (id) => {
     setPropertyId(id);
@@ -45,13 +52,15 @@ const OwnerProperties = () => {
 
   useEffect(() => {
     axios
-      .get("https://dummyjson.com/products")
+      .get("http://localhost:8000/properties/")
       .then((response) => {
-        const data = response.data;
-        setProperties(data.products);
+
+        setproperties(response.data);
       })
+
       .catch((error) => console.error(error));
   }, []);
+  // console.log(properties)
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -87,9 +96,9 @@ const OwnerProperties = () => {
 
   const deleteProperty = (id) => {
     axios
-      .delete(`https://dummyjson.com/products/${id}`)
+      .delete(`http://localhost:8000/properties/${id}/`)
       .then((response) => {
-        setProperties(properties.filter((property) => property.id !== id));
+        setproperties(properties.filter((property) => property.id !== id));
         handleCloseConfirmation();
       })
       .catch((error) => console.error(error));
@@ -97,9 +106,9 @@ const OwnerProperties = () => {
 
   const editProperty = (id, updatedProperty) => {
     axios
-      .put(`https://dummyjson.com/products/${id}`, updatedProperty)
+      .put(`http://localhost:8000/properties/${id}/`, updatedProperty)
       .then((response) => {
-        setProperties((properties) =>
+        setproperties((properties) =>
           properties.map((property) => {
             if (property.id === id) {
               return { ...property, ...updatedProperty };
@@ -114,9 +123,9 @@ const OwnerProperties = () => {
 
   const addProperty = (newProperty) => {
     axios
-      .post("https://dummyjson.com/products/add", newProperty)
+      .post("http://localhost:8000/properties/", newProperty)
       .then((response) => {
-        setProperties((properties) => [...properties, response.data]);
+        setproperties((properties) => [...properties, response.data]);
         handleCloseForm();
         setShowSuccessModal(true);
       })
@@ -152,14 +161,20 @@ const OwnerProperties = () => {
     const form = event.target;
     const updatedProperty = {
       title: form.title.value,
-      brand: form.brand.value,
+      address: form.address.value,
       price: form.price.value,
-      category: form.category.value,
+      type: form.type.value,
       description: form.description.value,
+      rooms: form.rooms.value,
+      bathrooms: form.bathrooms.value,
+      type: form.type.value,
+      owner: form.owner.value,
+      image: form.file,
+      availability: form.availability.value
     };
 
     if (editPropertyData) {
-      editProperty(editPropertyData.id,updatedProperty);
+      editProperty(editPropertyData.id, updatedProperty);
     } else {
       addProperty(updatedProperty);
     }
@@ -174,8 +189,8 @@ const OwnerProperties = () => {
       errors.title = "Title is required";
     }
 
-    if (!form.brand.value) {
-      errors.brand = "Brand is required";
+    if (!form.address.value) {
+      errors.address = "Brand is required";
     }
 
     if (!form.price.value) {
@@ -184,13 +199,34 @@ const OwnerProperties = () => {
       errors.price = "Price must be a number";
     }
 
-    if (!form.category.value) {
-      errors.category = "Category is required";
+    if (!form.type.value) {
+      errors.type = "Type is required";
     }
 
     if (!form.description.value) {
       errors.description = "Description is required";
     }
+    if (!form.rooms.value) {
+      errors.rooms = "Rooms is required";
+    } else if (isNaN(form.rooms.value)) {
+      errors.rooms = "Rooms must be a number";
+    }
+    if (!form.bathrooms.value) {
+      errors.bathrooms = "Bathrooms is required";
+    } else if (isNaN(form.bathrooms.value)) {
+      errors.bathrooms = "Bathrooms must be a number";
+    }
+    if (!form.owner.value) {
+      errors.owner = "Owner is required";
+    }
+
+    if (!form.availability.value) {
+      errors.availability = "availability is required";
+    }
+    if (!form.image.value) {
+      errors.image = "Please select an image";
+    }
+
 
     setFormErrors(errors);
 
@@ -201,52 +237,40 @@ const OwnerProperties = () => {
 
   return (
     <Container>
-     <h1><Badge >Owner Properties</Badge></h1>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentProperties.map((property) => (
-            <tr key={property.id}>
-              <td>{property.title}</td>
-              <td>{property.brand}</td>
-              <td>{property.price}</td>
-              <td> <Badge variant="primary">{property.category}</Badge></td>
-              <td>{property.description}</td>
-              <td>
-                <Button
-                  variant="primary"
-                  onClick={() => handleShowForm(property.id)}
-                >
-                  Edit
-                </Button>{" "}
-                <Button
-                  variant="danger"
-                  onClick={() => handleShowConfirmation(property.id)}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <h1> <Badge>My Properties </Badge></h1>
+      <div className="card-container">
+        {currentProperties.map((property) => (
+          <Card key={property.id} className="property-card">
+            <Card.Img variant="top" src={property.image} />
+            <Card.Body>
+              <Card.Title>{property.title}</Card.Title>
+              <Card.Text>
+                {property.description}
+              </Card.Text>
+            </Card.Body>
+            <ListGroup className="list-group-flush">
+              <ListGroup.Item>Address: {property.address}</ListGroup.Item>
+              <ListGroup.Item>Price: {property.price}</ListGroup.Item>
+              <ListGroup.Item>Rooms: {property.rooms}</ListGroup.Item>
+              <ListGroup.Item>Bathrooms: {property.bathrooms}</ListGroup.Item>
+            </ListGroup>
+            <Card.Body>
+
+              <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+                Edit Property
+              </Button>{" "}
+              <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+                Delete Property
+              </Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
       <Pagination>
         <Pagination.Prev onClick={handlePrevClick} />
         {renderPaginationItems()}
         <Pagination.Next onClick={handleNextClick} />
       </Pagination>
-      <Button variant="success" onClick={() => setShowForm(true)}>
-        Add New Property
-      </Button>
       <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
@@ -279,34 +303,39 @@ const OwnerProperties = () => {
                 <Badge bg="danger">{formErrors.title}</Badge>
               )}
             </Form.Group>
-            <Form.Group controlId="brand">
-              <Form.Label>Brand</Form.Label>
+            <Form.Group controlId="address">
+              <Form.Label>Address</Form.Label>
               <Form.Control
                 type="text"
-                defaultValue={editPropertyData ? editPropertyData.brand : ""}
+                defaultValue={editPropertyData ? editPropertyData.address : ""}
               />
-              {formErrors.brand && (
-                <Badge bg="danger">{formErrors.brand}</Badge>
+              {formErrors.address && (
+                <Badge bg="danger">{formErrors.address}</Badge>
               )}
             </Form.Group>
             <Form.Group controlId="price">
               <Form.Label>Price</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 defaultValue={editPropertyData ? editPropertyData.price : ""}
               />
               {formErrors.price && (
                 <Badge bg="danger">{formErrors.price}</Badge>
               )}
             </Form.Group>
-            <Form.Group controlId="category">
-              <Form.Label>Category</Form.Label>
+            <Form.Group controlId="type">
+              <Form.Label>Type</Form.Label>
               <Form.Control
-                type="text"
-                defaultValue={editPropertyData ? editPropertyData.category : ""}
-              />
-              {formErrors.category && (
-                <Badge bg="danger">{formErrors.category}</Badge>
+                as="select"
+                defaultValue={editPropertyData ? editPropertyData.type : ""}
+              >
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="condo">Condo</option>
+                <option value="villa">Villa</option>
+              </Form.Control>
+              {formErrors.type && (
+                <Badge bg="danger">{formErrors.type}</Badge>
               )}
             </Form.Group>
             <Form.Group controlId="description">
@@ -321,6 +350,65 @@ const OwnerProperties = () => {
               {formErrors.description && (
                 <Badge bg="danger">{formErrors.description}</Badge>
               )}
+            </Form.Group>
+            <Form.Group controlId="rooms">
+              <Form.Label>rooms</Form.Label>
+              <Form.Control
+                type="number"
+                rows={3}
+                defaultValue={
+                  editPropertyData ? editPropertyData.rooms : ""
+                }
+              />
+              {formErrors.rooms && (
+                <Badge bg="danger">{formErrors.rooms}</Badge>
+              )}
+            </Form.Group>
+            <Form.Group controlId="bathrooms">
+              <Form.Label>Bathrooms</Form.Label>
+              <Form.Control
+                type="number"
+                rows={3}
+                defaultValue={
+                  editPropertyData ? editPropertyData.bathrooms : ""
+                }
+              />
+              {formErrors.bathrooms && (
+                <Badge bg="danger">{formErrors.bathrooms}</Badge>
+              )}
+            </Form.Group>
+            <Form.Group controlId="owner">
+              <Form.Label>Owner</Form.Label>
+              <Form.Select
+                defaultValue={editPropertyData ? editPropertyData.owner : ""}
+
+              >
+                <option value="">Select owner...</option>
+                {properties.map((property) => (
+                  <option key={property.id} value={property.owner}>
+                    {property.owner}
+                  </option>
+                ))}
+              </Form.Select>
+              {formErrors.owner && <Badge bg="danger">{formErrors.owner}</Badge>}
+            </Form.Group>
+            <Form.Group controlId="availability">
+              <Form.Label>Availability</Form.Label>
+              <Form.Check
+                type="checkbox"
+              />
+              {formErrors.availability && (
+                <Badge bg="danger">{formErrors.availability}</Badge>
+              )}
+            </Form.Group>
+
+            <Form.Group controlId="image">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={handleImageChange}
+              />
+              {formErrors.image && <Badge bg="danger">{formErrors.image}</Badge>}
             </Form.Group>
             <Button variant="primary" type="submit">
               {editPropertyData ? "Save Changes" : "Add Property"}
@@ -341,6 +429,9 @@ const OwnerProperties = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+              <Button variant="success" onClick={() => setShowForm(true)}>
+                Add New Property
+              </Button>
     </Container>
   );
 };
