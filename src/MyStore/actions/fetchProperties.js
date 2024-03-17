@@ -4,11 +4,11 @@ export const fetchProperties = () => {
   return (dispatch) => {
     dispatch({ type: 'FETCH_PROPERTIES_REQUEST' });
     try {
-      return axios.get('https://dummyjson.com/products?limit=100')
+      return axios.get('http://localhost:8000/properties/') // Update the URL here
         .then(response => {
           dispatch({
             type: 'FETCH_PROPERTIES_SUCCESS',
-            payload: response.data,
+            payload: response.data, // Assuming the data returned from the endpoint is an array of properties
           });
         })
         .catch(error => {
