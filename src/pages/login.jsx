@@ -5,12 +5,12 @@ import Form from "react-bootstrap/Form";
 import BtnsCo from "../Components/Btns";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
-// import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import LoginSchema from "../schemas/login";
 import AlertCom from "../Components/alert";
 import "../pages/css/errors.css";
+import loginSignUp from "../images/login-signup.jpeg";
 
 export default function LoginPre() {
   let locally = JSON.parse(localStorage.getItem("Account Storage") || "[]");
@@ -109,7 +109,7 @@ export default function LoginPre() {
           )}
           <Col xs={12} lg={6}>
             <Image
-              src="https://images.pexels.com/photos/19265094/pexels-photo-19265094/free-photo-of-a-view-of-the-bosphorus-bridge-from-a-boat.jpeg"
+              src={loginSignUp}
               className="m-0 img-fluid position-relative w-100 h-auto h-lg-100"
               style={{ maxWidth: "auto", maxHeight: "900px" }}
             />
