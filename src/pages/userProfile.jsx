@@ -409,7 +409,7 @@ const UserProfile = () => {
                   {/* Display user information */}
                   <div className="circle-image text-center">
                     <img
-                      src={userData?.profile_picture}
+                      src={infos.profile_picture}
                       alt="Profile"
                       className="rounded-circle img-thumbnail"
                       onError={(e) => {
