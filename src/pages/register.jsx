@@ -3,7 +3,6 @@ import Form from "react-bootstrap/Form";
 import BtnsCo from "../Components/Btns";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
-// import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import ValidSchema from "../schemas/reg";
@@ -13,8 +12,6 @@ import "../pages/css/register.css";
 import axios from "axios";
 
 export default function SignUp() {
-  let accounts = JSON.parse(localStorage.getItem("Account Storage") || "[]");
-
   const [isSucess, setIsSucess] = useState(false);
   let history = useNavigate();
   const { values, errors, handleChange, handleSubmit, touched, handleBlur } =
@@ -27,40 +24,25 @@ export default function SignUp() {
         repeatPassword: "",
         role: "",
         termsCheckbox: false,
-        phoneNumber: "",
+        phoneNumber: "+20",
       },
       validationSchema: ValidSchema,
-
-      // onSubmit: (values, { resetForm }) => {
-      //   if (isValidEmail(values.email)) {
-      //     // accounts.push(values);
-      //     // localStorage.setItem("Account Storage", JSON.stringify(accounts));
-      //     resetForm(); // h3ml reset ll form l ana 3mltha ashan afdeha
-      //     // bas mesh htban ashan hyn2lo
-
-      //     history("/login");
-      //   } else {
-      //     setIsSucess(true);
-      //   }
-      // },
-
       onSubmit: async (values, { resetForm, setSubmitting }) => {
-        // Check if the form is valid
         if (Object.keys(errors).length === 0) {
           try {
             // Prepare the data to be posted
             const newData = {
               username: values.username,
-              first_name: values.fullname.split(" ")[0], // Assuming fullname is in the format "Firstname Lastname"
+              first_name: values.fullname.split(" ")[0],
               last_name: values.fullname.split(" ")[1],
               name: values.fullname,
               email: values.email,
               password: values.password,
-              birthdate: null, // Make sure the format is correct
+              birthdate: null,
               role: values.role,
-              validation_states: true, // Assuming it's always true on registration
-              registration_date: new Date().toISOString(), // Current date and time
-              profile_picture: null, // Assuming no profile picture provided
+              validation_states: true,
+              registration_date: new Date().toISOString(),
+              profile_picture: null,
               phone_number: values.phoneNumber,
             };
 
@@ -69,18 +51,11 @@ export default function SignUp() {
               "http://127.0.0.1:8000/users/",
               newData
             );
-
             console.log("Data posted successfully:", response.data);
-            // You can perform further actions after successful posting
-
-            // Reset the form
             resetForm();
-
-            // Redirect to login page after successful registration
             history.push("/login");
           } catch (error) {
             console.error("Error posting data:", error);
-            // Handle error if needed
           }
         } else {
           setSubmitting(false);
@@ -88,13 +63,6 @@ export default function SignUp() {
         }
       },
     });
-
-  // hnshghl l function bas enha tdini error bdl mt3ml push
-
-  const isValidEmail = (email) => {
-    const found = accounts.find((item) => item.email === email);
-    return !found;
-  };
 
   return (
     <>

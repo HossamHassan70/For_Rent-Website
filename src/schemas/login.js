@@ -9,7 +9,7 @@ const LoginSchema = yup.object().shape({
     .string()
     .min(6)
     .max(20)
-    // .matches(passwordRegex, "Password Requirments Error")
+    .matches(passwordRegex, "Password Requirments Error")
     .required("Must Fill this Field"),
 });
 

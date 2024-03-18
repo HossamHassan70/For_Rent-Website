@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../MyStore/actions/authAction";
 import { jwtDecode } from "jwt-decode";
 
@@ -10,7 +10,7 @@ const NavigationBar = () => {
   let useSel = useSelector((state) => state.authReducer.isLoggedIn);
   const dispatch = useDispatch();
   const [fName, setFname] = useState("");
-
+  let history = useNavigate();
 
   useEffect(() => {
     const refreshToken = sessionStorage.getItem("refreshToken");
@@ -20,7 +20,6 @@ const NavigationBar = () => {
       const decodedToken = jwtDecode(refreshToken);
       const userFname = decodedToken.user.firstName;
       setFname(userFname);
-
     } else {
       setIsLoggedIn(false);
     }
@@ -31,6 +30,7 @@ const NavigationBar = () => {
     sessionStorage.removeItem("accessToken");
     dispatch(logout());
     setIsLoggedIn(false);
+    history("/login");
   };
 
   return (
