@@ -1,21 +1,15 @@
 import * as yup from "yup";
 
-const loginPat = /^[a-zA-Z0-9._]+@[a-z]{1,8}\.(com|eg|gov|edu)$/;
 const passwordRegex =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=])(?=.*[^\w\d\s]).{8,}$/;
 
 const LoginSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Please Enter a Valid Email")
-    .required("Must Add Email")
-    .matches(loginPat, "Email Doesnt Meet Requirments"),
+  uName: yup.string().required("Must Add Username"),
   password: yup
     .string()
-    .min(8)
+    .min(6)
     .max(20)
-    .matches(passwordRegex, "Password Requirments Error")
-    .required("Password Must Match")
+    // .matches(passwordRegex, "Password Requirments Error")
     .required("Must Fill this Field"),
 });
 

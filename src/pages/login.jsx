@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import BtnsCo from "../Components/Btns";
@@ -11,6 +9,9 @@ import LoginSchema from "../schemas/login";
 import AlertCom from "../Components/alert";
 import "../pages/css/errors.css";
 import loginSignUp from "../images/login-signup.jpeg";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../MyStore/actions/authAction";
 
 export default function LoginPre() {
   let locally = JSON.parse(localStorage.getItem("Account Storage") || "[]");
@@ -19,34 +20,56 @@ export default function LoginPre() {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   let history = useNavigate();
+  let useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const dispatch = useDispatch();
 
   const { handleSubmit, values, errors, handleBlur, touched, handleChange } =
     useFormik({
       initialValues: {
-        email: "",
+        uName: "",
         password: "",
       },
       validationSchema: LoginSchema,
 
       onSubmit: (event) => {
-        const { email, password } = values;
-        const foundAccount = locally.find(
-          (item) => item.email === email && item.password === password
-        );
-
-        if (foundAccount) {
-          console.log("Found");
-          sessionLogin.push(foundAccount);
-          sessionStorage.setItem("login", JSON.stringify(sessionLogin));
-          setIsError(false);
-          handleRefresh();
-          history("/");
-        } else {
-          console.log("ERROR");
-          setIsError(true);
-        }
+        const { uName, password } = values;
+        dataFetch(uName, password);
       },
     });
+  const storage = sessionStorage.getItem("refreshToken");
+
+  useEffect(() => {
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    if (refreshToken) {
+      setIsLoggedin(true);
+      console.log("Refresh token exists:", refreshToken);
+      console.log(isLoggedin);
+    } else {
+      setIsLoggedin(false);
+      console.log("No refreshToken found in session storage");
+      console.log(isLoggedin);
+    }
+  }, [storage]);
+
+  const dataFetch = (uName, passWod) => {
+    axios
+      .post("http://127.0.0.1:8000/login/", {
+        username: uName,
+        password: passWod,
+      })
+      .then((response) => {
+        sessionStorage.setItem("refreshToken", response.data.refresh);
+        sessionStorage.setItem("accessToken", response.data.access);
+        history("/");
+        setIsError(false);
+        dispatch(login());
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        console.log("ERROR");
+        setIsError(true);
+      });
+  };
 
   useEffect(() => {
     let showUserPanel = () => {
@@ -134,15 +157,15 @@ export default function LoginPre() {
                   <Form.Control
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
+                    id="uName"
+                    type="text"
+                    placeholder="username.."
                     className={
-                      errors.email && touched.email ? "input-error" : ""
+                      errors.uName && touched.uName ? "input-error" : ""
                     }
                   />
-                  {errors.email && touched.email && (
-                    <p className="error">{errors.email}</p>
+                  {errors.uName && touched.uName && (
+                    <p className="error">{errors.uName}</p>
                   )}
                 </Form.Group>
 
