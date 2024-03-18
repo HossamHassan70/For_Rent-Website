@@ -163,7 +163,7 @@ const OwnerProperties = () => {
   };
 
   const handleSubmit = async (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     const form = event.target;
     const formData = new FormData(form);
     formData.append("image", image);
@@ -242,7 +242,7 @@ const OwnerProperties = () => {
   return (
     <Container>
       <h1 className="my-properties-heading">
-        <Badge bg="secondary">  My Properties</Badge>
+        <Badge bg="secondary"> My Properties</Badge>
       </h1>      <div className="card-container">
         {currentProperties.map((property) => (
           <Card key={property.id} className="property-card">

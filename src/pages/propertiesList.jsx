@@ -6,6 +6,8 @@ import LoadingScreen from './loadingScreen';
 import './css/propertiesList.css';
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
+import Fave from './wishlist';
+
 
 const PropertiesList = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const PropertiesList = () => {
   if (loading) {
     return (
       <LoadingScreen />
+      
+
     );
   }
 
@@ -32,7 +36,8 @@ const PropertiesList = () => {
 
   if (!properties || properties.length === 0) {
     return <div>No properties found.</div>;
-  }
+  } 
+  <Fave />
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
