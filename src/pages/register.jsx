@@ -10,6 +10,7 @@ import ValidSchema from "../schemas/reg";
 import "../pages/css/errors.css";
 import AlertCom from "../Components/alert";
 import "../pages/css/register.css";
+import axios from "axios";
 
 export default function SignUp() {
   let accounts = JSON.parse(localStorage.getItem("Account Storage") || "[]");
@@ -26,18 +27,63 @@ export default function SignUp() {
         repeatPassword: "",
         role: "",
         termsCheckbox: false,
+        phoneNumber: "",
       },
       validationSchema: ValidSchema,
 
-      onSubmit: (values, { resetForm }) => {
-        if (isValidEmail(values.email)) {
-          accounts.push(values);
-          localStorage.setItem("Account Storage", JSON.stringify(accounts));
-          resetForm(); // h3ml reset ll form l ana 3mltha ashan afdeha
-          // bas mesh htban ashan hyn2lo
+      // onSubmit: (values, { resetForm }) => {
+      //   if (isValidEmail(values.email)) {
+      //     // accounts.push(values);
+      //     // localStorage.setItem("Account Storage", JSON.stringify(accounts));
+      //     resetForm(); // h3ml reset ll form l ana 3mltha ashan afdeha
+      //     // bas mesh htban ashan hyn2lo
 
-          history("/login");
+      //     history("/login");
+      //   } else {
+      //     setIsSucess(true);
+      //   }
+      // },
+
+      onSubmit: async (values, { resetForm, setSubmitting }) => {
+        // Check if the form is valid
+        if (Object.keys(errors).length === 0) {
+          try {
+            // Prepare the data to be posted
+            const newData = {
+              username: values.username,
+              first_name: values.fullname.split(" ")[0], // Assuming fullname is in the format "Firstname Lastname"
+              last_name: values.fullname.split(" ")[1],
+              name: values.fullname,
+              email: values.email,
+              password: values.password,
+              birthdate: null, // Make sure the format is correct
+              role: values.role,
+              validation_states: true, // Assuming it's always true on registration
+              registration_date: new Date().toISOString(), // Current date and time
+              profile_picture: null, // Assuming no profile picture provided
+              phone_number: values.phoneNumber,
+            };
+
+            // Perform the POST request
+            const response = await axios.post(
+              "http://127.0.0.1:8000/users/",
+              newData
+            );
+
+            console.log("Data posted successfully:", response.data);
+            // You can perform further actions after successful posting
+
+            // Reset the form
+            resetForm();
+
+            // Redirect to login page after successful registration
+            history.push("/login");
+          } catch (error) {
+            console.error("Error posting data:", error);
+            // Handle error if needed
+          }
         } else {
+          setSubmitting(false);
           setIsSucess(true);
         }
       },
@@ -122,6 +168,25 @@ export default function SignUp() {
 
               <Form.Group className="mb-3">
                 <Form.Control
+                  value={values.phoneNumber}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="text"
+                  id="phoneNumber"
+                  placeholder="Phonenumber"
+                  className={
+                    errors.phoneNumber && touched.phoneNumber
+                      ? "input-error"
+                      : ""
+                  }
+                />
+                {errors.phoneNumber && touched.phoneNumber && (
+                  <p className="error"> {errors.phoneNumber} </p>
+                )}
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Control
                   value={values.password}
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -156,6 +221,7 @@ export default function SignUp() {
                 {errors.repeatPassword && touched.repeatPassword && (
                   <p className="error"> {errors.repeatPassword} </p>
                 )}
+
                 <div className="pt-3">
                   <Form.Select
                     id="role"
@@ -195,6 +261,7 @@ export default function SignUp() {
                   )}
                 </div>
               </Form.Group>
+
               <div className="container d-flex justify-conent-center flex-column gap-3">
                 <BtnsCo
                   btnType="submit"
