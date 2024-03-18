@@ -23,7 +23,7 @@ const NavigationBar = () => {
     } else {
       setIsLoggedIn(false);
     }
-  }, []);
+  }, [useSel]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("refreshToken");
@@ -61,7 +61,7 @@ const NavigationBar = () => {
                   to={`/user/1`}
                   style={{ fontWeight: "bold" }}
                 >
-                  <p>Welcome, {fName}</p>
+                  <p className="m-0">Welcome, {fName}</p>
                 </Nav.Link>
                 <Nav.Link onClick={handleLogout} style={{ fontWeight: "bold" }}>
                   Logout
