@@ -12,10 +12,10 @@ const PropertyView = () => {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const tk = sessionStorage.getItem("refreshToken");
-    if (tk) {
+    const token = sessionStorage.getItem("refreshToken");
+    if (token) {
       try {
-        const decodedToken = jwtDecode(tk);
+        const decodedToken = jwtDecode(token);
         const uid = decodedToken.user.id;
         setUserId(uid);
       } catch (error) {

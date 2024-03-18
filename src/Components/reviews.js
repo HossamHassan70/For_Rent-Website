@@ -118,8 +118,8 @@ function ReviewsList({ userId, propertyId }) {
                 </div>
                 <p className="review-rating">{renderStars(review.rating)}</p>
                 <p className="review-content">{review.content}</p>
-                {/* <p className="review-user">User ID: {review.user}</p> */}
-                {/* <p className="review-property">Property ID: {review.property}</p> */}
+                <p className="review-user">User ID: {review.user}</p>
+                <p className="review-property">Property ID: {review.property}</p>
 
                 {/* action buttons */}
                 <div className="review-actions">
