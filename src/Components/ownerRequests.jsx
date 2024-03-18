@@ -18,7 +18,7 @@ const OwnerRequests = () => {
   useEffect(() => {
     const fetchPropertyRequests = async () => {
       try {
-        const response = await axios.get(`https://retoolapi.dev/KqGq4M/request`, {
+        const response = await axios.get(`http://127.0.0.1:8000/requests/`, {
           params: {
             _page: page,
             _limit: 10
@@ -50,7 +50,7 @@ const OwnerRequests = () => {
         is_rejected: false
       };
 
-      await axios.put(`https://retoolapi.dev/KqGq4M/request/${id}`, updatedRequest);
+      await axios.put(`http://127.0.0.1:8000/requests/${id}`, updatedRequest);
 
       // Update the state to reflect the changes
       setPropertyRequests(prevRequests => {
@@ -64,17 +64,17 @@ const OwnerRequests = () => {
 
       // Send email
       const serviceId = 'service_21hdjtz';
-      const templateId = 'template_8dnvcxh';
+      const templateId = 'template_io83mns';
       const publicKey = 'xr6_cNCqHsf9TrFPu';
       const data = {
         service_id: serviceId,
         template_id: templateId,
         user_id: publicKey,
         // template_params: {
-        //   from_name: name,
-        //   from_email: email,
-        //   to_name: 'Web Wizard',
-        //   message: message,
+        //   username: ,
+        //   property_name: ,
+        //   message: '',
+        //   reply_to: ,
         // }
       };
 
@@ -118,7 +118,7 @@ const OwnerRequests = () => {
         // to add rejection reason to api
         rejection_reason: rejectionReason
       };
-      await axios.put(`https://retoolapi.dev/KqGq4M/request/${selectedRequestId}`, updatedRequest);
+      await axios.put(`http://127.0.0.1:8000/requests/${selectedRequestId}`, updatedRequest);
 
       // to update the page to show changes
       setPropertyRequests(prevRequests => {
@@ -145,7 +145,7 @@ const OwnerRequests = () => {
           is_accepted: false,
           is_rejected: false
         };
-        await axios.put(`https://retoolapi.dev/KqGq4M/request/${request.id}`, updatedRequest);
+        await axios.put(`http://127.0.0.1:8000/requests/${request.id}`, updatedRequest);
         updatedRequests.push(updatedRequest);
       }
 
