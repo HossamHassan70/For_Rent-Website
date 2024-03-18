@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviews, addReview, editReview, deleteReview } from '../MyStore/actions/reviews';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import '../pages/css/reviewsList.css';
 import LoadingScreen from './../pages/loadingScreen';
 import { Modal, Button, Form } from 'react-bootstrap';
+import RatingMeter from './ratingMeter';
+import '../pages/css/reviews.css';
 
 function ReviewsList() {
   const dispatch = useDispatch();
@@ -15,23 +16,25 @@ function ReviewsList() {
   const error = useSelector(state => state.reviews.error);
   const [reviewId, setReviewId] = useState(null);
   const [formData, setFormData] = useState({ title: '', rating: '', content: '' });
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [modalMode, setModalMode] = useState('add');
 
   useEffect(() => {
     dispatch(fetchReviews());
   }, [dispatch]);
 
   const handleAddReview = () => {
-    setShowAddModal(true);
+    setModalMode('add');
+    setShowModal(true);
   };
 
   const handleEditReview = (review) => {
+    setModalMode('edit');
     setReviewId(review.id);
     setFormData({ title: review.title, rating: review.rating, content: review.content });
-    setShowEditModal(true);
+    setShowModal(true);
   };
 
   const handleDeleteReview = (review) => {
@@ -39,14 +42,8 @@ function ReviewsList() {
     setShowDeleteModal(true);
   };
 
-  const handleCloseAddModal = () => {
-    setShowAddModal(false);
-    setFormData({ title: '', rating: '', content: '' });
-    setFormErrors({});
-  };
-
-  const handleCloseEditModal = () => {
-    setShowEditModal(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
     setFormData({ title: '', rating: '', content: '' });
     setFormErrors({});
   };
@@ -59,19 +56,14 @@ function ReviewsList() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddReviewSubmit = () => {
+  const handleFormSubmit = () => {
     if (validateForm()) {
-      dispatch(addReview(formData));
-      setShowAddModal(false);
-      setFormData({ title: '', rating: '', content: '' });
-      setFormErrors({});
-    }
-  };
-
-  const handleEditReviewSubmit = () => {
-    if (validateForm()) {
-      dispatch(editReview(reviewId, formData));
-      setShowEditModal(false);
+      if (modalMode === 'add') {
+        dispatch(addReview(formData));
+      } else if (modalMode === 'edit') {
+        dispatch(editReview(reviewId, formData));
+      }
+      setShowModal(false);
       setFormData({ title: '', rating: '', content: '' });
       setFormErrors({});
     }
@@ -114,12 +106,9 @@ function ReviewsList() {
       {isLoading && <LoadingScreen />}
       {error && <p>{error}</p>}
       {!isLoading && !error && (
-        <div>
-          <button className="btn btn-primary" onClick={handleAddReview}>
-            <FontAwesomeIcon icon={faPlus} /> Add New Review
-          </button>
+        <>
           {reviews.length === 0 ? (
-            <p className="no-reviews">No reviews available at the moment.</p>
+            <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
             reviews.map(review => (
               <div key={review.id} className="review-container mt-4">
@@ -129,101 +118,80 @@ function ReviewsList() {
                 </div>
                 <p className="review-rating">{renderStars(review.rating)}</p>
                 <p className="review-content">{review.content}</p>
-                <p className="review-user">User ID: {review.user}</p>
-                <p className="review-property">Property ID: {review.property}</p>
+                {/* <p className="review-user">User ID: {review.user}</p>
+                <p className="review-property">Property ID: {review.property}</p> */}
 
                 {/* action buttons */}
                 <div className="review-actions">
-                  <button className="btn btn-info" onClick={() => handleEditReview(review)}>
+                  <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
                     <FontAwesomeIcon icon={faEdit} /> Edit
                   </button>
-                  <button className="btn btn-danger" onClick={() => handleDeleteReview(review)}>
+                  <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
                     <FontAwesomeIcon icon={faTrash} /> Delete
                   </button>
                 </div>
-
               </div>
             ))
           )}
-        </div>
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-primary" onClick={handleAddReview}>
+              <FontAwesomeIcon icon={faPlus} /> Add Review
+            </button>
+          </div>
+        </>
       )}
 
-      {/* Add Modal */}
-      <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Review</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formTitle">
-              <Form.Label>Title</Form.Label>
-              <Form.Control type="text" name="title" value={formData.title} onChange={handleFormChange} placeholder="Enter title" />
-              {formErrors.title && <span className="text-danger">{formErrors.title}</span>}
-            </Form.Group>
-            <Form.Group controlId="formRating">
-              <Form.Label>Rating</Form.Label>
-              <Form.Control type="number" name="rating" value={formData.rating} onChange={handleFormChange} placeholder="Enter rating" />
-              {formErrors.rating && <span className="text-danger">{formErrors.rating}</span>}
-            </Form.Group>
-            <Form.Group controlId="formContent">
-              <Form.Label>Content</Form.Label>
-              <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
-              {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleAddReviewSubmit}>
-            Save Review
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Add/Edit Modal */}
+      <Modal show={showModal} onHide={handleCloseModal}>
 
-      {/* Edit Modal */}
-      <Modal show={showEditModal} onHide={handleCloseEditModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Review</Modal.Title>
+          <Modal.Title>{modalMode === 'add' ? 'Add New Review' : 'Edit Review'}</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form>
             <Form.Group controlId="formTitle">
-              <Form.Label>Title</Form.Label>
+              <Form.Label><b>Title</b></Form.Label>
               <Form.Control type="text" name="title" value={formData.title} onChange={handleFormChange} placeholder="Enter title" />
               {formErrors.title && <span className="text-danger">{formErrors.title}</span>}
             </Form.Group>
-            <Form.Group controlId="formRating">
-              <Form.Label>Rating</Form.Label>
-              <Form.Control type="number" name="rating" value={formData.rating} onChange={handleFormChange} placeholder="Enter rating" />
+
+            <Form.Group className='mt-3' controlId="formRating">
+              <RatingMeter value={formData.rating} onChange={(value) => handleFormChange({ target: { name: 'rating', value } })} />
               {formErrors.rating && <span className="text-danger">{formErrors.rating}</span>}
             </Form.Group>
-            <Form.Group controlId="formContent">
-              <Form.Label>Content</Form.Label>
+
+            <Form.Group className='mt-3' controlId="formContent">
+              <Form.Label><b>Content</b></Form.Label>
               <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
               {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
             </Form.Group>
           </Form>
+
         </Modal.Body>
+
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEditReviewSubmit}>
-            Update Review
+          <Button variant="primary" onClick={handleFormSubmit}>
+            {modalMode === 'add' ? 'Save Review' : 'Update Review'}
           </Button>
         </Modal.Footer>
+
       </Modal>
 
       {/* Delete Modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+
         <Modal.Header closeButton>
           <Modal.Title>Delete Review</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           Are you sure you want to delete this review?
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseDeleteModal}>
             Cancel
@@ -232,6 +200,7 @@ function ReviewsList() {
             Delete
           </Button>
         </Modal.Footer>
+
       </Modal>
     </>
   );

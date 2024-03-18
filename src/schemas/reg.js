@@ -21,6 +21,11 @@ const ValidSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Password Must Match")
     .required("Must Fill this Field"),
+  phoneNumber: yup
+    .string()
+    .max(14, "Phone Number must be 11")
+    .min(11, "Phone Number must be 11")
+    .required("Must Fill this Field"),
   username: yup
     .string()
     .min(3, "Must be Minimum 3 letters")
