@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import BtnsCo from "../Components/Btns";
 import Col from "react-bootstrap/Col";
@@ -10,17 +10,12 @@ import AlertCom from "../Components/alert";
 import "../pages/css/errors.css";
 import loginSignUp from "../images/login-signup.jpeg";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../MyStore/actions/authAction";
 
 export default function LoginPre() {
-  let locally = JSON.parse(localStorage.getItem("Account Storage") || "[]");
-  let sessionLogin = JSON.parse(sessionStorage.getItem("login") || "[]");
   const [isError, setIsError] = useState(false);
-  const [isLoggedin, setIsLoggedin] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   let history = useNavigate();
-  let useSel = useSelector((state) => state.authReducer.isLoggedIn);
   const dispatch = useDispatch();
 
   const { handleSubmit, values, errors, handleBlur, touched, handleChange } =
@@ -36,20 +31,6 @@ export default function LoginPre() {
         dataFetch(uName, password);
       },
     });
-  const storage = sessionStorage.getItem("refreshToken");
-
-  useEffect(() => {
-    const refreshToken = sessionStorage.getItem("refreshToken");
-    if (refreshToken) {
-      setIsLoggedin(true);
-      console.log("Refresh token exists:", refreshToken);
-      console.log(isLoggedin);
-    } else {
-      setIsLoggedin(false);
-      console.log("No refreshToken found in session storage");
-      console.log(isLoggedin);
-    }
-  }, [storage]);
 
   const dataFetch = (uName, passWod) => {
     axios
@@ -71,159 +52,102 @@ export default function LoginPre() {
       });
   };
 
-  useEffect(() => {
-    let showUserPanel = () => {
-      if (sessionLogin.length > 0) {
-        setIsLoggedin(true);
-        setShowForm(false);
-      } else {
-        setIsLoggedin(false);
-        setShowForm(true);
-      }
-    };
-
-    showUserPanel();
-  }, []);
-
-  let findAccount = (email, password) => {
-    let found = locally.find(
-      (item) => item.email === email && item.password === password
-    );
-    return found ? true : false;
-  };
-
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleRefresh = () => {
-    setRefreshKey((prevKey) => prevKey + 1);
-    let showUserPanel = () => {
-      if (sessionLogin.length > 0) {
-        setIsLoggedin(true);
-        setShowForm(false);
-      } else {
-        setIsLoggedin(false);
-        setShowForm(true);
-      }
-    };
-
-    showUserPanel();
-  };
-  const logoutFun = () => {
-    sessionLogin.pop();
-    sessionStorage.setItem("login", JSON.stringify(sessionLogin));
-    handleRefresh();
-    console.log(sessionLogin);
-  };
-
   return (
     <>
-      {showForm && (
-        <div className="d-flex justify-content-between align-items-center flex-wrap">
-          {isError && (
-            <>
-              <div className="container">
-                <AlertCom
-                  errorType="danger"
-                  errorHead="Can't Find Your Account"
-                  errorMsg="Whoops! Looks like there's a little hiccup. Check your username and password combo, and let's try that again. If you're still having trouble, hit the 'Forgot Password?' link or reach out to our support superheroes—they're ready to rescue your login."
+      <div className="d-flex justify-content-between align-items-center flex-wrap">
+        {isError && (
+          <>
+            <div className="container">
+              <AlertCom
+                errorType="danger"
+                errorHead="Can't Find Your Account"
+                errorMsg="Whoops! Looks like there's a little hiccup. Check your username and password combo, and let's try that again. If you're still having trouble, hit the 'Forgot Password?' link or reach out to our support superheroes—they're ready to rescue your login."
+              />
+            </div>
+          </>
+        )}
+        <Col xs={12} lg={6}>
+          <Image
+            src={loginSignUp}
+            className="m-0 img-fluid position-relative w-100 h-auto h-lg-100"
+            style={{ maxWidth: "auto", maxHeight: "900px" }}
+          />
+          <div className="cs-posti position-absolute">
+            <h3 className="text-white">For Rent</h3>
+            <p className="text-white">
+              Welcome to ForRent Website Where Renting buying and Selling is
+              Easier
+            </p>
+          </div>
+        </Col>
+
+        <Col xs={12} lg={6}>
+          <div className="container d-flex flex-column  gap-3 pt-3">
+            <div className="d-flex flex-column">
+              <h2 className="m-0 align-self-start"> Login to ForRent </h2>
+              <p className="m-0 align-self-start">Enter Your Details Below</p>
+            </div>
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Control
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  id="uName"
+                  type="text"
+                  placeholder="username.."
+                  className={errors.uName && touched.uName ? "input-error" : ""}
+                />
+                {errors.uName && touched.uName && (
+                  <p className="error">{errors.uName}</p>
+                )}
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Control
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  aria-describedby="passwordHelpBlock"
+                  className={
+                    errors.password && touched.password ? "input-error" : ""
+                  }
+                />
+                {errors.password && touched.password && (
+                  <p className="error">{errors.password}</p>
+                )}
+                <Form.Text id="passwordHelpBlock" muted>
+                  Your password must be 8-20 characters long, contain letters
+                  and numbers, and must not contain spaces, special characters,
+                  or emoji.
+                </Form.Text>
+              </Form.Group>
+
+              <div className="container d-flex justify-content-center align-content-center gap-3">
+                <BtnsCo
+                  btnType="submit"
+                  btnCo="primary"
+                  btnCs={{ backgroundColor: "#008f97" }}
+                  btnText="Login"
+                />
+                <BtnsCo
+                  btnCo="primary"
+                  btnText="Forget Your password"
+                  btnCs={{ backgroundColor: "#008f97" }}
+                  btnStyle=""
                 />
               </div>
-            </>
-          )}
-          <Col xs={12} lg={6}>
-            <Image
-              src={loginSignUp}
-              className="m-0 img-fluid position-relative w-100 h-auto h-lg-100"
-              style={{ maxWidth: "auto", maxHeight: "900px" }}
-            />
-            <div className="cs-posti position-absolute">
-              <h3 className="text-white">For Rent</h3>
-              <p className="text-white">
-                Welcome to ForRent Website Where Renting buying and Selling is
-                Easier
+
+              <p className="pt-3">
+                Didn't Register Yet? <Link to="/register">Signup</Link>
               </p>
-            </div>
-          </Col>
-
-          <Col xs={12} lg={6}>
-            <div className="container d-flex flex-column  gap-3 pt-3">
-              <div className="d-flex flex-column">
-                <h2 className="m-0 align-self-start"> Login to ForRent </h2>
-                <p className="m-0 align-self-start">Enter Your Details Below</p>
-              </div>
-
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    id="uName"
-                    type="text"
-                    placeholder="username.."
-                    className={
-                      errors.uName && touched.uName ? "input-error" : ""
-                    }
-                  />
-                  {errors.uName && touched.uName && (
-                    <p className="error">{errors.uName}</p>
-                  )}
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    aria-describedby="passwordHelpBlock"
-                    className={
-                      errors.password && touched.password ? "input-error" : ""
-                    }
-                  />
-                  {errors.password && touched.password && (
-                    <p className="error">{errors.password}</p>
-                  )}
-                  <Form.Text id="passwordHelpBlock" muted>
-                    Your password must be 8-20 characters long, contain letters
-                    and numbers, and must not contain spaces, special
-                    characters, or emoji.
-                  </Form.Text>
-                </Form.Group>
-
-                <div className="container d-flex justify-content-center align-content-center gap-3">
-                  <BtnsCo
-                    btnType="submit"
-                    btnCo="primary"
-                    btnCs={{ backgroundColor: "#008f97" }}
-                    btnText="Login"
-                  />
-                  <BtnsCo
-                    btnCo="primary"
-                    btnText="Forget Your password"
-                    btnCs={{ backgroundColor: "#008f97" }}
-                    btnStyle=""
-                  />
-                </div>
-
-                <p className="pt-3">
-                  Didn't Register Yet? <Link to="/register">Signup</Link>
-                </p>
-              </Form>
-            </div>
-          </Col>
-        </div>
-      )}
-
-      {isLoggedin && (
-        <>
-          <div className="pt-3">
-            <p>Welome {sessionLogin[0].email}</p>
-            <BtnsCo btnAct={logoutFun} btnCo="danger" btnText="logout" />
+            </Form>
           </div>
-        </>
-      )}
+        </Col>
+      </div>
     </>
   );
 }
