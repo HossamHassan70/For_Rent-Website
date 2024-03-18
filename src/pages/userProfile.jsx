@@ -153,11 +153,11 @@ const UserProfile = () => {
       }
     };
 
-    if (userId !== prevUserIdRef.current) {
-      prevUserIdRef.current = userId;
+    if (uid !== prevUserIdRef.current) {
+      prevUserIdRef.current = uid;
       fetchData();
     }
-  }, []);
+  }, [uid]);
 
   return (
     <Container fluid className="mt-3">

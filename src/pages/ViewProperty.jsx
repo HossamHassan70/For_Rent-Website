@@ -1,224 +1,31 @@
-// import React from "react";
-// import {
-//   Container,
-//   Row,
-//   Col,
-//   Card,
-//   Tab,
-//   Tabs,
-//   Table,
-//   Image,
-// } from "react-bootstrap";
-// import { useParams } from "react-router-dom";
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-// import "./css/ViewProperty.css";
-// import ReviewsList from "../Components/reviews";
-
-// const PropertyView = () => {
-//   const propertyId = useParams();
-//   const [propertyInfo, setpropertyInfo] = useState({});
-
-//   useEffect(() => {
-//     axios(`http://localhost:8000/properties/${propertyId.id}`)
-//       .then((res) => {
-//         setpropertyInfo(res.data); // Assuming the response data is in JSON format
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }, [propertyId.id]);
-//   const handleImageClick = (index) => {
-//     // Remove focus from previously clicked images
-//     const previousImages = document.querySelectorAll(".additional-image.focus");
-//     if (previousImages) {
-//       previousImages.forEach((image) => {
-//         image.classList.remove("focus");
-//       });
-//     }
-
-
-//     // Add focus to the clicked image
-//     const clickedImage = document.querySelectorAll(
-//       ".additional-image:not(.prop-image)"
-//     )[index];
-//     if (clickedImage) {
-//       clickedImage.classList.add("focus");
-
-//       // Display the clicked image in the prop-image section
-//       const propImage = document.querySelector(".prop-image");
-//       if (propImage) {
-//         propImage.src = clickedImage.src;
-//         propImage.alt = clickedImage.alt;
-//       }
-//     }
-//   };
-//   return (
-//     <Container fluid>
-//       <h1>Property Detail</h1>
-
-//       <Row>
-//         <Col>
-//           {propertyInfo && (
-//             <div>
-//               <Card>
-//                 <div className="prop-image-container">
-//                   <Image
-//                     className="prop-image"
-//                     src={propertyInfo.thumbnail}
-//                     alt={propertyInfo.title}
-//                     thumbnail
-//                   />
-//                 </div>
-
-//                 <Card.Title className="display-5 mb-4 text-center">
-//                   Additional Images
-//                 </Card.Title>
-//                 <Card.Body>
-//                   {propertyInfo.images && propertyInfo.images.length > 0 ? (
-//                     <div className="image-thumbnails">
-//                       {propertyInfo.images.map((image, index) => (
-//                         <div key={index} className="image-thumbnail">
-//                           <Image
-//                             id={`image-${index}`}
-//                             className="additional-image"
-//                             src={image}
-//                             alt={`Image ${index + 1}`}
-//                             onClick={() => handleImageClick(index)}
-//                             tabIndex={0}
-//                           />
-//                         </div>
-//                       ))}
-//                     </div>
-//                   ) : null}
-//                 </Card.Body>
-//               </Card>
-//             </div>
-//           )}
-//         </Col>
-//         <Col>
-//           <Card>
-//             <Card.Body>
-//               <Card.Title className="display-5 mb-2">
-//                 {propertyInfo.title}
-//               </Card.Title>
-//               <Card.Text className="mb-2">
-//                 <b>Category:</b> {propertyInfo.category}
-//               </Card.Text>
-//             </Card.Body>
-//           </Card>
-//           <Card>
-//             <Card.Header> price</Card.Header>
-//             <Card.Body>
-//               <Card.Text>${propertyInfo.price}</Card.Text>
-//             </Card.Body>
-//           </Card>
-
-//           <Card>
-//             <Card.Header>Property Description:</Card.Header>
-//             <Card.Body>
-//               <Tabs
-//                 defaultActiveKey="home"
-//                 transition={false}
-//                 id="noanim-tab-example"
-//                 className="mb-3"
-//               >
-//                 <Tab eventKey="property overview" title="Property Overview">
-//                   <Table>
-//                     <thead>
-//                       <tr>
-//                         <th>Property Address</th>
-//                         <th>Property Type</th>
-//                         <th>Square Footage</th>
-//                         <th># of Units</th>
-//                       </tr>
-//                     </thead>
-//                     <tbody>
-//                       <tr>
-//                         <td>Sacramento, CA 95823</td>
-//                         <td>lorem sph</td>
-//                         <td>lorem sph</td>
-//                         <td>Otto</td>
-//                       </tr>
-//                     </tbody>
-//                   </Table>
-//                 </Tab>
-//                 <Tab eventKey="basic information" title="Basic Information">
-//                   <Table striped>
-//                     <thead>
-//                       <tr>
-//                         <th>First Name</th>
-//                         <th>Last Name</th>
-//                         <th>Email</th>
-//                         <th>Phone</th>
-//                       </tr>
-//                     </thead>
-//                     <tbody>
-//                       <tr>
-//                         <td>Mark</td>
-//                         <td>Otto</td>
-//                         <td>markotto@example.com</td>
-//                         <td>555-555-5555</td>
-//                       </tr>
-//                     </tbody>
-//                   </Table>
-//                 </Tab>
-//                 <Tab eventKey="property track" title="Property Track">
-//                   <Table striped>
-//                     <thead>
-//                       <tr>
-//                         <th>Status</th>
-//                         <th>Date</th>
-//                         <th>User</th>
-//                         <th>Notes</th>
-//                       </tr>
-//                     </thead>
-//                     <tbody>
-//                       <tr>
-//                         <td>Inspection</td>
-//                         <td>01/01/2023</td>
-//                         <td>John Doe</td>
-//                         <td>N/A</td>
-//                       </tr>
-//                     </tbody>
-//                   </Table>
-//                 </Tab>
-//               </Tabs>
-//             </Card.Body>
-//           </Card>
-
-//           <Card>
-//             <Card.Header>Location:</Card.Header>
-//             <Card.Body>
-//               <Card.Title>City Name :</Card.Title>
-//               <Card.Title>Streat Name :</Card.Title>
-//             </Card.Body>
-//           </Card>
-
-//           <h5 className="mt-4">Reviews:</h5>
-//           <ReviewsList />
-//         </Col>
-//       </Row>
-//     </Container>
-//   );
-// };
-
-// export default PropertyView;
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Tab, Tabs, Table, Badge } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./css/ViewProperty.css";
 import ReviewsList from "../Components/reviews";
+import { jwtDecode } from "jwt-decode";
 
 const PropertyView = () => {
   const { id } = useParams();
   const [propertyInfo, setPropertyInfo] = useState({});
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    const tk = sessionStorage.getItem("refreshToken");
+    if (tk) {
+      try {
+        const decodedToken = jwtDecode(tk);
+        const uid = decodedToken.user.id;
+        setUserId(uid);
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+
     axios.get(`http://localhost:8000/properties/${id}`)
       .then((res) => {
-        setPropertyInfo(res.data); 
+        setPropertyInfo(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -231,37 +38,37 @@ const PropertyView = () => {
         <Badge bg="secondary"> Property Detail</Badge>
       </h1>
       <Row>
-        <Col className= "view-card">
+        <Col className="view-card">
           {propertyInfo && (
-            <div  className="view-card">
+            <div className="view-card">
               <Card>
                 <Card.Body>
                   <Card.Img variant="top" src={propertyInfo.image} />
                 </Card.Body>
               </Card>
-          <Card>
-            <Card.Body>
-              <Card.Title className="mb-2">
-                <b>Descreption:</b> {propertyInfo.description}
-              </Card.Title>
-            </Card.Body>
-          </Card>
+              <Card>
+                <Card.Body>
+                  <Card.Title className="mb-2">
+                    <b>Descreption:</b> {propertyInfo.description}
+                  </Card.Title>
+                </Card.Body>
+              </Card>
             </div>
           )}
         </Col>
         <Col>
           <Card>
             <Card.Body>
-             <Card.Title className="price-card">
-             {propertyInfo.title}
+              <Card.Title className="price-card">
+                {propertyInfo.title}
               </Card.Title>
 
             </Card.Body>
           </Card>
           <Card className="price-card">
-              <Card.Title > Price</Card.Title>
-           
-              ${propertyInfo.price}
+            <Card.Title > Price</Card.Title>
+
+            ${propertyInfo.price}
           </Card>
           <Card>
             <Card.Header>Property Description:</Card.Header>
@@ -335,7 +142,7 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
           <h5 className="mt-4">Reviews:</h5>
-          <ReviewsList />
+          <ReviewsList userId={userId} propertyId={id} />
         </Col>
       </Row>
     </Container>
