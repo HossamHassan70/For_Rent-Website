@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./css/userProfile.css";
 import { useParams } from "react-router-dom";
@@ -96,6 +96,7 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedUserData, setEditedUserData] = useState({});
   const [loading, setLoading] = useState(true);
+  const prevUserIdRef = useRef(null);
 
   const handleEditClick = () => {
     setEditMode(true);
@@ -103,7 +104,6 @@ const UserProfile = () => {
   };
 
   const handleSaveClick = () => {
-    // Call the API to update user information
     axios
       .put(`http://127.0.0.1:8000/api/users/${userId}`, editedUserData)
       .then((response) => {
@@ -129,7 +129,6 @@ const UserProfile = () => {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/users/${userId}`
         );
-        console.log(response);
         setUserData(response.data);
         setLoading(false);
       } catch (error) {
@@ -138,7 +137,10 @@ const UserProfile = () => {
       }
     };
 
-    fetchData();
+    if (userId !== prevUserIdRef.current) {
+      prevUserIdRef.current = userId;
+      fetchData();
+    }
   }, [userId]);
 
 
