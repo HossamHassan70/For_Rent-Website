@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { searchAction } from '../MyStore/actions/searchAction';
-import { Dropdown, Button, FormControl, InputGroup, Row, Col, ButtonGroup } from 'react-bootstrap';
-import PropertyTypeDropdown from './PropertyTypeDropdown';
-import BedroomButton from './BedroomButton';
-import BathroomButton from './BathroomButton';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { searchAction } from "../MyStore/actions/searchAction";
+import {
+  Dropdown,
+  Button,
+  FormControl,
+  InputGroup,
+  Row,
+  Col,
+  ButtonGroup,
+} from "react-bootstrap";
+import PropertyTypeDropdown from "./PropertyTypeDropdown";
+import BedroomButton from "./BedroomButton";
+import BathroomButton from "./BathroomButton";
 
 const Search = () => {
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -16,16 +24,37 @@ const Search = () => {
   };
 
   return (
-    <div className="container text-center mb-6" style={{ marginTop: '200px' }}>
-      <div className="rounded p-2 mx-auto" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)', maxWidth: '700px', width: '100%' }}>
+    <div className="container text-center mb-6" style={{ marginTop: "200px" }}>
+      <div
+        className="rounded p-2 mx-auto"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          maxWidth: "700px",
+          width: "100%",
+        }}
+      >
         <Row className="mb-3">
           <Col md={12} className="d-flex justify-content-center">
             <Col md={6} className="d-flex justify-content-center">
-              <ButtonGroup aria-label="Basic checkbox toggle button group" className="rounded overflow-hidden" style={{ width: '100%' }}>
-                <Button variant="light" size="sm" className="option-button d-flex align-items-center justify-content-center" style={{ width: '50%' }}>
+              <ButtonGroup
+                aria-label="Basic checkbox toggle button group"
+                className="rounded overflow-hidden"
+                style={{ width: "100%" }}
+              >
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="option-button d-flex align-items-center justify-content-center"
+                  style={{ width: "50%" }}
+                >
                   Buy
                 </Button>
-                <Button variant="light" size="sm" className="option-button d-flex align-items-center justify-content-center" style={{ width: '50%' }}>
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="option-button d-flex align-items-center justify-content-center"
+                  style={{ width: "50%" }}
+                >
                   Rent
                 </Button>
               </ButtonGroup>
@@ -34,14 +63,15 @@ const Search = () => {
         </Row>
         <Row className="mb-2">
           <Col md={12} className="d-flex justify-content-center">
-            <div className="search-bar" style={{ width: '100%' }}>
-              <InputGroup className='rounded-pill'>
+            <div className="search-bar" style={{ width: "100%" }}>
+              <InputGroup className="rounded-pill">
                 <FormControl
                   type="text"
                   placeholder="Enter City, state or Zip"
                   className="form-control search-input"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)} />
+                  onChange={(e) => setQuery(e.target.value)}
+                />
                 <Dropdown className="select-container">
                   <Dropdown.Toggle variant="light" id="dropdown-basic">
                     Property Type
@@ -75,9 +105,17 @@ const Search = () => {
                     <BathroomButton value="7+" />
                   </Dropdown.Menu>
                 </Dropdown>
-                <Button className="btn-search"
-                style={{ backgroundColor: '#008f97', border: 'none', width: '100px' }}
-                onClick={handleSearch}>Search</Button>
+                <Button
+                  className="btn-search"
+                  style={{
+                    backgroundColor: "#008f97",
+                    border: "none",
+                    width: "100px",
+                  }}
+                  onClick={handleSearch}
+                >
+                  Search
+                </Button>
               </InputGroup>
             </div>
           </Col>
