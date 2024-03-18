@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logout } from "../MyStore/actions/authAction";
 
 // const NavigationBar = () => {
 //   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -91,6 +93,8 @@ import { Link } from "react-router-dom";
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fullName, setFullName] = useState(null);
+  let useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const refreshToken = sessionStorage.getItem("refreshToken");
@@ -103,6 +107,8 @@ const NavigationBar = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
+    dispatch(logout());
     setIsLoggedIn(false);
     setFullName(null);
   };
@@ -121,7 +127,7 @@ const NavigationBar = () => {
             </Nav.Link>
           </Nav>
           <Nav>
-            {isLoggedIn ? (
+            {isLoggedIn || useSel ? (
               <>
                 <Nav.Link
                   as={Link}
