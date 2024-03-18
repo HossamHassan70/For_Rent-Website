@@ -7,7 +7,6 @@ import { jwtDecode } from "jwt-decode";
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [fullName, setFullName] = useState(null);
   let useSel = useSelector((state) => state.authReducer.isLoggedIn);
   const dispatch = useDispatch();
   const [fName, setFname] = useState("");
@@ -32,7 +31,6 @@ const NavigationBar = () => {
     sessionStorage.removeItem("accessToken");
     dispatch(logout());
     setIsLoggedIn(false);
-    setFullName(null);
   };
 
   return (
