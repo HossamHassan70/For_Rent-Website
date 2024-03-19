@@ -8,6 +8,7 @@ import LoadingScreen from "./loadingScreen";
 // import OwnerRequests from "../Components/ownerRequests";
 // import ReviewsList from "../Components/reviews";
 import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 // const Emails = ({ userId }) => {
 //   const [emails, setPosts] = useState([]);
@@ -100,9 +101,10 @@ const UserProfile = () => {
   const prevUserIdRef = useRef(null);
   const [uid, setUid] = useState("");
   const [infos, setInfos] = useState();
+  const useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const refreshToken = useSelector((state) => state.authReducer.refreshToken);
 
   useEffect(() => {
-    const refreshToken = sessionStorage.getItem("refreshToken");
     if (refreshToken) {
       const decodedToken = jwtDecode(refreshToken);
       const userId = decodedToken.user.id;

@@ -33,12 +33,9 @@ export default function SignUp() {
             // Prepare the data to be posted
             const newData = {
               username: values.username,
-              first_name: values.fullname.split(" ")[0],
-              last_name: values.fullname.split(" ")[1],
               name: values.fullname,
               email: values.email,
               password: values.password,
-              birthdate: null,
               role: values.role,
               validation_states: true,
               registration_date: new Date().toISOString(),
