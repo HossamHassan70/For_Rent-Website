@@ -49,48 +49,48 @@ const PropertyView = () => {
         <Col>
           {propertyInfo && (
             <div>
-              <Card>
-                <div className="prop-image-container">
-                  <Image className="prop-image" src={selectedImage} />
-                </div>
-                <Card.Title className="display-5 mb-4 text-center">
-                  Additional Images
-                </Card.Title>
-                <div className="thumbnail-container">
-                  <div
-                    className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""
-                      }`}
-                    onClick={() => handleThumbnailClick(propertyInfo.image)}
-                  >
-                    <Image className="thumbnail-image" src={propertyInfo.image} />
-                    <div className="thumbnail-title">Image 1</div>
-                  </div>
-                  <div
-                    className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""
-                      }`}
-                    onClick={() => handleThumbnailClick(propertyInfo.image1)}
-                  >
-                    <Image className="thumbnail-image" src={propertyInfo.image1} />
-                    <div className="thumbnail-title">Image 2</div>
-                  </div>
-                  <div
-                    className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""
-                      }`}
-                    onClick={() => handleThumbnailClick(propertyInfo.image2)}
-                  >
-                    <Image className="thumbnail-image" src={propertyInfo.image2} />
-                    <div className="thumbnail-title">Image 3</div>
-                  </div>
-                  <div
-                    className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""
-                      }`}
-                    onClick={() => handleThumbnailClick(propertyInfo.image3)}
-                  >
-                    <Image className="thumbnail-image" src={propertyInfo.image3} />
-                    <div className="thumbnail-title">Image 4</div>
-                  </div>
-                </div>
-              </Card>
+     <Card>
+  <div className="prop-image-container">
+    <Image className="prop-image" src={selectedImage} />
+  </div>
+  {propertyInfo.image1 && propertyInfo.image2 && propertyInfo.image3 && (
+    <>
+      <Card.Title className="display-5 mb-4 text-center">
+        Additional Images
+      </Card.Title>
+      <div className="thumbnail-container">
+        <div
+          className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""}`}
+          onClick={() => handleThumbnailClick(propertyInfo.image)}
+        >
+          <Image className="thumbnail-image" src={propertyInfo.image} />
+          <div className="thumbnail-title">Image 1</div>
+        </div>
+        <div
+          className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""}`}
+          onClick={() => handleThumbnailClick(propertyInfo.image1)}
+        >
+          <Image className="thumbnail-image" src={propertyInfo.image1} />
+          <div className="thumbnail-title">Image 2</div>
+        </div>
+        <div
+          className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""}`}
+          onClick={() => handleThumbnailClick(propertyInfo.image2)}
+        >
+          <Image className="thumbnail-image" src={propertyInfo.image2} />
+          <div className="thumbnail-title">Image 3</div>
+        </div>
+        <div
+          className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""}`}
+          onClick={() => handleThumbnailClick(propertyInfo.image3)}
+        >
+          <Image className="thumbnail-image" src={propertyInfo.image3} />
+          <div className="thumbnail-title">Image 4</div>
+        </div>
+      </div>
+    </>
+  )}
+</Card>
             </div>
           )}
         </Col>
