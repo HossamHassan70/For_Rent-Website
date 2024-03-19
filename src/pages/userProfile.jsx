@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./css/userProfile.css";
 import { useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import LoadingScreen from "./loadingScreen";
 // import OwnerRequests from "../Components/ownerRequests";
 // import ReviewsList from "../Components/reviews";
+import { jwtDecode } from "jwt-decode";
 
 // const Emails = ({ userId }) => {
 //   const [emails, setPosts] = useState([]);
@@ -96,6 +97,22 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedUserData, setEditedUserData] = useState({});
   const [loading, setLoading] = useState(true);
+  const prevUserIdRef = useRef(null);
+  const [uid, setUid] = useState("");
+  const [infos, setInfos] = useState();
+
+  useEffect(() => {
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    if (refreshToken) {
+      const decodedToken = jwtDecode(refreshToken);
+      const userId = decodedToken.user.id;
+      const userInfos = decodedToken.user;
+      setInfos(userInfos);
+      setUid(userId);
+    }
+  }, []);
+
+  console.log(uid);
 
   const handleEditClick = () => {
     setEditMode(true);
@@ -103,7 +120,6 @@ const UserProfile = () => {
   };
 
   const handleSaveClick = () => {
-    // Call the API to update user information
     axios
       .put(`http://127.0.0.1:8000/api/users/${userId}`, editedUserData)
       .then((response) => {
@@ -127,9 +143,8 @@ const UserProfile = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/users/${userId}`
+          `http://127.0.0.1:8000/api/users/${uid}`
         );
-        console.log(response);
         setUserData(response.data);
         setLoading(false);
       } catch (error) {
@@ -138,9 +153,11 @@ const UserProfile = () => {
       }
     };
 
-    fetchData();
-  }, [userId]);
-
+    if (uid !== prevUserIdRef.current) {
+      prevUserIdRef.current = uid;
+      fetchData();
+    }
+  }, [uid]);
 
   return (
     <Container fluid className="mt-3">
@@ -392,7 +409,7 @@ const UserProfile = () => {
                   {/* Display user information */}
                   <div className="circle-image text-center">
                     <img
-                      src={userData?.profile_picture}
+                      src={infos.profile_picture}
                       alt="Profile"
                       className="rounded-circle img-thumbnail"
                       onError={(e) => {
@@ -414,19 +431,19 @@ const UserProfile = () => {
                     {/* Display user details */}
                     <div className="flex-container">
                       <p>
-                        <b>Full name: &#160;</b> {userData?.name}
+                        <b>Full name: &#160;</b> {infos.firstName}
                       </p>
                       <p>
-                        <b>Email: &#160;</b> {userData?.email}
+                        <b>Email: &#160;</b> {infos.email}
                       </p>
                       <p>
-                        <b>Date Of Birth: &#160;</b> {userData?.birthdate}
+                        <b>Date Of Birth: &#160;</b> {infos.DOB}
                       </p>
                       <p>
-                        <b>Phone: &#160;</b> {userData?.phone_number}
+                        <b>Phone: &#160;</b> {infos.phoneNumber}
                       </p>
                       <p>
-                        <b>Created at: &#160;</b> {(userData?.registration_date)}
+                        <b>Created at: &#160;</b> {infos.registration_date}
                       </p>
                     </div>
                   </div>

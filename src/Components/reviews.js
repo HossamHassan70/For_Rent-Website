@@ -9,7 +9,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import RatingMeter from './ratingMeter';
 import '../pages/css/reviews.css';
 
-function ReviewsList() {
+function ReviewsList({ userId, propertyId }) {
   const dispatch = useDispatch();
   const reviews = useSelector(state => state.reviews.reviews);
   const isLoading = useSelector(state => state.reviews.loading);
@@ -59,9 +59,9 @@ function ReviewsList() {
   const handleFormSubmit = () => {
     if (validateForm()) {
       if (modalMode === 'add') {
-        dispatch(addReview(formData));
+        dispatch(addReview({ ...formData, user: userId, property: propertyId }));
       } else if (modalMode === 'edit') {
-        dispatch(editReview(reviewId, formData));
+        dispatch(editReview(reviewId, { ...formData, user: userId, property: propertyId }));
       }
       setShowModal(false);
       setFormData({ title: '', rating: '', content: '' });
@@ -118,8 +118,8 @@ function ReviewsList() {
                 </div>
                 <p className="review-rating">{renderStars(review.rating)}</p>
                 <p className="review-content">{review.content}</p>
-                {/* <p className="review-user">User ID: {review.user}</p>
-                <p className="review-property">Property ID: {review.property}</p> */}
+                <p className="review-user">User ID: {review.user}</p>
+                <p className="review-property">Property ID: {review.property}</p>
 
                 {/* action buttons */}
                 <div className="review-actions">
@@ -166,6 +166,8 @@ function ReviewsList() {
               <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
               {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
             </Form.Group>
+            <Form.Control type="hidden" name="user" value={userId} />
+            <Form.Control type="hidden" name="property" value={propertyId} />
           </Form>
 
         </Modal.Body>
