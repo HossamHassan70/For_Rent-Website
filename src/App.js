@@ -12,6 +12,7 @@ import PropertyView from "./pages/ViewProperty";
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
 import PageNotFound from "./pages/PageNotFound";
+import Requests from "./Components/requests";
 
 const AuthRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
@@ -25,6 +26,7 @@ const App = () => {
           <NavigationBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/requests" element={<Requests />} />
             <Route
               path="/login"
               element={
