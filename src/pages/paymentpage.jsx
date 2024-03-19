@@ -21,10 +21,10 @@ const PaymentPage = () => {
   const handleCardNumberChange = (e) => {
     let { value } = e.target;
     value = value
-      .replace(/\s+/g, "") // Remove any spaces
-      .slice(0, 16) // Limit to 16 digits
-      .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
-      .trim(); // Trim spaces from both ends
+      .replace(/\s+/g, "")
+      .slice(0, 16) 
+      .replace(/(\d{4})(?=\d)/g, "$1 ") 
+      .trim();
     formik.setFieldValue("cardNumber", value);
   };
 
@@ -48,7 +48,7 @@ const PaymentPage = () => {
 
   const handleCVVChange = (e) => {
     let { value } = e.target;
-    value = value.replace(/\D/g, "").slice(0, 3); // Remove all non-numeric characters and limit to 3 digits
+    value = value.replace(/\D/g, "").slice(0, 3); 
     formik.setFieldValue("cvv", value);
   };
 
