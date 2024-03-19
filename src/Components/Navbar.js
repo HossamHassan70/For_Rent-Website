@@ -3,31 +3,28 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../MyStore/actions/authAction";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  let useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const dispatch = useDispatch();
   const [fName, setFname] = useState("");
   let history = useNavigate();
 
   useEffect(() => {
-    const refreshToken = sessionStorage.getItem("refreshToken");
     if (refreshToken) {
       setIsLoggedIn(true);
-
       const decodedToken = jwtDecode(refreshToken);
-      const userFname = decodedToken.user.firstName;
-      setFname(userFname);
+      const userName = decodedToken.user.username;
+      setFname(userName);
     } else {
       setIsLoggedIn(false);
     }
-  }, [useSel]);
+  }, [useSel, refreshToken]);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("refreshToken");
-    sessionStorage.removeItem("accessToken");
     dispatch(logout());
     setIsLoggedIn(false);
     history("/login");
