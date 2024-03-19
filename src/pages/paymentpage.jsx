@@ -3,20 +3,73 @@ import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const PaymentPage = () => {
-
   const getCardType = (number) => {
     const cardPatterns = {
       visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
       mastercard: /^5[1-5][0-9]{14}$/,
     };
 
-    if (cardPatterns.visa.test(number)) {
+    if (cardPatterns.visa.test(number.replace(/\s+/g, ""))) {
       return "Visa";
-    } else if (cardPatterns.mastercard.test(number)) {
+    } else if (cardPatterns.mastercard.test(number.replace(/\s+/g, ""))) {
       return "MasterCard";
     } else {
       return "";
     }
+  };
+
+  
+  const handleCardNumberChange = (e) => {
+    let { value } = e.target;
+    value = value
+      .replace(/\s+/g, "")
+      .replace(/(\d{4})/g, "$1 ")
+      .trim();
+    formik.setFieldValue("cardNumber", value);
+  };
+
+  const handleExpDateChange = (e) => {
+    let { value } = e.target;
+    value = value
+      .replace(
+        /^([1-9]\/|[2-9])$/g,
+        "0$1/" 
+      )
+      .replace(
+        /^(0[1-9]|1[0-2])$/g,
+        "$1/" 
+      )
+      .replace(
+        /^([0-1])([3-9])$/g,
+        "0$1/$2" 
+      )
+      .replace(
+        /^(0?[1-9]|1[0-2])([0-9]{2})$/g,
+        "$1/$2" 
+      )
+      .replace(
+        /^([0]+)\/|[0]+$/g,
+        "0" 
+      )
+      .replace(
+        /[^\d\/]|^[\/]*$/g,
+        "" 
+      )
+      .replace(
+        /\/\//g,
+        "/" 
+      );
+    formik.setFieldValue("expDate", value);
+  };
+
+  const handleCardNameChange = (e) => {
+    let { value } = e.target;
+    formik.setFieldValue("cardName", value);
+  };
+
+  const handleCVVChange = (e) => {
+    let { value } = e.target;
+    value = value.replace(/\D/g, "").slice(0, 3); 
   };
 
 
@@ -27,10 +80,28 @@ const PaymentPage = () => {
       expDate: "",
       cvv: "",
     },
+    validate: (values) => {
+      const errors = {};
+      if (
+        !values.cardName ||
+        !values.cardNumber ||
+        !values.expDate ||
+        !values.cvv
+      ) {
+        errors.submit = "All fields must be filled";
+      }
+      return errors;
+    },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+  const allFieldsFilled =
+    formik.values.cardName &&
+    formik.values.cardNumber &&
+    formik.values.expDate &&
+    formik.values.cvv;
 
   return (
     <div className="container my-5">
@@ -47,7 +118,7 @@ const PaymentPage = () => {
                 className="form-control"
                 id="cardName"
                 name="cardName"
-                onChange={formik.handleChange}
+                onChange={handleCardNameChange}
                 value={formik.values.cardName}
               />
             </div>
@@ -60,11 +131,8 @@ const PaymentPage = () => {
                 className="form-control"
                 id="cardNumber"
                 name="cardNumber"
-                onChange={formik.handleChange}
+                onChange={handleCardNumberChange}
                 value={formik.values.cardNumber}
-                onBlur={(e) =>
-                  formik.setFieldValue("cardType", getCardType(e.target.value))
-                }
               />
               <small className="form-text text-muted">
                 Card Type: {getCardType(formik.values.cardNumber)}
@@ -79,7 +147,8 @@ const PaymentPage = () => {
                 className="form-control"
                 id="expDate"
                 name="expDate"
-                onChange={formik.handleChange}
+                maxLength="5"
+                onChange={handleExpDateChange}
                 value={formik.values.expDate}
               />
             </div>
@@ -92,11 +161,16 @@ const PaymentPage = () => {
                 className="form-control"
                 id="cvv"
                 name="cvv"
-                onChange={formik.handleChange}
+                maxLength="4"
+                onChange={handleCVVChange}
                 value={formik.values.cvv}
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!allFieldsFilled}
+            >
               Submit
             </button>
           </form>
