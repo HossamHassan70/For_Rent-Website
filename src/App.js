@@ -13,7 +13,6 @@ import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
 import PageNotFound from "./pages/PageNotFound";
 
-
 const AuthRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
   return isLoggedIn ? <Navigate to="/" /> : children;
@@ -43,14 +42,7 @@ const App = () => {
                 </AuthRoute>
               }
             />
-            <Route
-              path="/property/:id"
-              element={
-                <PrivateRoute>
-                  <PropertyView />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/property/:id" element={<PropertyView />} />
             <Route
               path="/user/:userId"
               element={
