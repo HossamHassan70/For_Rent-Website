@@ -29,13 +29,13 @@ const PropertyView = () => {
       .get(`http://localhost:8000/properties/${id}`)
       .then((res) => {
         setPropertyInfo(res.data);
-        setSelectedImage(res.data.image); 
+        setSelectedImage(res.data.image);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
-  
+  }, [id, token]);
+
   const handleThumbnailClick = (image) => {
     setSelectedImage(image);
   };
@@ -58,36 +58,32 @@ const PropertyView = () => {
                 </Card.Title>
                 <div className="thumbnail-container">
                   <div
-                    className={`thumbnail ${
-                      selectedImage === propertyInfo.image ? "selected" : ""
-                    }`}
+                    className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""
+                      }`}
                     onClick={() => handleThumbnailClick(propertyInfo.image)}
                   >
                     <Image className="thumbnail-image" src={propertyInfo.image} />
                     <div className="thumbnail-title">Image 1</div>
                   </div>
                   <div
-                    className={`thumbnail ${
-                      selectedImage === propertyInfo.image1 ? "selected" : ""
-                    }`}
+                    className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""
+                      }`}
                     onClick={() => handleThumbnailClick(propertyInfo.image1)}
                   >
                     <Image className="thumbnail-image" src={propertyInfo.image1} />
                     <div className="thumbnail-title">Image 2</div>
                   </div>
                   <div
-                    className={`thumbnail ${
-                      selectedImage === propertyInfo.image2 ? "selected" : ""
-                    }`}
+                    className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""
+                      }`}
                     onClick={() => handleThumbnailClick(propertyInfo.image2)}
                   >
                     <Image className="thumbnail-image" src={propertyInfo.image2} />
                     <div className="thumbnail-title">Image 3</div>
                   </div>
                   <div
-                    className={`thumbnail ${
-                      selectedImage === propertyInfo.image3 ? "selected" : ""
-                    }`}
+                    className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""
+                      }`}
                     onClick={() => handleThumbnailClick(propertyInfo.image3)}
                   >
                     <Image className="thumbnail-image" src={propertyInfo.image3} />
@@ -100,11 +96,11 @@ const PropertyView = () => {
         </Col>
         <Col>
           <Card >
-            <Card.Body > 
+            <Card.Body >
               <Card.Title   >
-              <p>Title:</p>
+                <p>Title:</p>
               </Card.Title>
-              {propertyInfo.title} 
+              {propertyInfo.title}
             </Card.Body>
           </Card>
           <Card>
@@ -115,9 +111,9 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
           <Card className="price-card">
-          <Card.Body>
-            <Card.Title>Price</Card.Title>
-            ${propertyInfo.price}
+            <Card.Body>
+              <Card.Title>Price</Card.Title>
+              ${propertyInfo.price}
             </Card.Body>
           </Card>
           <Card>
@@ -129,7 +125,7 @@ const PropertyView = () => {
                 id="noanim-tab-example"
                 className="mb-3"
               >
-                 <Tab eventKey="property overview" title="Property Overview">
+                <Tab eventKey="property overview" title="Property Overview">
                   <Table>
                     <thead>
                       <tr>
