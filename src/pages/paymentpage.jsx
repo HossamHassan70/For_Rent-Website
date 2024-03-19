@@ -14,51 +14,30 @@ const PaymentPage = () => {
     } else if (cardPatterns.mastercard.test(number.replace(/\s+/g, ""))) {
       return "MasterCard";
     } else {
-      return "";
+      return "Unkown";
     }
   };
 
-  
   const handleCardNumberChange = (e) => {
     let { value } = e.target;
     value = value
-      .replace(/\s+/g, "")
-      .replace(/(\d{4})/g, "$1 ")
-      .trim();
+      .replace(/\s+/g, "") // Remove any spaces
+      .slice(0, 16) // Limit to 16 digits
+      .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
+      .trim(); // Trim spaces from both ends
     formik.setFieldValue("cardNumber", value);
   };
 
   const handleExpDateChange = (e) => {
     let { value } = e.target;
     value = value
-      .replace(
-        /^([1-9]\/|[2-9])$/g,
-        "0$1/" 
-      )
-      .replace(
-        /^(0[1-9]|1[0-2])$/g,
-        "$1/" 
-      )
-      .replace(
-        /^([0-1])([3-9])$/g,
-        "0$1/$2" 
-      )
-      .replace(
-        /^(0?[1-9]|1[0-2])([0-9]{2})$/g,
-        "$1/$2" 
-      )
-      .replace(
-        /^([0]+)\/|[0]+$/g,
-        "0" 
-      )
-      .replace(
-        /[^\d\/]|^[\/]*$/g,
-        "" 
-      )
-      .replace(
-        /\/\//g,
-        "/" 
-      );
+      .replace(/^([1-9]\/|[2-9])$/g, "0$1/")
+      .replace(/^(0[1-9]|1[0-2])$/g, "$1/")
+      .replace(/^([0-1])([3-9])$/g, "0$1/$2")
+      .replace(/^(0?[1-9]|1[0-2])([0-9]{2})$/g, "$1/$2")
+      .replace(/^([0]+)\/|[0]+$/g, "0")
+      .replace(/[^\d\/]|^[\/]*$/g, "")
+      .replace(/\/\//g, "/");
     formik.setFieldValue("expDate", value);
   };
 
@@ -69,9 +48,9 @@ const PaymentPage = () => {
 
   const handleCVVChange = (e) => {
     let { value } = e.target;
-    value = value.replace(/\D/g, "").slice(0, 3); 
+    value = value.replace(/\D/g, "").slice(0, 3); // Remove all non-numeric characters and limit to 3 digits
+    formik.setFieldValue("cvv", value);
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -161,7 +140,7 @@ const PaymentPage = () => {
                 className="form-control"
                 id="cvv"
                 name="cvv"
-                maxLength="4"
+                maxLength="3"
                 onChange={handleCVVChange}
                 value={formik.values.cvv}
               />
