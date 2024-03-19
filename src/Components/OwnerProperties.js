@@ -43,7 +43,7 @@ const OwnerProperties = () => {
         console.error("Error decoding token:", error);
       }
     }
-  }, []);
+  }, [token]);
 
   const propertiesPerPage = 8;
   const totalPages = Math.ceil(properties.length / propertiesPerPage);
@@ -281,7 +281,7 @@ const OwnerProperties = () => {
   return (
     <Container>
       <h1 className="my-properties-heading">
-        <Badge bg="secondary">  My Properties</Badge>
+        <Badge bg="secondary">My Properties</Badge>
       </h1>
       <div className="card-container">
         {currentProperties.length === 0 ? (
@@ -313,15 +313,16 @@ const OwnerProperties = () => {
                 </Card.Body>
               </Card>
             ))}
-            <Pagination>
-              <Pagination.Prev onClick={handlePrevClick} />
-              {renderPaginationItems()}
-              <Pagination.Next onClick={handleNextClick} />
-            </Pagination>
           </>
         )}
       </div>
-
+      {currentProperties.length > 0 && (
+        <Pagination className="mt-3">
+          <Pagination.Prev onClick={handlePrevClick} />
+          {renderPaginationItems()}
+          <Pagination.Next onClick={handleNextClick} />
+        </Pagination>
+      )}
 
       <Modal show={showConfirmation} onHide={handleCloseConfirmation}>
         <Modal.Header closeButton>
