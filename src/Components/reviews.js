@@ -8,8 +8,9 @@ import LoadingScreen from './../pages/loadingScreen';
 import { Modal, Button, Form } from 'react-bootstrap';
 import RatingMeter from './ratingMeter';
 import '../pages/css/reviews.css';
+import { Alert } from 'react-bootstrap';
 
-function ReviewsList() {
+function ReviewsList({ userId, propertyId }) {
   const dispatch = useDispatch();
   const reviews = useSelector(state => state.reviews.reviews);
   const isLoading = useSelector(state => state.reviews.loading);
@@ -20,12 +21,28 @@ function ReviewsList() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [modalMode, setModalMode] = useState('add');
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     dispatch(fetchReviews());
   }, [dispatch]);
 
   const handleAddReview = () => {
+    if (!userId) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 4000);
+      return;
+    }
+    const userReview = reviews.find(review => review.user === userId);
+    if (userReview) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 4000);
+      return;
+    }
     setModalMode('add');
     setShowModal(true);
   };
@@ -59,9 +76,9 @@ function ReviewsList() {
   const handleFormSubmit = () => {
     if (validateForm()) {
       if (modalMode === 'add') {
-        dispatch(addReview(formData));
+        dispatch(addReview({ ...formData, user: userId, property: propertyId }));
       } else if (modalMode === 'edit') {
-        dispatch(editReview(reviewId, formData));
+        dispatch(editReview(reviewId, { ...formData, user: userId, property: propertyId }));
       }
       setShowModal(false);
       setFormData({ title: '', rating: '', content: '' });
@@ -110,28 +127,75 @@ function ReviewsList() {
           {reviews.length === 0 ? (
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
-            reviews.map(review => (
-              <div key={review.id} className="review-container mt-4">
-                <div className="review-header">
-                  <h2 className="review-title">{review.title}</h2>
-                  <p className="review-date">{formatDate(review.created_at)}</p>
-                </div>
-                <p className="review-rating">{renderStars(review.rating)}</p>
-                <p className="review-content">{review.content}</p>
-                {/* <p className="review-user">User ID: {review.user}</p>
-                <p className="review-property">Property ID: {review.property}</p> */}
+            <>
+              {/* Render user's review first */}
+              {showAlert && (
+                <Alert variant="danger" >
+                  {userId ? 'You have already reviewed this property.' : 'Please log in first to add a review.'}
+                </Alert>
+              )}
+              {userId && reviews.some(review => review.user === userId) && (
+                reviews
+                  .filter(review => review.user === userId)
+                  .map(review => (
+                    <div key={review.id} className="review-container mt-4">
+                      <div className="review-header">
+                        <h2 className="review-title">{review.title}</h2>
+                        <p className="review-date">{formatDate(review.created_at)}</p>
+                      </div>
+                      <p className="review-rating">{renderStars(review.rating)}</p>
+                      <p className="review-content">{review.content}</p>
+                      <p className="review-user">User ID: {review.user} (test)</p>
+                      <p className="review-property">Property ID: {review.property} (test)</p>
 
-                {/* action buttons */}
-                <div className="review-actions">
-                  <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
-                    <FontAwesomeIcon icon={faEdit} /> Edit
-                  </button>
-                  <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </button>
-                </div>
-              </div>
-            ))
+                      {/* Action buttons */}
+                      <div className="review-actions">
+                        {userId === review.user && (
+                          <>
+                            <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
+                              <FontAwesomeIcon icon={faEdit} /> Edit
+                            </button>
+                            <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
+                              <FontAwesomeIcon icon={faTrash} /> Delete
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))
+              )}
+
+              {/* Render other reviews */}
+              {reviews
+                .filter(review => !(review.user === userId))
+                .map(review => (
+                  <div key={review.id} className="review-container mt-4">
+                    <div className="review-header">
+                      <h2 className="review-title">{review.title}</h2>
+                      <p className="review-date">{formatDate(review.created_at)}</p>
+                    </div>
+                    <p className="review-rating">{renderStars(review.rating)}</p>
+                    <p className="review-content">{review.content}</p>
+                    <p className="review-user">User ID: {review.user} (test)</p>
+                    <p className="review-property">Property ID: {review.property} (test)</p>
+
+                    {/* Action buttons */}
+                    <div className="review-actions">
+                      {userId === review.user && (
+                        <>
+                          <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
+                            <FontAwesomeIcon icon={faEdit} /> Edit
+                          </button>
+                          <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
+                            <FontAwesomeIcon icon={faTrash} /> Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))
+              }
+            </>
           )}
           <div className="d-flex justify-content-end">
             <button className="btn btn-primary" onClick={handleAddReview}>
@@ -166,6 +230,8 @@ function ReviewsList() {
               <Form.Control as="textarea" name="content" value={formData.content} onChange={handleFormChange} rows={3} placeholder="Enter content" />
               {formErrors.content && <span className="text-danger">{formErrors.content}</span>}
             </Form.Group>
+            <Form.Control type="hidden" name="user" value={userId} />
+            <Form.Control type="hidden" name="property" value={propertyId} />
           </Form>
 
         </Modal.Body>
