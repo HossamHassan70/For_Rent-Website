@@ -30,7 +30,6 @@ export default function SignUp() {
       onSubmit: async (values, { resetForm, setSubmitting }) => {
         if (Object.keys(errors).length === 0) {
           try {
-            // Prepare the data to be posted
             const newData = {
               username: values.username,
               name: values.fullname,
@@ -43,7 +42,6 @@ export default function SignUp() {
               phone_number: values.phoneNumber,
             };
 
-            // Perform the POST request
             const response = await axios.post(
               "http://127.0.0.1:8000/users/",
               newData
@@ -51,8 +49,10 @@ export default function SignUp() {
             console.log("Data posted successfully:", response.data);
             resetForm();
             history("/login");
-          } catch (error) {
-            console.error("Error posting data:", error);
+          } catch (e) {
+            console.log("error");
+            setSubmitting(false);
+            setIsSucess(true);
           }
         } else {
           setSubmitting(false);
