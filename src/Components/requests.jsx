@@ -60,25 +60,25 @@ const Requests = () => {
         });
       });
 
-      // Send email
-      const serviceId = 'service_21hdjtz';
-      const templateId = 'template_io83mns';
-      const publicKey = 'xr6_cNCqHsf9TrFPu';
-      const data = {
-        service_id: serviceId,
-        template_id: templateId,
-        user_id: publicKey,
-        // template_params: {
-        //   username: ,
-        //   property_name: ,
-        //   message: '',
-        //   reply_to: ,
-        // }
+      // Send email for acceptance
+      const acceptanceServiceId = 'service_21hdjtz';
+      const acceptanceTemplateId = 'template_io83mns';
+      const acceptancePublicKey = 'xr6_cNCqHsf9TrFPu';
+      const acceptanceData = {
+        service_id: acceptanceServiceId,
+        template_id: acceptanceTemplateId,
+        user_id: acceptancePublicKey,
+        template_params: {
+          username: requestToUpdate.username,
+          property_name: requestToUpdate.property_name,
+          message: 'Your request has been accepted.',
+          payment_link: '',
+          reply_to: requestToUpdate.email,
+        }
       };
 
       // Send the email using EmailJS
-      await axios.post("https://api.emailjs.com/api/v1.0/email/send", data);
-      // console.log(res.data);
+      await axios.post("https://api.emailjs.com/api/v1.0/email/send", acceptanceData);
 
       // Display alert when accept button is clicked
       setShowAlert(true);
@@ -113,10 +113,29 @@ const Requests = () => {
         ...requestToUpdate,
         is_accepted: false,
         is_rejected: true,
-        // to add rejection reason to api
         rejection_reason: rejectionReason
       };
       await axios.put(`http://127.0.0.1:8000/requests/${selectedRequestId}/`, updatedRequest);
+
+      // Send email for rejection
+      const rejectionServiceId = 'service_21hdjtz';
+      const rejectionTemplateId = 'template_o7hhtco';
+      const rejectionPublicKey = 'xr6_cNCqHsf9TrFPu';
+      const rejectionData = {
+        service_id: rejectionServiceId,
+        template_id: rejectionTemplateId,
+        user_id: rejectionPublicKey,
+        template_params: {
+          username: requestToUpdate.username,
+          property_name: requestToUpdate.property_name,
+          message: 'Your request has been rejected.',
+          reply_to: requestToUpdate.email,
+          rejection_reason: rejectionReason,
+        }
+      };
+
+      // Send the email using EmailJS
+      await axios.post("https://api.emailjs.com/api/v1.0/email/send", rejectionData);
 
       // to update the page to show changes
       setPropertyRequests(prevRequests => {
