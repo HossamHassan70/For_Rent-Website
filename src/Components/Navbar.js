@@ -11,6 +11,7 @@ const NavigationBar = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const dispatch = useDispatch();
   const [fName, setFname] = useState("");
+  const [userId, setUserId] = useState(null);
   let history = useNavigate();
 
   useEffect(() => {
@@ -18,7 +19,9 @@ const NavigationBar = () => {
       setIsLoggedIn(true);
       const decodedToken = jwtDecode(refreshToken);
       const userName = decodedToken.user.username;
+      const uid = decodedToken.user.id;
       setFname(userName);
+      setUserId(uid);
     } else {
       setIsLoggedIn(false);
     }
@@ -55,7 +58,7 @@ const NavigationBar = () => {
                 </Nav.Link>
                 <Nav.Link
                   as={Link}
-                  to={`/user/1`}
+                  to={`/user/${userId}`}
                   style={{ fontWeight: "bold" }}
                 >
                   <p className="m-0">Welcome, {fName}</p>
