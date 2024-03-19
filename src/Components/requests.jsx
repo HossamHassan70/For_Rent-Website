@@ -4,7 +4,7 @@ import { Button, Card, Badge, Modal, Form } from 'react-bootstrap';
 import LoadingScreen from '../pages/loadingScreen';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 
-const OwnerRequests = () => {
+const Requests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -235,4 +235,4 @@ const OwnerRequests = () => {
   );
 };
 
-export default OwnerRequests;
+export default Requests;

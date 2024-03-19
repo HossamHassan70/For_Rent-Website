@@ -7,7 +7,7 @@ import HomePage from "./pages/homePage";
 import PropertyView from './pages/ViewProperty';
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
-import OwnerRequests from "./Components/ownerRequests";
+import Requests from "./Components/requests";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route path="/property/:id" element={<PropertyView />} />
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/OwnerProperties" element={<OwnerProperties />} />
-          <Route path="/requests" element={<OwnerRequests />} /> {/* to test */}
+          <Route path="/requests" element={<Requests />} /> {/* to test */}
         </Routes>
         <Footer />
       </BrowserRouter>
