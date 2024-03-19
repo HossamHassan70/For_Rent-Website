@@ -50,7 +50,7 @@ export default function SignUp() {
             );
             console.log("Data posted successfully:", response.data);
             resetForm();
-            history.push("/login");
+            history("/login");
           } catch (error) {
             console.error("Error posting data:", error);
           }
