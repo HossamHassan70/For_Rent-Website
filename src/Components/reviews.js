@@ -134,6 +134,11 @@ function ReviewsList({ userId, propertyId }) {
                   {userId ? 'You have already reviewed this property.' : 'Please log in first to add a review.'}
                 </Alert>
               )}
+              <div className="d-flex justify-content-end">
+                <button className="btn btn-primary" onClick={handleAddReview}>
+                  <FontAwesomeIcon icon={faPlus} /> Add Review
+                </button>
+              </div>
               {userId && reviews.some(review => review.user === userId) && (
                 reviews
                   .filter(review => review.user === userId)
@@ -197,11 +202,6 @@ function ReviewsList({ userId, propertyId }) {
               }
             </>
           )}
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={handleAddReview}>
-              <FontAwesomeIcon icon={faPlus} /> Add Review
-            </button>
-          </div>
         </>
       )}
 
