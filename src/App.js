@@ -44,7 +44,6 @@ function App() {
             path="/OwnerProperties"
             element={<PrivateRoute element={OwnerProperties} />}
           />
-          {/* <Route path="/wishlist" element={<Fave />} /> */}
           <Route path="*" element={<PageNotFound />} />
           <Route path="/properties" element={<PropertiesPage />} />
         </Routes>

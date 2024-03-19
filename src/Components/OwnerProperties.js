@@ -207,15 +207,9 @@ const OwnerProperties = () => {
     formData.append("bathrooms", form.bathrooms.value);
     formData.append("owner", userId);
     formData.append("availability", true);
-    if (image1) {
-      formData.append("image1", image1);
-    }
-    if (image2) {
-      formData.append("image2", image2);
-    }
-    if (image3) {
-      formData.append("image3", image3);
-    }
+    if (image1) { formData.append("image1", image1) }
+    if (image2) { formData.append("image2", image2) }
+    if (image3) { formData.append("image3", image3) }
 
     if (editPropertyData) {
       editProperty(editPropertyData.id, formData);
@@ -444,19 +438,16 @@ const OwnerProperties = () => {
             <Form.Group controlId="image1">
               <Form.Label>Additional Image 1 (Optional)</Form.Label>
               <Form.Control type="file" onChange={handleImage1Change} />
-              {formErrors.image1 && <Badge bg="danger">{formErrors.image1}</Badge>}
             </Form.Group>
 
             <Form.Group controlId="image2">
               <Form.Label>Additional Image 2 (Optional)</Form.Label>
               <Form.Control type="file" onChange={handleImage2Change} />
-              {formErrors.image2 && <Badge bg="danger">{formErrors.image2}</Badge>}
             </Form.Group>
 
             <Form.Group controlId="image3">
               <Form.Label>Additional Image 3 (Optional)</Form.Label>
               <Form.Control type="file" onChange={handleImage3Change} />
-              {formErrors.image3 && <Badge bg="danger">{formErrors.image3}</Badge>}
             </Form.Group>
 
             <Button variant="primary" type="submit">
