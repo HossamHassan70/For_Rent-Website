@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Card, Badge, Modal, Form } from 'react-bootstrap';
 import LoadingScreen from '../pages/loadingScreen';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 const OwnerRequests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
@@ -14,15 +15,12 @@ const OwnerRequests = () => {
   const [rejectionReason, setRejectionReason] = useState("")
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
+  // console.log(propertyRequests)
 
   useEffect(() => {
     const fetchPropertyRequests = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/requests/`, {
-          params: {
-            _page: page,
-            _limit: 10
-          }
         });
         setPropertyRequests(response.data);
         setLoading(false);
@@ -50,7 +48,7 @@ const OwnerRequests = () => {
         is_rejected: false
       };
 
-      await axios.put(`http://127.0.0.1:8000/requests/${id}`, updatedRequest);
+      await axios.put(`http://127.0.0.1:8000/requests/${id}/`, updatedRequest);
 
       // Update the state to reflect the changes
       setPropertyRequests(prevRequests => {
@@ -79,8 +77,8 @@ const OwnerRequests = () => {
       };
 
       // Send the email using EmailJS
-      const res = await axios.post("https://api.emailjs.com/api/v1.0/email/send", data);
-      console.log(res.data);
+      await axios.post("https://api.emailjs.com/api/v1.0/email/send", data);
+      // console.log(res.data);
 
       // Display alert when accept button is clicked
       setShowAlert(true);
@@ -118,7 +116,7 @@ const OwnerRequests = () => {
         // to add rejection reason to api
         rejection_reason: rejectionReason
       };
-      await axios.put(`http://127.0.0.1:8000/requests/${selectedRequestId}`, updatedRequest);
+      await axios.put(`http://127.0.0.1:8000/requests/${selectedRequestId}/`, updatedRequest);
 
       // to update the page to show changes
       setPropertyRequests(prevRequests => {
@@ -135,25 +133,9 @@ const OwnerRequests = () => {
     }
   };
 
-  // reset button change all requests status to pending
-  const handleResetStatus = async () => {
-    try {
-      const updatedRequests = [];
-      for (const request of propertyRequests) {
-        const updatedRequest = {
-          ...request,
-          is_accepted: false,
-          is_rejected: false
-        };
-        await axios.put(`http://127.0.0.1:8000/requests/${request.id}`, updatedRequest);
-        updatedRequests.push(updatedRequest);
-      }
-
-      // to update the page to show changes
-      setPropertyRequests(updatedRequests);
-    } catch (error) {
-      console.error('Error resetting status:', error);
-    }
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return formatDistanceToNow(date, { addSuffix: true });
   };
 
   if (loading) {
@@ -175,47 +157,54 @@ const OwnerRequests = () => {
         )}
       </div>
 
-      {/* Requests list */}
-      {propertyRequests.map(request => (
-        <Card className='mt-3' key={request.id} style={{ marginBottom: '10px' }}>
-          <Card.Body>
-            <Card.Title>{request.title}</Card.Title>
-            <Card.Text>{request.timestamp}</Card.Text>
-            <Card.Text>{request.body}</Card.Text>
+      {propertyRequests.length === 0 ? (
+        <p>No requests available.</p>
+      ) : (
+        <>
+          {/* Requests list */}
+          {propertyRequests.map(request => (
+            <Card className='mt-3' key={request.id} style={{ marginBottom: '10px' }}>
+              <Card.Body>
+                <Card.Title>{request.title}</Card.Title>
+                <Card.Text>{formatDate(request.created_at)}</Card.Text>
+                <Card.Text>{request.message}</Card.Text>
 
-            {request.is_accepted ? (
-              <Badge bg="success">Accepted</Badge>
-            ) : request.is_rejected ? (
-              <>
-                <Badge bg="danger">Rejected</Badge>
-                {request.rejection_reason && (
-                  <span> - {request.rejection_reason}</span>
+                {request.is_accepted ? (
+                  <Badge bg="success">Accepted</Badge>
+                ) : request.is_rejected ? (
+                  <>
+                    <Badge bg="danger">Rejected</Badge>
+                    {request.rejection_reason && (
+                      <span> - {request.rejection_reason}</span>
+                    )}
+                  </>
+                ) : (
+                  <Badge bg="secondary">Pending</Badge>
                 )}
-              </>
-            ) : (
-              <Badge bg="secondary">Pending</Badge>
-            )}
 
-            {!request.is_accepted && !request.is_rejected && (
-              <div className='my-2'>
-                <Button variant="success" onClick={() => handleAccept(request.id)}>Accept</Button>{' '}
-                <Button variant="danger" className='mx-2' onClick={() => handleReject(request.id)}>Reject</Button>
-              </div>
-            )}
-          </Card.Body>
-        </Card>
-      ))}
+                {!request.is_accepted && !request.is_rejected && (
+                  <div className='my-2'>
+                    <Button variant="success" onClick={() => handleAccept(request.id)}>Accept</Button>{' '}
+                    <Button variant="danger" className='mx-2' onClick={() => handleReject(request.id)}>Reject</Button>
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+          ))}
 
-      {/* Pagination */}
-      <div className='d-flex justify-content-center mt-3'>
-        <Button variant="outline-primary mx-2" onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
-          Previous
-        </Button>{' '}
-        <Button variant="outline-primary mx-2" onClick={() => handlePageChange(page + 1)} disabled={page === 3}>
-          Next
-        </Button>
-      </div>
-      <Button variant="danger" onClick={handleResetStatus}>Reset All Status</Button>
+          {/* Pagination */}
+          {propertyRequests.length > 0 && (
+            <div className='d-flex justify-content-center mt-3'>
+              <Button variant="outline-primary mx-2" onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+                Previous
+              </Button>{' '}
+              <Button variant="outline-primary mx-2" onClick={() => handlePageChange(page + 1)} disabled={page === 3}>
+                Next
+              </Button>
+            </div>
+          )}
+        </>
+      )}
 
       {/* reject modal */}
       <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
