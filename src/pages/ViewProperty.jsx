@@ -5,14 +5,16 @@ import axios from "axios";
 import "./css/ViewProperty.css";
 import ReviewsList from "../Components/reviews";
 import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 const PropertyView = () => {
   const { id } = useParams();
   const [propertyInfo, setPropertyInfo] = useState({});
   const [userId, setUserId] = useState(null);
+  const token = useSelector((state) => state.authReducer.refreshToken);
+
 
   useEffect(() => {
-    const token = sessionStorage.getItem("refreshToken");
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
