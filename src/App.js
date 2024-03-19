@@ -7,7 +7,8 @@ import HomePage from "./pages/homePage";
 import PropertyView from './pages/ViewProperty';
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
-import Fave from './pages/wishlist';
+// import Fave from './pages/wishlist';
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/OwnerProperties" element={<OwnerProperties />} />
           {/* <Route path="/wishlist" element={<Fave />} /> */}
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

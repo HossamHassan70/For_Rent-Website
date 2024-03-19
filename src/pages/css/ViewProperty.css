@@ -1,18 +1,34 @@
+/* Center the Property Detail heading */
 h1 {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 20px;
   margin-bottom: 20px;
   font-size: 40px;
   font-weight: bold;
+
+
   letter-spacing: 2px;
   text-shadow: 2px 2px 2px #000;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
   padding: 20px;
 }
 
-.container-fluid>.row {
-  margin: 20px 40px;
+#IMAGE {
+  height: 100%;
+  width: 100%;
 }
 
+/* Adjust the vertical spacing between rows */
+.container-fluid>.row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+/* Make prop-image take up the full width and height of its container */
 .prop-image-container {
   width: 100%;
   height: 100%;
@@ -24,10 +40,12 @@ h1 {
   margin-top: 20px;
   margin-left: 0%;
   margin-right: 0%;
+
 }
 
 .prop-image {
   width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 5px;
   margin-bottom: 20px;
@@ -36,18 +54,31 @@ h1 {
   justify-content: center;
 }
 
+/* Adjust the alignment of the Property Details */
 .prop-details {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+
 }
 
+/* Adjust the alignment of Additional Images title */
+.display-5.mb-4.text-center {
+  text-align: center;
+}
+
+/* Create a grid for the image-thumbnails */
 .image-thumbnails {
   display: flex;
   grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+  /* Adjust the image-thumbnail size as needed */
   grid-gap: 10px;
+  /* Adjust the spacing between thumbnails */
+  flex: 1;
 }
 
+/* Style the additional-image */
 .additional-image {
   width: 100%;
   height: 100%;
@@ -55,94 +86,44 @@ h1 {
   cursor: pointer;
 }
 
+/* Adjust the alignment of the cards */
+
+
 .card-header {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
+
+
   justify-content: center;
+
+
 }
 
+/* Style the Property Description tabs */
 .nav-tabs {
   margin-bottom: 15px;
+
 }
 
+/* Set a max-width for the Property Description tabs content */
 .tab-content {
   max-width: 600px;
+  /* Adjust as needed */
   margin: 0 auto;
 }
 
+/* Align the Location button */
 .card-header {
   display: flex;
   justify-content: space-between;
+
 }
 
+/* Ensure the PropertyMapView is displayed properly */
 .container-fluid>.row:last-child .card-body {
   position: relative;
   overflow: hidden;
   padding: 30px;
-}
-/* ViewProperty.css */
 
-.container-fluid {
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.view-card {
-  width: 100%;
-  height: 100%;
-  
-}
-.card {
-  margin-bottom: 20px;
-}
-
-.card-img-top {
-  height: 450px;
-  object-fit: cover;
-}
-
-.display-5 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.mb-2 {
-  margin-bottom: 10px;
-}
-
-.mb-3 {
-  margin-bottom: 15px;
-}
-
-.table {
-  margin-bottom: 20px;
-}
-
-.table th {
-  font-weight: bold;
-}
-
-.table td {
-  vertical-align: middle;
-}
-
-.mt-4 {
-  margin-top: 20px;
-}
-
-/* Center the price card horizontally */
-.price-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-  padding-top: 30px;
-  padding-bottom: 20px;
-
- 
 }
