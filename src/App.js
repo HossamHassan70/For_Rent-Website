@@ -35,10 +35,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPre />} />
           <Route path="/register" element={<SignUp />} />
-          <Route
-            path="/property/:id"
-            element={<PrivateRoute element={PropertyView} />}
-          />
+          <Route path="/property/:id" element={<PropertyView />} />
           <Route
             path="/user/:userId"
             element={<PrivateRoute element={UserProfile} />}
