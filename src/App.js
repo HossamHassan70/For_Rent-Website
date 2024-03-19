@@ -41,14 +41,6 @@ const App = () => {
                 </AuthRoute>
               }
             />
-            <Route
-              path="/property/:id"
-              element={
-                <PrivateRoute>
-                  <PropertyView />
-                </PrivateRoute>
-              }
-            />
             <Route path="/property/:id" element={<PropertyView />} />
             <Route
               path="/user/:userId"
