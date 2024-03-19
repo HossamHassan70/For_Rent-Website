@@ -128,7 +128,6 @@ function ReviewsList({ userId, propertyId }) {
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
             <>
-              {/* Render user's review first */}
               {showAlert && (
                 <Alert variant="danger" >
                   {userId ? 'You have already reviewed this property.' : 'Please log in first to add a review.'}
@@ -170,7 +169,6 @@ function ReviewsList({ userId, propertyId }) {
                   ))
               )}
 
-              {/* Render other reviews */}
               {reviews
                 .filter(review => !(review.user === userId))
                 .map(review => (

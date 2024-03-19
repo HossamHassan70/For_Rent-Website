@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Button, Card, Badge, Modal, Form } from 'react-bootstrap';
 import LoadingScreen from '../pages/loadingScreen';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode';
 
 const Requests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
@@ -15,14 +17,35 @@ const Requests = () => {
   const [rejectionReason, setRejectionReason] = useState("")
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
-  // console.log(propertyRequests)
+  // console.log(propertyRequests)3
+  const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState("");
+  const token = useSelector((state) => state.authReducer.refreshToken);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const uid = decodedToken.user.id;
+        const userRole = decodedToken.user.role;
+        setUserId(uid);
+        setUserRole(userRole);
+        // console.log(uid, userRole)
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, [token]);
 
   useEffect(() => {
     const fetchPropertyRequests = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/requests/`, {
-        });
-        setPropertyRequests(response.data);
+        const response = await axios.get(`http://127.0.0.1:8000/requests/`);
+        if (userRole === 'Owner') {
+          setPropertyRequests(response.data.filter(request => request.owner === userId));
+        } else if (userRole === 'Renter') {
+          setPropertyRequests(response.data.filter(request => request.renter === userId));
+        }
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -31,7 +54,7 @@ const Requests = () => {
     };
 
     fetchPropertyRequests();
-  }, [page]);
+  }, [page, userId, userRole]);
 
   // for pagination
   const handlePageChange = (newPage) => {
@@ -201,7 +224,7 @@ const Requests = () => {
                   <Badge bg="secondary">Pending</Badge>
                 )}
 
-                {!request.is_accepted && !request.is_rejected && (
+                {userRole === 'Owner' && !request.is_accepted && !request.is_rejected && (
                   <div className='my-2'>
                     <Button variant="success" onClick={() => handleAccept(request.id)}>Accept</Button>{' '}
                     <Button variant="danger" className='mx-2' onClick={() => handleReject(request.id)}>Reject</Button>
