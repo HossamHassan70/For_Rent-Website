@@ -29,12 +29,10 @@ const PropertiesPage = () => {
         }
     }, [type]);
 
-    // Logic to get current properties
     const indexOfLastProperty = currentPage * propertiesPerPage;
     const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
     const currentProperties = properties.slice(indexOfFirstProperty, indexOfLastProperty);
 
-    // Handle page change
     const handlePageChange = pageNumber => setCurrentPage(pageNumber);
 
     if (loading) {
