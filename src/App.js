@@ -7,6 +7,7 @@ import HomePage from "./pages/homePage";
 import PropertyView from './pages/ViewProperty';
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
+import PropertiesPage from "./Components/PropertiesPage"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/property/:id" element={<PropertyView />} />
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/OwnerProperties" element={<OwnerProperties />} />
+          <Route path="/properties" element={<PropertiesPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
