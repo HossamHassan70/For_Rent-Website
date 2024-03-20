@@ -8,7 +8,7 @@ import {
   InputGroup,
   Row,
   Col,
-  ButtonGroup,
+  // ButtonGroup,
 } from "react-bootstrap";
 import PropertyTypeDropdown from "./PropertyTypeDropdown";
 import BedroomButton from "./BedroomButton";
@@ -34,7 +34,7 @@ const Search = () => {
         }}
       >
         <Row className="mb-3">
-          <Col md={12} className="d-flex justify-content-center">
+          {/* <Col md={12} className="d-flex justify-content-center">
             <Col md={6} className="d-flex justify-content-center">
               <ButtonGroup
                 aria-label="Basic checkbox toggle button group"
@@ -59,7 +59,7 @@ const Search = () => {
                 </Button>
               </ButtonGroup>
             </Col>
-          </Col>
+          </Col> */}
         </Row>
         <Row className="mb-2">
           <Col md={12} className="d-flex justify-content-center">
