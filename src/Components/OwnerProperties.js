@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { formatDistanceToNow, parseISO } from 'date-fns';
+
 import axios from "axios";
 import {
   Container,
@@ -129,7 +131,7 @@ const OwnerProperties = () => {
 
   const deleteProperty = (id) => {
     axios
-      .delete(`http://localhost:8000/properties/${id}/`)
+      .delete(`http://localhost:8000/properties/${id}/  `)
       .then((response) => {
         setProperties(properties.filter((property) => property.id !== id));
         handleCloseConfirmation();
@@ -155,6 +157,7 @@ const OwnerProperties = () => {
       })
       .catch((error) => console.error(error));
   };
+
 
   const addProperty = async (formData) => {
     try {
@@ -216,6 +219,10 @@ const OwnerProperties = () => {
     } else {
       addProperty(formData);
     }
+  };
+  const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return formatDistanceToNow(date, { addSuffix: true });
   };
 
   const validateForm = (event) => {
@@ -296,6 +303,8 @@ const OwnerProperties = () => {
                   <ListGroup.Item>Price: {property.price}</ListGroup.Item>
                   <ListGroup.Item>Rooms: {property.rooms}</ListGroup.Item>
                   <ListGroup.Item>Bathrooms: {property.bathrooms}</ListGroup.Item>
+                  <ListGroup.Item>Date_Created:{formatDate(property.created_at)}
+                  </ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
                   <Button variant="primary" onClick={() => handleShowForm(property.id)}>
@@ -475,7 +484,7 @@ const OwnerProperties = () => {
           Add New Property
         </Button>
       )}
-
+     
     </Container>
   );
 };

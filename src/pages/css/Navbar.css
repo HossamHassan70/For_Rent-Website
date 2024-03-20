@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "IslandMoments-Regular";
+    src: url('../../../public/IslandMoments-Regular.ttf') format('truetype');
+}
+
+.logo {
+    font-family: "IslandMoments-Regular", sans-serif;
+    font-size: 1.5rem !important;
+}
