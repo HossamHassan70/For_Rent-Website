@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { useParams } from "react-router-dom";
 
 import axios from "axios";
 import {
@@ -11,11 +12,12 @@ import {
   Badge,
   Card,
   ListGroup,
+ 
 } from "react-bootstrap";
 import "./OwnerProperties.css";
 import { jwtDecode } from "jwt-decode";
 import { useSelector } from "react-redux";
-
+import { Link } from 'react-router-dom';
 const OwnerProperties = () => {
   const [properties, setProperties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +34,7 @@ const OwnerProperties = () => {
   const [userId, setUserId] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const token = useSelector((state) => state.authReducer.refreshToken);
+
 
   useEffect(() => {
     if (token) {
@@ -307,17 +310,16 @@ const OwnerProperties = () => {
                   </ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-  {userRole === 'Owner' && (
-    <>
-      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
-        Edit Property
-      </Button>{" "}
-      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
-        Delete Property
-      </Button>
-    </>
-  )}
-</Card.Body>
+                  <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+                    Edit Property
+                  </Button>{" "}
+                  <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+                    Delete Property
+                  </Button>
+                  <Link to={`/properties/`}>
+                      <button className='btn more-details'><b>More Details</b></button>
+                    </Link>
+                </Card.Body>
               </Card>
             ))}
           </>
@@ -488,9 +490,9 @@ const OwnerProperties = () => {
           Add New Property
         </Button>
       )}
+     
     </Container>
   );
 };
-
 
 export default OwnerProperties;

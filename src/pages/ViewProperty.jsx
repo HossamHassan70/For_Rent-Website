@@ -84,7 +84,7 @@ const PropertyView = () => {
       owner: propertyInfo.owner,
       property: id
     };
-    console.log("Request Data:", requestData);
+    // console.log("Request Data:", requestData);
 
     axios
       .post(`http://localhost:8000/requests/`,
@@ -229,15 +229,17 @@ const PropertyView = () => {
               </Tabs>
             </Card.Body>
           </Card>
+          {userRole === "Renter" && (
+            <div className="d-flex justify-content-end">
+              <Button className="mt-3" variant="primary" onClick={handleButtonClick}>
+                Request Property
+              </Button>
+            </div>
+          )}
         </Col>
 
         <Col className="my-2" xs={12} lg={4}>
           <h5 className="mt-4">Reviews:</h5>
-          {userRole === "Renter" && (
-            <Button variant="primary" onClick={handleButtonClick}>
-              Request Property
-            </Button>
-          )}
           <ReviewsList userPicture={userPicture} userName={userName} userId={userId} propertyId={id} />
         </Col>
 
