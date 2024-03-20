@@ -29,7 +29,14 @@ const App = () => {
           <NavigationBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/payment" element={<PaymentPage />} />
+            <Route
+              path="/payment"
+              element={
+                <PrivateRoute>
+                  <PaymentPage />
+                </PrivateRoute>
+              }
+            />
             <Route path="/requests" element={<Requests />} />
             <Route
               path="/login"
