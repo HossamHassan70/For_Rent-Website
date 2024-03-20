@@ -303,17 +303,21 @@ const OwnerProperties = () => {
                   <ListGroup.Item>Price: {property.price}</ListGroup.Item>
                   <ListGroup.Item>Rooms: {property.rooms}</ListGroup.Item>
                   <ListGroup.Item>Bathrooms: {property.bathrooms}</ListGroup.Item>
-                  <ListGroup.Item>Date_Created:{formatDate(property.created_at)}
+                  <ListGroup.Item>{formatDate(property.created_at)}
                   </ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-                  <Button variant="primary" onClick={() => handleShowForm(property.id)}>
-                    Edit Property
-                  </Button>{" "}
-                  <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
-                    Delete Property
-                  </Button>
-                </Card.Body>
+  {userRole === 'Owner' && (
+    <>
+      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+        Edit Property
+      </Button>{" "}
+      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+        Delete Property
+      </Button>
+    </>
+  )}
+</Card.Body>
               </Card>
             ))}
           </>
