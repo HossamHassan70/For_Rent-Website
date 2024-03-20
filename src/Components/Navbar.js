@@ -42,17 +42,19 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/" style={{ fontWeight: "bold" }}>
               Home
             </Nav.Link>
+            {isLoggedIn || useSel && (
+              <Nav.Link
+                as={Link}
+                to="/OwnerProperties"
+                style={{ fontWeight: "bold" }}
+              >
+                My Properties
+              </Nav.Link>
+            )}
           </Nav>
           <Nav>
             {isLoggedIn || useSel ? (
               <>
-                <Nav.Link
-                  as={Link}
-                  to="/OwnerProperties"
-                  style={{ fontWeight: "bold" }}
-                >
-                  My Properties
-                </Nav.Link>
                 <Nav.Link
                   as={Link}
                   to={`/user/1`}
