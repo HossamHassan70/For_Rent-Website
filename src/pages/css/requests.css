@@ -1,0 +1,57 @@
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    color: #333;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination li a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination .disabled a {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.pagination .break a {
+    cursor: default;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-date {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.card-message {
+    margin-bottom: 1rem;
+}
+
+.offered-price {
+    font-weight: bold;
+    color: #006bded9;
+}
