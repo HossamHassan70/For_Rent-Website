@@ -7,12 +7,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import ValidSchema from "../schemas/reg";
 import "../pages/css/errors.css";
-import AlertCom from "../Components/alert";
 import "../pages/css/register.css";
 import axios from "axios";
+import { Alert } from "react-bootstrap";
 
 export default function SignUp() {
-  const [isSucess, setIsSucess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   let history = useNavigate();
   const { values, errors, handleChange, handleSubmit, touched, handleBlur } =
     useFormik({
@@ -49,14 +49,14 @@ export default function SignUp() {
             console.log("Data posted successfully:", response.data);
             resetForm();
             history("/login");
-          } catch (e) {
-            console.log("error");
+          } catch (error) {
+            console.log(error);
             setSubmitting(false);
-            setIsSucess(true);
+            setIsSuccess(true);
           }
         } else {
           setSubmitting(false);
-          setIsSucess(true);
+          setIsSuccess(true);
         }
       },
     });
@@ -80,6 +80,15 @@ export default function SignUp() {
         </Col>
         <Col xs={12} lg={6}>
           <div className="container pt-5">
+            {isSuccess && (
+              <div className="d-flex justify-content" style={{ width: '100%' }}>
+                <Alert className="w-100" variant="danger" onClose={() => setIsSuccess(false)}>
+                  <Alert.Heading>Account Already Registered</Alert.Heading>
+                  <p>Please use different Email or Username</p>
+                </Alert>
+                {setTimeout(() => setIsSuccess(false), 4000)}
+              </div>
+            )}
             <h1 className="text-center"> Create Your Account </h1>
             <Form className="container" onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
@@ -248,21 +257,6 @@ export default function SignUp() {
           </div>
         </Col>
       </div>
-
-      {isSucess && (
-        <>
-          <div className="container">
-            <AlertCom
-              errorType="danger"
-              errorHead="Account Already Registered"
-              errorMsg="              Oops! Looks like you've already claimed this spot. No need to
-              double-dip; your account is already up and running. If you're
-              having trouble accessing it, hit up our support team—they're
-              wizards at sorting things out!"
-            />
-          </div>
-        </>
-      )}
     </>
   );
 }

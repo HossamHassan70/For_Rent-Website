@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
-
 import axios from "axios";
 import {
   Container,
@@ -11,7 +10,7 @@ import {
   Badge,
   Card,
   ListGroup,
- 
+
 } from "react-bootstrap";
 import "./OwnerProperties.css";
 import { jwtDecode } from "jwt-decode";
@@ -309,15 +308,19 @@ const OwnerProperties = () => {
                   </ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
-                  <Button variant="primary" onClick={() => handleShowForm(property.id)}>
-                    Edit Property
-                  </Button>{" "}
-                  <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
-                    Delete Property
-                  </Button>
+                  {userRole === 'Owner' && (
+                    <>
+                      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+                        Edit Property
+                      </Button>{" "}
+                      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+                        Delete Property
+                      </Button>
+                    </>
+                  )}
                   <Link to={`/properties/`}>
-                      <button className='btn more-details'><b>More Details</b></button>
-                    </Link>
+                    <button className='btn more-details'><b>More Details</b></button>
+                  </Link>
                 </Card.Body>
               </Card>
             ))}
@@ -489,7 +492,7 @@ const OwnerProperties = () => {
           Add New Property
         </Button>
       )}
-     
+
     </Container>
   );
 };

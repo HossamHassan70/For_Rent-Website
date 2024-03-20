@@ -70,7 +70,7 @@ const PropertiesList = () => {
                       <span>Price: ${product.price}</span>
                       <span>7.25% CAP</span>
                     </Card.Text>
-                    <Card.Text > Date_Published:{formatDate(product.created_at)}</Card.Text>
+                    <Card.Text >{formatDate(product.created_at)}</Card.Text>
                     <Link to={`/property/${product.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>
