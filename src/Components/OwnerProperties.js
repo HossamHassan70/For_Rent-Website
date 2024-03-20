@@ -311,15 +311,7 @@ const OwnerProperties = () => {
 
                   {userRole === 'Owner' && (
                     <>
-                      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
-                        Edit Property
-                      </Button>{" "}
-                      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
-                        Delete Property
-                      </Button>
-                    </>
-                  )}
-               
+                   
 
                   <Button variant="primary" onClick={() => handleShowForm(property.id)}>
                     Edit Property
@@ -327,6 +319,9 @@ const OwnerProperties = () => {
                   <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
                     Delete Property
                   </Button>
+                    </>
+                  )}
+               
                   <Link to={`/property/${property.id}`}>
 
                       <button className='btn more-details'><b>More Details</b></button>

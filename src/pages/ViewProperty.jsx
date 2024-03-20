@@ -68,41 +68,29 @@ const PropertyView = () => {
     e.preventDefault();
     handleSubmitRequest();
     const errors = {};
-
+  
     if (!form.title) {
       errors.title = "Title is required";
     }
-
+  
     if (!form.message) {
       errors.message = "Message is required";
     }
-
+  
     if (!form.price) {
       errors.price = "Price is required";
     } else if (isNaN(form.price)) {
       errors.price = "Price must be a number";
     }
-
+    
     setFormErrors(errors);
-
-
-
+  
     if (Object.keys(errors).length === 0) {
-      setSubmittingRequest(true);
-
-      setTimeout(() => {
-        console.log("Form submitted successfully");
-
-        setForm({
-          title: "",
-          message: "",
-          price: ""
-        });
-
-        setSubmittingRequest(false);
-      }, 2000);
+      // Perform form submission or other actions
+      console.log("Form submitted successfully");
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -149,49 +137,54 @@ const PropertyView = () => {
       </h1>
       <Row>
         <Col className="my-2" xs={12}>
+          
           {propertyInfo && (
             <div>
               <Card>
                 <div className="prop-image-container">
                   <Image className="prop-image" src={selectedImage} />
                 </div>
-                {propertyInfo.image1 && propertyInfo.image2 && propertyInfo.image3 && (
-                  <>
-                    <Card.Title className="display-5 mb-4 text-center">
-                      Additional Images
-                    </Card.Title>
-                    <div className="thumbnail-container">
-                      <div
-                        className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""}`}
-                        onClick={() => handleThumbnailClick(propertyInfo.image)}
-                      >
-                        <Image className="thumbnail-image" src={propertyInfo.image} />
-                        <div className="thumbnail-title">Image 1</div>
-                      </div>
-                      <div
-                        className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""}`}
-                        onClick={() => handleThumbnailClick(propertyInfo.image1)}
-                      >
-                        <Image className="thumbnail-image" src={propertyInfo.image1} />
-                        <div className="thumbnail-title">Image 2</div>
-                      </div>
-                      <div
-                        className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""}`}
-                        onClick={() => handleThumbnailClick(propertyInfo.image2)}
-                      >
-                        <Image className="thumbnail-image" src={propertyInfo.image2} />
-                        <div className="thumbnail-title">Image 3</div>
-                      </div>
-                      <div
-                        className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""}`}
-                        onClick={() => handleThumbnailClick(propertyInfo.image3)}
-                      >
-                        <Image className="thumbnail-image" src={propertyInfo.image3} />
-                        <div className="thumbnail-title">Image 4</div>
-                      </div>
-                    </div>
-                  </>
-                )}
+                <Card.Title className="display-5 mb-4 text-center">
+                  Additional Images
+                </Card.Title>
+                <div className="thumbnail-container">
+                  <div
+                    className={`thumbnail ${
+                      selectedImage === propertyInfo.image ? "selected" : ""
+                    }`}
+                    onClick={() => handleThumbnailClick(propertyInfo.image)}
+                  >
+                    <Image className="thumbnail-image" src={propertyInfo.image} />
+                    <div className="thumbnail-title">Image 1</div>
+                  </div>
+                  <div
+                    className={`thumbnail ${
+                      selectedImage === propertyInfo.image1 ? "selected" : ""
+                    }`}
+                    onClick={() => handleThumbnailClick(propertyInfo.image1)}
+                  >
+                    <Image className="thumbnail-image" src={propertyInfo.image1} />
+                    <div className="thumbnail-title">Image 2</div>
+                  </div>
+                  <div
+                    className={`thumbnail ${
+                      selectedImage === propertyInfo.image2 ? "selected" : ""
+                    }`}
+                    onClick={() => handleThumbnailClick(propertyInfo.image2)}
+                  >
+                    <Image className="thumbnail-image" src={propertyInfo.image2} />
+                    <div className="thumbnail-title">Image 3</div>
+                  </div>
+                  <div
+                    className={`thumbnail ${
+                      selectedImage === propertyInfo.image3 ? "selected" : ""
+                    }`}
+                    onClick={() => handleThumbnailClick(propertyInfo.image3)}
+                  >
+                    <Image className="thumbnail-image" src={propertyInfo.image3} />
+                    <div className="thumbnail-title">Image 4</div>
+                  </div>
+                </div>
               </Card>
             </div>
           )}
@@ -282,51 +275,51 @@ const PropertyView = () => {
             <Modal.Title>Request Property</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formTitle">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="title"
-                  value={form.title}
-                  onChange={handleChange}
-                  isInvalid={!!formErrors.title}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formErrors.title}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="formMessage">
-                <Form.Label>Message</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  isInvalid={!!formErrors.message}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formErrors.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="formPrice">
-                <Form.Label>Price</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="price"
-                  value={form.price}
-                  onChange={handleChange}
-                  isInvalid={!!formErrors.price}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formErrors.price}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Button variant="primary" type="submit" disabled={submittingRequest}>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                isInvalid={!!formErrors.title}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.title}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formMessage">
+              <Form.Label>Message</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                isInvalid={!!formErrors.message}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formPrice">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                isInvalid={!!formErrors.price}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.price}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button variant="primary" type="submit" disabled={submittingRequest}>
                 {submittingRequest ? "Submitting..." : "Submit Request"}
               </Button>
-            </Form>
+          </Form>
           </Modal.Body>
         </Modal>
       </Row>
