@@ -36,6 +36,7 @@ const PropertiesList = () => {
   if (!properties || properties.length === 0) {
     return <div>No properties found.</div>;
   } 
+ 
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -57,7 +58,9 @@ const PropertiesList = () => {
                   <Col xs={12} md={6}>
                     <div className="card-img-container position-relative">
                       <img className='prop-image' src={product.image} alt={product.title} />
-                     
+                      <div className="favorites-icon position-absolute">
+                        <i className="far fa-heart text-light"></i>
+                      </div>
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
