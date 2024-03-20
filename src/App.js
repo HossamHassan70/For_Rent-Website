@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Requests from "./Components/requests";
 import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
+import PaymentPage from "./pages/paymentpage";
 
 const AuthRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
@@ -28,6 +29,7 @@ const App = () => {
           <NavigationBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/payment" element={<PaymentPage />} />
             <Route path="/requests" element={<Requests />} />
             <Route
               path="/login"
@@ -68,7 +70,9 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <PropertiesPage />
-                </PrivateRoute>} />
+                </PrivateRoute>
+              }
+            />
             <Route path="/about" element={<AboutUs />} />
           </Routes>
           <Footer />
