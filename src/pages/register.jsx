@@ -51,12 +51,13 @@ export default function SignUp() {
             history("/login");
           } catch (error) {
             console.log(error);
-            setSubmitting(false);
-            setIsSuccess(true);
+            setIsSuccess(true); // Show the alert
+            setTimeout(() => {
+              setIsSuccess(false); // Hide the alert after 4 seconds
+            }, 4000);
           }
         } else {
           setSubmitting(false);
-          setIsSuccess(true);
         }
       },
     });
@@ -81,12 +82,16 @@ export default function SignUp() {
         <Col xs={12} lg={6}>
           <div className="container pt-5">
             {isSuccess && (
-              <div className="d-flex justify-content" style={{ width: '100%' }}>
-                <Alert className="w-100" variant="danger" onClose={() => setIsSuccess(false)}>
+              <div className="d-flex justify-content" style={{ width: "100%" }}>
+                <Alert
+                  className="w-100"
+                  variant="danger"
+                  onClose={() => setIsSuccess(false)}
+                >
                   <Alert.Heading>Account Already Registered</Alert.Heading>
                   <p>Please use different Email or Username</p>
                 </Alert>
-                {setTimeout(() => setIsSuccess(false), 4000)}
+                {/* {setTimeout(() => setIsSuccess(false), 4000)} */}
               </div>
             )}
             <h1 className="text-center"> Create Your Account </h1>
