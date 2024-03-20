@@ -314,7 +314,7 @@ const OwnerProperties = () => {
                   <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
                     Delete Property
                   </Button>
-                  <Link to={`/properties/`}>
+                  <Link to={`/property/${property.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>
                 </Card.Body>
