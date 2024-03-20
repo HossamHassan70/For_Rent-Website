@@ -180,7 +180,7 @@ const PaymentPage = () => {
               </button>
             </form> */}
             <div>
-              <h3 className="text-center">Or Pay With PayPal</h3>
+              <h3 className="text-center">Pay With PayPal</h3>
               <div>
                 <PayPalScriptProvider
                   options={{
