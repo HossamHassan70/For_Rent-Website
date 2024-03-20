@@ -11,6 +11,8 @@ const PropertyView = () => {
   const { id } = useParams();
   const [propertyInfo, setPropertyInfo] = useState({});
   const [userId, setUserId] = useState(null);
+  const [userPicture, setUserPicture] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const token = useSelector((state) => state.authReducer.refreshToken);
 
@@ -19,7 +21,11 @@ const PropertyView = () => {
       try {
         const decodedToken = jwtDecode(token);
         const uid = decodedToken.user.id;
+        const userPicture = decodedToken.user.profilePicture;
+        const userName = decodedToken.user.username;
         setUserId(uid);
+        setUserPicture(userPicture);
+        setUserName(userName);
       } catch (error) {
         console.error("Error decoding token:", error);
       }
@@ -49,48 +55,48 @@ const PropertyView = () => {
         <Col>
           {propertyInfo && (
             <div>
-     <Card>
-  <div className="prop-image-container">
-    <Image className="prop-image" src={selectedImage} />
-  </div>
-  {propertyInfo.image1 && propertyInfo.image2 && propertyInfo.image3 && (
-    <>
-      <Card.Title className="display-5 mb-4 text-center">
-        Additional Images
-      </Card.Title>
-      <div className="thumbnail-container">
-        <div
-          className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""}`}
-          onClick={() => handleThumbnailClick(propertyInfo.image)}
-        >
-          <Image className="thumbnail-image" src={propertyInfo.image} />
-          <div className="thumbnail-title">Image 1</div>
-        </div>
-        <div
-          className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""}`}
-          onClick={() => handleThumbnailClick(propertyInfo.image1)}
-        >
-          <Image className="thumbnail-image" src={propertyInfo.image1} />
-          <div className="thumbnail-title">Image 2</div>
-        </div>
-        <div
-          className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""}`}
-          onClick={() => handleThumbnailClick(propertyInfo.image2)}
-        >
-          <Image className="thumbnail-image" src={propertyInfo.image2} />
-          <div className="thumbnail-title">Image 3</div>
-        </div>
-        <div
-          className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""}`}
-          onClick={() => handleThumbnailClick(propertyInfo.image3)}
-        >
-          <Image className="thumbnail-image" src={propertyInfo.image3} />
-          <div className="thumbnail-title">Image 4</div>
-        </div>
-      </div>
-    </>
-  )}
-</Card>
+              <Card>
+                <div className="prop-image-container">
+                  <Image className="prop-image" src={selectedImage} />
+                </div>
+                {propertyInfo.image1 && propertyInfo.image2 && propertyInfo.image3 && (
+                  <>
+                    <Card.Title className="display-5 mb-4 text-center">
+                      Additional Images
+                    </Card.Title>
+                    <div className="thumbnail-container">
+                      <div
+                        className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""}`}
+                        onClick={() => handleThumbnailClick(propertyInfo.image)}
+                      >
+                        <Image className="thumbnail-image" src={propertyInfo.image} />
+                        <div className="thumbnail-title">Image 1</div>
+                      </div>
+                      <div
+                        className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""}`}
+                        onClick={() => handleThumbnailClick(propertyInfo.image1)}
+                      >
+                        <Image className="thumbnail-image" src={propertyInfo.image1} />
+                        <div className="thumbnail-title">Image 2</div>
+                      </div>
+                      <div
+                        className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""}`}
+                        onClick={() => handleThumbnailClick(propertyInfo.image2)}
+                      >
+                        <Image className="thumbnail-image" src={propertyInfo.image2} />
+                        <div className="thumbnail-title">Image 3</div>
+                      </div>
+                      <div
+                        className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""}`}
+                        onClick={() => handleThumbnailClick(propertyInfo.image3)}
+                      >
+                        <Image className="thumbnail-image" src={propertyInfo.image3} />
+                        <div className="thumbnail-title">Image 4</div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </Card>
             </div>
           )}
         </Col>
@@ -188,7 +194,7 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
           <h5 className="mt-4">Reviews:</h5>
-          <ReviewsList userId={userId} propertyId={id} />
+          <ReviewsList userPicture={userPicture} userName={userName} userId={userId} propertyId={id} />
         </Col>
       </Row>
     </Container>
