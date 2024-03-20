@@ -23,6 +23,7 @@ const PropertyView = () => {
     message: "",
     price: ""
   });
+  const [formErrors, setFormErrors] = useState({});
   useEffect(() => {
     if (token) {
       try {
@@ -63,8 +64,45 @@ const PropertyView = () => {
     setShowModal(false);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSubmitRequest();
+    const errors = {};
+
+    if (!form.title) {
+      errors.title = "Title is required";
+    }
+
+    if (!form.message) {
+      errors.message = "Message is required";
+    }
+
+    if (!form.price) {
+      errors.price = "Price is required";
+    } else if (isNaN(form.price)) {
+      errors.price = "Price must be a number";
+    }
+
+    setFormErrors(errors);
 
 
+
+    if (Object.keys(errors).length === 0) {
+      setSubmittingRequest(true);
+
+      setTimeout(() => {
+        console.log("Form submitted successfully");
+
+        setForm({
+          title: "",
+          message: "",
+          price: ""
+        });
+
+        setSubmittingRequest(false);
+      }, 2000);
+    }
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -103,10 +141,6 @@ const PropertyView = () => {
       });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSubmitRequest();
-  };
 
   return (
     <Container fluid>
@@ -256,8 +290,11 @@ const PropertyView = () => {
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!formErrors.title}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {formErrors.title}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="formMessage">
                 <Form.Label>Message</Form.Label>
@@ -267,8 +304,11 @@ const PropertyView = () => {
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!formErrors.message}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {formErrors.message}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="formPrice">
                 <Form.Label>Price</Form.Label>
@@ -277,8 +317,11 @@ const PropertyView = () => {
                   name="price"
                   value={form.price}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!formErrors.price}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {formErrors.price}
+                </Form.Control.Feedback>
               </Form.Group>
               <Button variant="primary" type="submit" disabled={submittingRequest}>
                 {submittingRequest ? "Submitting..." : "Submit Request"}
