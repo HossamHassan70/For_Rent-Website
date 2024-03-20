@@ -2,6 +2,8 @@ import React from "react";
 import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ValidSchema from "../schemas/paymentpage";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 
 const PaymentPage = () => {
   const getCardType = (number) => {
