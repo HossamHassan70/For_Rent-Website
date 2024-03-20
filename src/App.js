@@ -69,12 +69,7 @@ const App = () => {
                 <PrivateRoute>
                   <PropertiesPage />
                 </PrivateRoute>} />
-            <Route
-              path="/about"
-              element={
-                <PrivateRoute>
-                  <AboutUs />
-                </PrivateRoute>} />
+            <Route path="/about" element={<AboutUs />} />
           </Routes>
           <Footer />
         </BrowserRouter>
