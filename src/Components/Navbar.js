@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../MyStore/actions/authAction";
 import { jwtDecode } from "jwt-decode";
+import '../pages/css/Navbar.css'
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,7 +37,7 @@ const NavigationBar = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Container>
-        <Navbar.Brand as={Link} to="/" style={{ fontWeight: "bold" }}>
+        <Navbar.Brand className="logo" as={Link} to="/" style={{ fontWeight: "bold" }}>
           FoRent
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
