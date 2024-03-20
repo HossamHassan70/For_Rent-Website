@@ -6,26 +6,7 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const PaymentPage = () => {
-  const getCardType = (number) => {
-    const cardPatterns = {
-      visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-      mastercard: /^5[1-5][0-9]{14}$/,
-    };
-
-    if (cardPatterns.visa.test(number.replace(/\s+/g, ""))) {
-      return "Visa";
-    } else if (cardPatterns.mastercard.test(number.replace(/\s+/g, ""))) {
-      return "MasterCard";
-    } else {
-      return "Unknown";
-    }
-  };
-
-  const {
-    errors,
-    touched,
-    setFieldValue,
-  } = useFormik({
+  const { errors, touched } = useFormik({
     initialValues: {
       cardName: "",
       cardNumber: "",
@@ -37,29 +18,6 @@ const PaymentPage = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-
-  const handleCardNumberChange = (e) => {
-    let { value } = e.target;
-    value = value
-      .replace(/\s+/g, "")
-      .slice(0, 16)
-      .replace(/(\d{4})(?=\d)/g, "$1 ")
-      .trim();
-    setFieldValue("cardNumber", value);
-  };
-
-  const handleExpDateChange = (e) => {
-    let { value } = e.target;
-    value = value
-      .replace(/^([1-9]\/|[2-9])$/g, "0$1/")
-      .replace(/^(0[1-9]|1[0-2])$/g, "$1/")
-      .replace(/^([0-1])([3-9])$/g, "0$1/$2")
-      .replace(/^(0?[1-9]|1[0-2])([0-9]{2})$/g, "$1/$2")
-      .replace(/^([0]+)\/|[0]+$/g, "0")
-      .replace(/[^\d\/]|^[\/]*$/g, "")
-      .replace(/\/\//g, "/");
-    setFieldValue("expDate", value);
-  };
 
   console.log(errors);
   console.log(touched);
