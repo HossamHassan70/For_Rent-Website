@@ -79,10 +79,10 @@ export default function SignUp() {
           </div>
         </Col>
         <Col xs={12} lg={6}>
-          <div className="container pt-5" style={{ position: 'relative' }}>
+          <div className="container pt-5">
             {isSuccess && (
-              <div style={{ position: 'absolute', width: '90%', top: '-10%'}}>
-                <Alert variant="danger" onClose={() => setIsSuccess(false)}>
+              <div className="d-flex justify-content" style={{ width: '100%' }}>
+                <Alert className="w-100" variant="danger" onClose={() => setIsSuccess(false)}>
                   <Alert.Heading>Account Already Registered</Alert.Heading>
                   <p>Please use different Email or Username</p>
                 </Alert>

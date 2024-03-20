@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import { useParams } from "react-router-dom";
-
 import axios from "axios";
 import {
   Container,
