@@ -12,6 +12,7 @@ import PropertyView from "./pages/ViewProperty";
 import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
 import PageNotFound from "./pages/PageNotFound";
+import Requests from "./Components/requests";
 import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 
@@ -27,6 +28,7 @@ const App = () => {
           <NavigationBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/requests" element={<Requests />} />
             <Route
               path="/login"
               element={

@@ -66,7 +66,6 @@ export default function LoginPre() {
             )}
           </div>
           <Form noValidate onSubmit={formik.handleSubmit}>
-            {/* Form groups and controls remain the same */}
             <Form.Group className="mb-3">
               <Form.Control
                 id="uName"
