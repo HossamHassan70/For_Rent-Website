@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ValidSchema from "../schemas/paymentpage";
 
 const PaymentPage = () => {
   const getCardType = (number) => {
@@ -14,18 +15,39 @@ const PaymentPage = () => {
     } else if (cardPatterns.mastercard.test(number.replace(/\s+/g, ""))) {
       return "MasterCard";
     } else {
-      return "Unkown";
+      return "Unknown";
     }
   };
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      cardName: "",
+      cardNumber: "",
+      expDate: "",
+      cvv: "",
+    },
+    validationSchema: ValidSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   const handleCardNumberChange = (e) => {
     let { value } = e.target;
     value = value
       .replace(/\s+/g, "")
-      .slice(0, 16) 
-      .replace(/(\d{4})(?=\d)/g, "$1 ") 
+      .slice(0, 16)
+      .replace(/(\d{4})(?=\d)/g, "$1 ")
       .trim();
-    formik.setFieldValue("cardNumber", value);
+    setFieldValue("cardNumber", value);
   };
 
   const handleExpDateChange = (e) => {
@@ -38,117 +60,118 @@ const PaymentPage = () => {
       .replace(/^([0]+)\/|[0]+$/g, "0")
       .replace(/[^\d\/]|^[\/]*$/g, "")
       .replace(/\/\//g, "/");
-    formik.setFieldValue("expDate", value);
+    setFieldValue("expDate", value);
   };
 
-  const handleCardNameChange = (e) => {
-    let { value } = e.target;
-    formik.setFieldValue("cardName", value);
-  };
-
-  const handleCVVChange = (e) => {
-    let { value } = e.target;
-    value = value.replace(/\D/g, "").slice(0, 3); 
-    formik.setFieldValue("cvv", value);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      cardName: "",
-      cardNumber: "",
-      expDate: "",
-      cvv: "",
-    },
-    validate: (values) => {
-      const errors = {};
-      if (
-        !values.cardName ||
-        !values.cardNumber ||
-        !values.expDate ||
-        !values.cvv
-      ) {
-        errors.submit = "All fields must be filled";
-      }
-      return errors;
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
-
-  const allFieldsFilled =
-    formik.values.cardName &&
-    formik.values.cardNumber &&
-    formik.values.expDate &&
-    formik.values.cvv;
+  console.log(errors);
+  console.log(touched);
 
   return (
     <div className="container my-5">
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h2>Payment Information</h2>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="cardName" className="form-label">
                 Cardholder's Name
               </label>
               <input
+                value={values.cardName}
+                onBlur={handleBlur}
+                onChange={handleChange}
                 type="text"
-                className="form-control"
+                placeholder="Cardholder's Name..."
                 id="cardName"
-                name="cardName"
-                onChange={handleCardNameChange}
-                value={formik.values.cardName}
+                className={
+                  errors.cardName && touched.cardName
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
               />
+              {errors.cardName && touched.cardName && (
+                <div className="invalid-feedback">{errors.cardName}</div>
+              )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="cardNumber" className="form-label">
                 Card Number
               </label>
               <input
-                type="text"
-                className="form-control"
-                id="cardNumber"
-                name="cardNumber"
                 onChange={handleCardNumberChange}
-                value={formik.values.cardNumber}
+                onBlur={handleBlur}
+                value={values.cardNumber}
+                type="text"
+                placeholder="Card Number..."
+                id="cardNumber"
+                className={
+                  errors.cardNumber && touched.cardNumber
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
               />
               <small className="form-text text-muted">
-                Card Type: {getCardType(formik.values.cardNumber)}
+                Card Type: {getCardType(values.cardNumber)}
               </small>
+              {errors.cardNumber && touched.cardNumber && (
+                <div className="invalid-feedback">{errors.cardNumber}</div>
+              )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="expDate" className="form-label">
                 Expiration Date (MM/YY)
               </label>
               <input
-                type="text"
-                className="form-control"
-                id="expDate"
-                name="expDate"
-                maxLength="5"
                 onChange={handleExpDateChange}
-                value={formik.values.expDate}
+                onBlur={handleBlur}
+                value={values.expDate}
+                type="text"
+                placeholder="MM/YY..."
+                id="expDate"
+                maxLength="5"
+                className={
+                  errors.expDate && touched.expDate
+                    ? "form-control is-invalid"
+                    : "form-control"
+                }
               />
+              {errors.expDate && touched.expDate && (
+                <div className="invalid-feedback">{errors.expDate}</div>
+              )}
             </div>
+
             <div className="mb-3">
               <label htmlFor="cvv" className="form-label">
                 CVV
               </label>
               <input
                 type="text"
-                className="form-control"
                 id="cvv"
                 name="cvv"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.cvv}
+                className={`form-control ${
+                  errors.cvv && touched.cvv ? "is-invalid" : ""
+                }`}
+                placeholder="CVV..."
                 maxLength="3"
-                onChange={handleCVVChange}
-                value={formik.values.cvv}
               />
+              {errors.cvv && touched.cvv && (
+                <div className="invalid-feedback">{errors.cvv}</div>
+              )}
             </div>
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={!allFieldsFilled}
+              disabled={
+                !values.cardName ||
+                !values.cardNumber ||
+                !values.expDate ||
+                !values.cvv
+              }
             >
               Submit
             </button>
