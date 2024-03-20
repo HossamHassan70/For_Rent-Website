@@ -80,3 +80,11 @@ body {
     color: #FFF !important;
     border: #FFF 1px solid !important;
 }
+
+.no-properties {
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(223, 55, 55);
+    text-align: center;
+    padding: 20px;
+}
