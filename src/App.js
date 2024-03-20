@@ -13,6 +13,8 @@ import UserProfile from "./pages/userProfile";
 import OwnerProperties from "./Components/OwnerProperties";
 import PageNotFound from "./pages/PageNotFound";
 import Requests from "./Components/requests";
+import PropertiesPage from "./Components/PropertiesPage";
+import AboutUs from "./Components/About";
 
 const AuthRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
@@ -61,6 +63,18 @@ const App = () => {
               }
             />
             <Route path="*" element={<PageNotFound />} />
+            <Route
+              path="/properties"
+              element={
+                <PrivateRoute>
+                  <PropertiesPage />
+                </PrivateRoute>} />
+            <Route
+              path="/about"
+              element={
+                <PrivateRoute>
+                  <AboutUs />
+                </PrivateRoute>} />
           </Routes>
           <Footer />
         </BrowserRouter>
