@@ -22,12 +22,8 @@ const PaymentPage = () => {
   };
 
   const {
-    values,
     errors,
     touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
     setFieldValue,
   } = useFormik({
     initialValues: {
