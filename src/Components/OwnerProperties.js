@@ -484,9 +484,9 @@ const OwnerProperties = () => {
           Add New Property
         </Button>
       )}
-     
     </Container>
   );
 };
+
 
 export default OwnerProperties;

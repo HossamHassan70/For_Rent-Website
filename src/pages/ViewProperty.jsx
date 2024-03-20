@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Tab, Tabs, Table, Badge, Image } from "react-bootstrap";
+import { Container, Row, Col, Card, Tab, Tabs,Badge, Image, Button, Modal, Form ,Table} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./css/ViewProperty.css";
 import ReviewsList from "../Components/reviews";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode  } from "jwt-decode";
 import { useSelector } from "react-redux";
 
 const PropertyView = () => {
@@ -15,17 +15,28 @@ const PropertyView = () => {
   const [userName, setUserName] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const token = useSelector((state) => state.authReducer.refreshToken);
-
+  const [userRole, setUserRole] = useState("");
+  const [submittingRequest, setSubmittingRequest] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({
+    title: "",
+    message: "",
+    price: ""
+  });
   useEffect(() => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
         const uid = decodedToken.user.id;
+
+        const userRole = decodedToken.user.role;
+        
+
         const userPicture = decodedToken.user.profilePicture;
         const userName = decodedToken.user.username;
-        setUserId(uid);
         setUserPicture(userPicture);
         setUserName(userName);
+        setUserId(uid);
       } catch (error) {
         console.error("Error decoding token:", error);
       }
@@ -44,6 +55,59 @@ const PropertyView = () => {
 
   const handleThumbnailClick = (image) => {
     setSelectedImage(image);
+  };
+
+  const handleButtonClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+ 
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+  
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmitRequest = () => {
+    setSubmittingRequest(true);
+    const requestData = {
+      title: form.title,
+      message: form.message,
+      price: form.price,
+      renter: userId,
+      owner: propertyInfo.owner,
+      property : id
+    };
+    console.log("Request Data:", requestData);
+
+    axios
+      .post(`http://localhost:8000/requests/`, 
+        requestData
+      )
+      .then((res) => {
+        // Handle success
+        console.log("Request submitted successfully");
+        setSubmittingRequest(false);
+        setShowModal(false);
+      })
+      .catch((err) => {
+        // Handle error
+        console.error("Error submitting request:", err);
+        setSubmittingRequest(false);
+      });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSubmitRequest();
   };
 
   return (
@@ -136,16 +200,17 @@ const PropertyView = () => {
                     <thead>
                       <tr>
                         <th>Property Address</th>
+                        <th>Property Price</th>
                         <th>Property Type</th>
-                        <th>Square Footage</th>
+                        <th>Square Address</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{propertyInfo.address}</td>
+                        <td>  {propertyInfo.title}</td>
+                        <td>{propertyInfo.price}</td>
                         <td>{propertyInfo.type}</td>
-                        <td>{propertyInfo.squareFootage}</td>
-                        <td>{propertyInfo.numUnits}</td>
+                        <td>{propertyInfo.address}</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -194,7 +259,61 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
           <h5 className="mt-4">Reviews:</h5>
-          <ReviewsList userPicture={userPicture} userName={userName} userId={userId} propertyId={id} />
+<ReviewsList userPicture={userPicture} userName={userName} userId={userId} propertyId={id} />
+          {userRole === "Renter" && (
+            <Button variant="primary" onClick={handleButtonClick}>
+              Request Property
+            </Button>
+          )}
+  
+              <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Request Property</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="formTitle">
+                      <Form.Label>Title</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="title"
+                        value={form.title}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formMessage">
+                      <Form.Label>Message</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formPrice">
+                      <Form.Label>Price</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="price"
+                        value={form.price}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Form.Group>
+                    <Button variant="primary" type="submit" disabled={submittingRequest}>
+                      {submittingRequest ? "Submitting..." : "Submit Request"}
+                    </Button>
+                  </Form>
+                </Modal.Body>
+              </Modal>
+        
+    
+
+          
+
         </Col>
       </Row>
     </Container>
