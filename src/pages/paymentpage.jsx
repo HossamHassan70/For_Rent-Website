@@ -1,26 +1,11 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
-import ValidSchema from "../schemas/paymentpage";
+
 import "../pages/css/pay.css";
 
 const PaymentPage = () => {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
-
-  // useFormik hook for form handling
-  const { errors, touched } = useFormik({
-    initialValues: {
-      cardName: "",
-      cardNumber: "",
-      expDate: "",
-      cvv: "",
-    },
-    validationSchema: ValidSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
 
   // Function to show the modal
   const handleShowModal = () => setShowModal(true);
