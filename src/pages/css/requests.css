@@ -42,16 +42,45 @@
     margin-bottom: 0.5rem;
 }
 
+
+.my-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
 .card-date {
-    color: #6c757d;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.card-property {
+    font-size: 1rem;
+    color: #555;
 }
 
 .card-message {
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 10px;
 }
 
 .offered-price {
+    font-size: 1.2rem;
     font-weight: bold;
-    color: #006bded9;
 }
