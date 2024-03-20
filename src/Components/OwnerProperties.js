@@ -318,9 +318,9 @@ const OwnerProperties = () => {
                       </Button>
                     </>
                   )}
-                  <Link to={`/properties/`}>
-                    <button className='btn more-details'><b>More Details</b></button>
-                  </Link>
+                 <Link to={`/property/${property.id}`}>
+                      <button className='btn more-details'><b>More Details</b></button>
+                    </Link>
                 </Card.Body>
               </Card>
             ))}
