@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Button, Card, Badge, Modal, Form } from 'react-bootstrap';
-import LoadingScreen from '../pages/loadingScreen';
-import { formatDistanceToNow, parseISO } from 'date-fns';
-import { useSelector } from 'react-redux';
-import { jwtDecode } from 'jwt-decode';
-import ReactPaginate from 'react-paginate';
-import '../pages/css/requests.css'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Card, Badge, Modal, Form } from "react-bootstrap";
+import LoadingScreen from "../pages/loadingScreen";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import ReactPaginate from "react-paginate";
+import "../pages/css/requests.css";
 
 const Requests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
@@ -15,7 +15,7 @@ const Requests = () => {
   // modal states
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const [rejectionReason, setRejectionReason] = useState("")
+  const [rejectionReason, setRejectionReason] = useState("");
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -42,27 +42,35 @@ const Requests = () => {
     const fetchData = async () => {
       try {
         // Fetch property requests
-        const requestsResponse = await axios.get(`http://127.0.0.1:8000/requests/`);
+        const requestsResponse = await axios.get(
+          `http://127.0.0.1:8000/requests/`
+        );
 
         // Filter requests based on user role
         let filteredRequests = [];
-        if (userRole === 'Owner') {
-          filteredRequests = requestsResponse.data.filter(request => request.owner === userId);
-        } else if (userRole === 'Renter') {
-          filteredRequests = requestsResponse.data.filter(request => request.renter === userId);
+        if (userRole === "Owner") {
+          filteredRequests = requestsResponse.data.filter(
+            (request) => request.owner === userId
+          );
+        } else if (userRole === "Renter") {
+          filteredRequests = requestsResponse.data.filter(
+            (request) => request.renter === userId
+          );
         }
 
         // Set property requests
         setPropertyRequests(filteredRequests);
 
         // Fetch property names
-        const propertyNames = await Promise.all(filteredRequests.map(async (request) => {
-          const name = await fetchPropertyName(request.property);
-          return { ...request, propertyName: name };
-        }));
+        const propertyNames = await Promise.all(
+          filteredRequests.map(async (request) => {
+            const name = await fetchPropertyName(request.property);
+            return { ...request, propertyName: name };
+          })
+        );
 
         setPropertyRequests(propertyNames);
-        console.log(propertyNames)
+        console.log(propertyNames);
 
         setLoading(false);
       } catch (error) {
@@ -76,14 +84,15 @@ const Requests = () => {
 
   const fetchPropertyName = async (propertyId) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/properties/${propertyId}`);
+      const response = await axios.get(
+        `http://127.0.0.1:8000/properties/${propertyId}`
+      );
       return response.data.title;
     } catch (error) {
-      console.error('Error fetching property name:', error);
+      console.error("Error fetching property name:", error);
       return null;
     }
   };
-
 
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
@@ -93,18 +102,20 @@ const Requests = () => {
   // Accept Button
   const handleAccept = async (id) => {
     try {
-      const requestToUpdate = propertyRequests.find(request => request.id === id);
+      const requestToUpdate = propertyRequests.find(
+        (request) => request.id === id
+      );
       const updatedRequest = {
         ...requestToUpdate,
         is_accepted: true,
-        is_rejected: false
+        is_rejected: false,
       };
 
       await axios.put(`http://127.0.0.1:8000/requests/${id}/`, updatedRequest);
 
       // Update the state to reflect the changes
-      setPropertyRequests(prevRequests => {
-        return prevRequests.map(request => {
+      setPropertyRequests((prevRequests) => {
+        return prevRequests.map((request) => {
           if (request.id === id) {
             return updatedRequest;
           }
@@ -113,9 +124,9 @@ const Requests = () => {
       });
 
       // Send email for acceptance
-      const acceptanceServiceId = 'service_21hdjtz';
-      const acceptanceTemplateId = 'template_io83mns';
-      const acceptancePublicKey = 'xr6_cNCqHsf9TrFPu';
+      const acceptanceServiceId = "service_21hdjtz";
+      const acceptanceTemplateId = "template_io83mns";
+      const acceptancePublicKey = "xr6_cNCqHsf9TrFPu";
       const acceptanceData = {
         service_id: acceptanceServiceId,
         template_id: acceptanceTemplateId,
@@ -123,14 +134,17 @@ const Requests = () => {
         template_params: {
           username: requestToUpdate.username,
           property_name: requestToUpdate.property_name,
-          message: 'Your request has been accepted.',
-          payment_link: '',
+          message: "Your request has been accepted.",
+          payment_link: "http://localhost:3000/payment",
           reply_to: requestToUpdate.email,
-        }
+        },
       };
 
       // Send the email using EmailJS
-      await axios.post("https://api.emailjs.com/api/v1.0/email/send", acceptanceData);
+      await axios.post(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        acceptanceData
+      );
 
       // Display alert when accept button is clicked
       setShowAlert(true);
@@ -138,9 +152,8 @@ const Requests = () => {
       setTimeout(() => {
         setShowAlert(false);
       }, 4000);
-
     } catch (error) {
-      console.error('Error accepting request:', error);
+      console.error("Error accepting request:", error);
     }
   };
 
@@ -160,19 +173,24 @@ const Requests = () => {
   // handle rejection in the modal
   const handleSubmitRejectModal = async () => {
     try {
-      const requestToUpdate = propertyRequests.find(request => request.id === selectedRequestId);
+      const requestToUpdate = propertyRequests.find(
+        (request) => request.id === selectedRequestId
+      );
       const updatedRequest = {
         ...requestToUpdate,
         is_accepted: false,
         is_rejected: true,
-        rejection_reason: rejectionReason
+        rejection_reason: rejectionReason,
       };
-      await axios.put(`http://127.0.0.1:8000/requests/${selectedRequestId}/`, updatedRequest);
+      await axios.put(
+        `http://127.0.0.1:8000/requests/${selectedRequestId}/`,
+        updatedRequest
+      );
 
       // Send email for rejection
-      const rejectionServiceId = 'service_21hdjtz';
-      const rejectionTemplateId = 'template_o7hhtco';
-      const rejectionPublicKey = 'xr6_cNCqHsf9TrFPu';
+      const rejectionServiceId = "service_21hdjtz";
+      const rejectionTemplateId = "template_o7hhtco";
+      const rejectionPublicKey = "xr6_cNCqHsf9TrFPu";
       const rejectionData = {
         service_id: rejectionServiceId,
         template_id: rejectionTemplateId,
@@ -180,18 +198,21 @@ const Requests = () => {
         template_params: {
           username: requestToUpdate.username,
           property_name: requestToUpdate.property_name,
-          message: 'Your request has been rejected.',
+          message: "Your request has been rejected.",
           reply_to: requestToUpdate.email,
           rejection_reason: rejectionReason,
-        }
+        },
       };
 
       // Send the email using EmailJS
-      await axios.post("https://api.emailjs.com/api/v1.0/email/send", rejectionData);
+      await axios.post(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        rejectionData
+      );
 
       // to update the page to show changes
-      setPropertyRequests(prevRequests => {
-        return prevRequests.map(request => {
+      setPropertyRequests((prevRequests) => {
+        return prevRequests.map((request) => {
           if (request.id === selectedRequestId) {
             return updatedRequest;
           }
@@ -200,7 +221,7 @@ const Requests = () => {
       });
       handleCloseRejectModal();
     } catch (error) {
-      console.error('Error rejecting request:', error);
+      console.error("Error rejecting request:", error);
     }
   };
 
@@ -220,7 +241,18 @@ const Requests = () => {
   return (
     <>
       {/* Acceptance alert */}
-      <div style={{ position: 'fixed', top: '10%', left: '50%', transform: 'translateX(-50%)', zIndex: '1000', width: '50%', textAlign: 'center', fontWeight: '600' }}>
+      <div
+        style={{
+          position: "fixed",
+          top: "10%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: "1000",
+          width: "50%",
+          textAlign: "center",
+          fontWeight: "600",
+        }}
+      >
         {showAlert && (
           <div className="alert alert-success show" role="alert">
             We've notified the client about your accept via email
@@ -234,51 +266,84 @@ const Requests = () => {
         <>
           {propertyRequests
             .slice(page * itemsPerPage, (page + 1) * itemsPerPage)
-            .map(request => (
-              <Card className='mt-3' key={request.id} style={{ marginBottom: '10px' }}>
+            .map((request) => (
+              <Card
+                className="mt-3"
+                key={request.id}
+                style={{ marginBottom: "10px" }}
+              >
                 <Card.Body className="card-body">
                   <div className="card-header">
-                    <Card.Title className="card-title">{request.title}</Card.Title>
-                    <Card.Text className="card-date">{formatDate(request.created_at)}</Card.Text>
+                    <Card.Title className="card-title">
+                      {request.title}
+                    </Card.Title>
+                    <Card.Text className="card-date">
+                      {formatDate(request.created_at)}
+                    </Card.Text>
                   </div>
-                  <Card.Text className="card-property">{request.propertyName}</Card.Text>
-                  <Card.Text className="card-message">{request.message}</Card.Text>
-                  <Card.Text className="offered-price">{request.price} EGP</Card.Text>
+                  <Card.Text className="card-property">
+                    {request.propertyName}
+                  </Card.Text>
+                  <Card.Text className="card-message">
+                    {request.message}
+                  </Card.Text>
+                  <Card.Text className="offered-price">
+                    {request.price} EGP
+                  </Card.Text>
 
                   {request.is_accepted ? (
-                    <Badge className='my-1' bg="success">Accepted</Badge>
+                    <Badge className="my-1" bg="success">
+                      Accepted
+                    </Badge>
                   ) : request.is_rejected ? (
                     <>
-                      <Badge className='my-1' bg="danger">Rejected</Badge>
+                      <Badge className="my-1" bg="danger">
+                        Rejected
+                      </Badge>
                       {request.rejection_reason && (
                         <span> - {request.rejection_reason}</span>
                       )}
                     </>
                   ) : (
-                    <Badge className='my-1' bg="secondary">Pending</Badge>
+                    <Badge className="my-1" bg="secondary">
+                      Pending
+                    </Badge>
                   )}
 
-                  {userRole === 'Owner' && !request.is_accepted && !request.is_rejected && (
-                    <div className='my-2'>
-                      <Button variant="success" onClick={() => handleAccept(request.id)}>Accept</Button>{' '}
-                      <Button variant="danger" className='mx-2' onClick={() => handleReject(request.id)}>Reject</Button>
-                    </div>
-                  )}
+                  {userRole === "Owner" &&
+                    !request.is_accepted &&
+                    !request.is_rejected && (
+                      <div className="my-2">
+                        <Button
+                          variant="success"
+                          onClick={() => handleAccept(request.id)}
+                        >
+                          Accept
+                        </Button>{" "}
+                        <Button
+                          variant="danger"
+                          className="mx-2"
+                          onClick={() => handleReject(request.id)}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    )}
                 </Card.Body>
               </Card>
             ))}
 
           {propertyRequests.length > itemsPerPage && (
             <ReactPaginate
-              previousLabel={'Previous'}
-              nextLabel={'Next'}
-              breakLabel={'...'}
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
               pageCount={Math.ceil(propertyRequests.length / itemsPerPage)}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
               onPageChange={handlePageClick}
-              containerClassName={'pagination'}
-              activeClassName={'active'}
+              containerClassName={"pagination"}
+              activeClassName={"active"}
             />
           )}
         </>
