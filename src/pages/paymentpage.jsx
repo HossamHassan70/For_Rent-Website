@@ -160,9 +160,38 @@ const PaymentPage = () => {
                       onApprove={(data, actions) => {
                         return actions.order.capture().then((details) => {
                           alert(
-                            "Transaction completed by " +
-                              details.payer.name.given_name
+                            `Transaction completed by ${details.payer.name.given_name}`
                           );
+
+                          // Send the order ID to your backend for verification
+                          fetch("http://localhost:8000/verify-payment/", {
+                            // Make sure to use the correct URL
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                              orderID: data.orderID,
+                            }),
+                          })
+                            .then((response) => response.json())
+                            .then((data) => {
+                              // Handle response from your backend
+                              if (data.status === "success") {
+                                console.log(
+                                  "Transaction verified successfully:",
+                                  data.detail
+                                );
+                              } else {
+                                console.error(
+                                  "Transaction verification failed:",
+                                  data.detail
+                                );
+                              }
+                            })
+                            .catch((error) => {
+                              console.error("Error:", error);
+                            });
                         });
                       }}
                       onError={(err) => {
