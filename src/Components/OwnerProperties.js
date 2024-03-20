@@ -10,7 +10,7 @@ import {
   Badge,
   Card,
   ListGroup,
- 
+
 } from "react-bootstrap";
 import "./OwnerProperties.css";
 import { jwtDecode } from "jwt-decode";
@@ -308,6 +308,19 @@ const OwnerProperties = () => {
                   </ListGroup.Item>
                 </ListGroup>
                 <Card.Body>
+
+                  {userRole === 'Owner' && (
+                    <>
+                      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+                        Edit Property
+                      </Button>{" "}
+                      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+                        Delete Property
+                      </Button>
+                    </>
+                  )}
+               
+
                   <Button variant="primary" onClick={() => handleShowForm(property.id)}>
                     Edit Property
                   </Button>{" "}
@@ -315,6 +328,7 @@ const OwnerProperties = () => {
                     Delete Property
                   </Button>
                   <Link to={`/property/${property.id}`}>
+
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>
                 </Card.Body>
@@ -488,7 +502,7 @@ const OwnerProperties = () => {
           Add New Property
         </Button>
       )}
-     
+
     </Container>
   );
 };
