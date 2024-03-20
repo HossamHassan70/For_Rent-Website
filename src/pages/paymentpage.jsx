@@ -3,8 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "../pages/css/pay.css";
+import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
+  const history = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
   // Function to show the modal
@@ -36,6 +38,7 @@ const PaymentPage = () => {
                   onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
                       handleShowModal();
+                      history("/");
                     });
                   }}
                   onError={(err) => {
