@@ -18,7 +18,6 @@ const Requests = () => {
   const [rejectionReason, setRejectionReason] = useState("")
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
-  // console.log(propertyRequests)3
   const [userId, setUserId] = useState(null);
   const [userRole, setUserRole] = useState("");
   const token = useSelector((state) => state.authReducer.refreshToken);
@@ -40,14 +39,31 @@ const Requests = () => {
   }, [token]);
 
   useEffect(() => {
-    const fetchPropertyRequests = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/requests/`);
+        // Fetch property requests
+        const requestsResponse = await axios.get(`http://127.0.0.1:8000/requests/`);
+
+        // Filter requests based on user role
+        let filteredRequests = [];
         if (userRole === 'Owner') {
-          setPropertyRequests(response.data.filter(request => request.owner === userId));
+          filteredRequests = requestsResponse.data.filter(request => request.owner === userId);
         } else if (userRole === 'Renter') {
-          setPropertyRequests(response.data.filter(request => request.renter === userId));
+          filteredRequests = requestsResponse.data.filter(request => request.renter === userId);
         }
+
+        // Set property requests
+        setPropertyRequests(filteredRequests);
+
+        // Fetch property names
+        const propertyNames = await Promise.all(filteredRequests.map(async (request) => {
+          const name = await fetchPropertyName(request.property);
+          return { ...request, propertyName: name };
+        }));
+
+        setPropertyRequests(propertyNames);
+        console.log(propertyNames)
+
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -55,8 +71,19 @@ const Requests = () => {
       }
     };
 
-    fetchPropertyRequests();
+    fetchData();
   }, [page, userId, userRole]);
+
+  const fetchPropertyName = async (propertyId) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/properties/${propertyId}`);
+      return response.data.title;
+    } catch (error) {
+      console.error('Error fetching property name:', error);
+      return null;
+    }
+  };
+
 
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
@@ -210,8 +237,11 @@ const Requests = () => {
             .map(request => (
               <Card className='mt-3' key={request.id} style={{ marginBottom: '10px' }}>
                 <Card.Body className="card-body">
-                  <Card.Title className="card-title">{request.title}</Card.Title>
-                  <Card.Text className="card-date">{formatDate(request.created_at)}</Card.Text>
+                  <div className="card-header">
+                    <Card.Title className="card-title">{request.title}</Card.Title>
+                    <Card.Text className="card-date">{formatDate(request.created_at)}</Card.Text>
+                  </div>
+                  <Card.Text className="card-property">{request.propertyName}</Card.Text>
                   <Card.Text className="card-message">{request.message}</Card.Text>
                   <Card.Text className="offered-price">{request.price} EGP</Card.Text>
 
