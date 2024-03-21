@@ -70,7 +70,7 @@ const Requests = () => {
         );
 
         setPropertyRequests(propertyNames);
-        console.log(propertyNames);
+        // console.log(propertyNames);
 
         setLoading(false);
       } catch (error) {
@@ -136,7 +136,7 @@ const Requests = () => {
           property_name: requestToUpdate.property_name,
           message: "Your request has been accepted.",
           payment_link: "http://localhost:3000/payment",
-          reply_to: requestToUpdate.email,
+          // reply_to: requestToUpdate.email,
         },
       };
 
@@ -199,7 +199,7 @@ const Requests = () => {
           username: requestToUpdate.username,
           property_name: requestToUpdate.property_name,
           message: "Your request has been rejected.",
-          reply_to: requestToUpdate.email,
+          // reply_to: requestToUpdate.email,
           rejection_reason: rejectionReason,
         },
       };

@@ -29,6 +29,9 @@ const App = () => {
           <NavigationBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/property/:id" element={<PropertyView />} />
+            <Route path="/about" element={<AboutUs />} />
+
             <Route
               path="/payment"
               element={
@@ -37,7 +40,14 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route path="/requests" element={<Requests />} />
+            <Route
+              path="/requests"
+              element={
+                <PrivateRoute>
+                  <Requests />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/login"
               element={
@@ -54,7 +64,6 @@ const App = () => {
                 </AuthRoute>
               }
             />
-            <Route path="/property/:id" element={<PropertyView />} />
             <Route
               path="/user/:userId"
               element={
@@ -71,7 +80,6 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route path="*" element={<PageNotFound />} />
             <Route
               path="/properties"
               element={
@@ -80,7 +88,8 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-            <Route path="/about" element={<AboutUs />} />
+
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
         </BrowserRouter>
