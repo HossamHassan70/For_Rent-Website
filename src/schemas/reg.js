@@ -23,8 +23,8 @@ const ValidSchema = yup.object().shape({
     .required("Must Fill this Field"),
   phoneNumber: yup
     .string()
-    .max(14, "Phone Number must be 11")
-    .min(14, "Phone Number must be 11")
+    .max(13, "Phone Number must be 11")
+    .min(13, "Phone Number must be 11")
     .required("Must Fill this Field"),
   username: yup
     .string()

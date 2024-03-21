@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginAsync } from "../MyStore/actions/authAction";
 import AlertCom from "../Components/alert";
@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import "../pages/css/errors.css";
 import loginSignUp from "../images/login-signup.jpeg";
 import BtnsCo from "../Components/Btns";
+import { Alert } from "react-bootstrap";
 
 const loginValidationSchema = Yup.object().shape({
   uName: Yup.string().required("Username is required"),
@@ -21,6 +22,8 @@ const loginValidationSchema = Yup.object().shape({
 export default function LoginPre() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -28,13 +31,42 @@ export default function LoginPre() {
       password: "",
     },
     validationSchema: loginValidationSchema,
+    // onSubmit: (values) => {
+    //   dispatch(loginAsync(values.uName, values.password))
+    //     .then(() => {
+    //       if (useSel) {
+    //         navigate("/");
+    //       } else {
+    //         setIsSuccess(true);
+    //         console.log("error");
+    //         console.log(isSuccess);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
     onSubmit: (values) => {
       dispatch(loginAsync(values.uName, values.password))
-        .then(() => navigate("/"))
+        .then(() => {
+          // Assuming `useSel` (or a similar condition) is correctly set up outside this scope
+          if (useSel) {
+            navigate("/");
+          } else {
+            setIsSuccess(true);
+            setTimeout(() => {
+              setIsSuccess(false);
+            }, 4000);
+            console.log("Login failed or condition not met.");
+          }
+        })
         .catch((error) => {
-          formik.setErrors({
-            server: "Invalid username or password. Please try again.",
-          });
+          console.error("Login error:", error);
+          setIsSuccess(true);
+
+          setTimeout(() => {
+            setIsSuccess(false);
+          }, 4000);
         });
     },
   });
@@ -57,6 +89,16 @@ export default function LoginPre() {
         </div>
       </Col>
       <Col xs={12} lg={6}>
+        {isSuccess && (
+          <>
+            <div>
+              <Alert variant="danger" onClose={() => setIsSuccess(false)}>
+                <Alert.Heading>Account Already Registered</Alert.Heading>
+                <p>Please use different Email or Username</p>
+              </Alert>
+            </div>
+          </>
+        )}
         <div className="container d-flex flex-column gap-3 pt-3">
           <div className="d-flex flex-column">
             <h2 className="m-0 align-self-start">Login to ForRent</h2>
@@ -82,7 +124,6 @@ export default function LoginPre() {
               </Form.Control.Feedback>
             </Form.Group>
 
-            
             <Form.Group className="mb-3">
               <Form.Control
                 id="password"

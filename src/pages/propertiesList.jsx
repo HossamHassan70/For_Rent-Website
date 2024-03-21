@@ -17,27 +17,27 @@ const PropertiesList = () => {
   const error = useSelector((state) => state.properties.error);
   const loading = useSelector((state) => state.properties.loading);
   const properties = useSelector((state) => state.properties.properties);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [propertiesPerPage] = useState(10);
-  
+
   useEffect(() => {
     dispatch(fetchProperties());
   }, [dispatch]);
-  
+
   if (loading) {
     return (
       <LoadingScreen />
-      );
-    }
-    
-    if (error) {
-      return <div className='error-page text-danger'>{error}</div>;
-    }
-    
-    if (!properties || properties.length === 0) {
-    return <div>No properties found.</div>;
-  } 
+    );
+  }
+
+  if (error) {
+    return <div className='error-page text-danger'>{error}</div>;
+  }
+
+  if (!properties || properties.length === 0) {
+    return <div className="no-properties">Sorry, There is no properties at the moment.</div>;
+  }
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -59,7 +59,6 @@ const PropertiesList = () => {
                   <Col xs={12} md={6}>
                     <div className="card-img-container position-relative">
                       <img className='prop-image' src={product.image} alt={product.title} />
-                     
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
@@ -71,7 +70,7 @@ const PropertiesList = () => {
                       <span>Price: ${product.price}</span>
                       <span>7.25% CAP</span>
                     </Card.Text>
-                    <Card.Text > Date_Published:{formatDate(product.created_at)}</Card.Text>
+                    <Card.Text >{formatDate(product.created_at)}</Card.Text>
                     <Link to={`/property/${product.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>
