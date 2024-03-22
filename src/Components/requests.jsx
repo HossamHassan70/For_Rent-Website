@@ -136,10 +136,9 @@ const Requests = () => {
         template_id: acceptanceTemplateId,
         user_id: acceptancePublicKey,
         template_params: {
-          username: requestToUpdate.username,
-          property_name: requestToUpdate.property_name,
+          property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been accepted.",
-          payment_link: "http://localhost:3000/payment",
+          payment_link: `http://localhost:3000/payment/${requestToUpdate.id}/`,
           // reply_to: requestToUpdate.email,
         },
       };
@@ -187,8 +186,7 @@ const Requests = () => {
         template_id: rejectionTemplateId,
         user_id: rejectionPublicKey,
         template_params: {
-          username: requestToUpdate.username,
-          property_name: requestToUpdate.property_name,
+          property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been rejected.",
           // reply_to: requestToUpdate.email,
           rejection_reason: rejectionReason,
@@ -277,17 +275,18 @@ const Requests = () => {
                 key={request.id}
                 style={{ marginBottom: "10px" }}
               >
-                <Card.Body className="card-body d-flex justify-content-between">
+                <Card.Body className="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
                   {request.propertyDetails?.image && (
                     <img
                       src={request.propertyDetails.image}
                       alt="Property"
-                      className="property-image mx-4"
+                      className="property-image mx-auto mx-md-4 mb-3 mb-md-0"
                       style={{
-                        width: "25rem",
+                        width: "100%",
+                        maxWidth: "25rem",
                         height: "auto",
                         borderRadius: "5px",
-                        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)", // Drop shadow
+                        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
                       }}
                     />
                   )}
@@ -345,28 +344,28 @@ const Requests = () => {
                     {userRole === "Owner" &&
                       !request.is_accepted &&
                       !request.is_rejected && (
-                        <div className="my-2 reject-button">
+                        <div className="my-2">
+
                           <Button
                             variant="success"
                             onClick={() => handleAccept(request.id)}
+                            className="mr-2"
                             style={{
                               borderRadius: "10px",
-                              padding: "7px 25px",
-                              fontSize: "1.1rem",
                               fontWeight: "bold",
                               transition: "background-color 0.3s ease-in-out",
                             }}
+
                           >
                             Accept
-                          </Button>{" "}
+                          </Button>
+
                           <Button
                             variant="danger"
-                            className="my-2 mx-2 accept-button"
                             onClick={() => handleReject(request.id)}
+                            className="mx-2"
                             style={{
                               borderRadius: "10px",
-                              padding: "7px 25px",
-                              fontSize: "1.1rem",
                               fontWeight: "bold",
                               transition: "background-color 0.3s ease-in-out",
                             }}
