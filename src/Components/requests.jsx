@@ -23,6 +23,7 @@ const Requests = () => {
   const token = useSelector((state) => state.authReducer.refreshToken);
   const itemsPerPage = 5;
   const [page, setPage] = useState(0);
+  // console.log(propertyRequests)
 
   useEffect(() => {
     if (token) {
@@ -61,16 +62,16 @@ const Requests = () => {
         // Set property requests
         setPropertyRequests(filteredRequests);
 
-        // Fetch property names
-        const propertyDetails = await Promise.all(
+        // Fetch property and renter details
+        const addedDetails = await Promise.all(
           filteredRequests.map(async (request) => {
-            const details = await fetchPropertyDetails(request.property);
-            return { ...request, propertyDetails: details };
+            const propertyDetails = await fetchPropertyDetails(request.property);
+            const renterDetails = await fetchUserDetails(request.renter);
+            return { ...request, propertyDetails: propertyDetails, renterDetails: renterDetails };
           })
         );
 
-        setPropertyRequests(propertyDetails);
-        console.log(propertyDetails);
+        setPropertyRequests(addedDetails);
 
         setLoading(false);
       } catch (error) {
@@ -94,6 +95,22 @@ const Requests = () => {
       };
     } catch (error) {
       console.error("Error fetching property details:", error);
+      return null;
+    }
+  };
+
+
+  const fetchUserDetails = async (renterId) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/users/${renterId}`
+      );
+      return {
+        email: response.data.email,
+        name: response.data.name
+      };
+    } catch (error) {
+      console.error("Error fetching user details:", error);
       return null;
     }
   };
@@ -136,10 +153,11 @@ const Requests = () => {
         template_id: acceptanceTemplateId,
         user_id: acceptancePublicKey,
         template_params: {
+          username: requestToUpdate.renterDetails.name,
           property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been accepted.",
           payment_link: `http://localhost:3000/payment/${requestToUpdate.id}/`,
-          // reply_to: requestToUpdate.email,
+          to_email: requestToUpdate.renterDetails.email
         },
       };
 
@@ -186,9 +204,10 @@ const Requests = () => {
         template_id: rejectionTemplateId,
         user_id: rejectionPublicKey,
         template_params: {
+          username: requestToUpdate.renterDetails.name,
           property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been rejected.",
-          // reply_to: requestToUpdate.email,
+          to_email: requestToUpdate.renterDetails.email,
           rejection_reason: rejectionReason,
         },
       };
