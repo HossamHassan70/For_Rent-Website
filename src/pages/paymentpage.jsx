@@ -7,25 +7,28 @@ import { useNavigate } from "react-router-dom";
 const PaymentPage = () => {
   const history = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
- const [, setPropertyInfo] = useState({
-  rooms: "3",
-  bathrooms: "2",
-  owner: "John Doe",
-  availability: true
-});
+  const [, setPropertyInfo] = useState({
+    rooms: "3",
+    bathrooms: "2",
+    owner: "John Doe",
+    availability: true,
+  });
   // Function to show the modal
   const handleShowModal = () => setShowModal(true);
 
   // Function to hide the modal
-  const handleCloseModal = () => setShowModal(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
+    history("/");
+  };
   const handlePaymentSuccess = () => {
     handleShowModal();
     // Update the availability status to "Not Available"
-    setPropertyInfo(prevState => ({
+    setPropertyInfo((prevState) => ({
       ...prevState,
-      availability: false
+      availability: false,
     }));
-    history("/");
+    // history("/");
   };
 
   return (
@@ -52,7 +55,6 @@ const PaymentPage = () => {
                     return actions.order.capture().then((details) => {
                       handleShowModal();
                       handlePaymentSuccess();
-                      history("/");
                     });
                   }}
                   onError={(err) => {
@@ -73,13 +75,6 @@ const PaymentPage = () => {
                   <div className="modal-content">
                     <div className="modal-header">
                       <h5 className="modal-title">Payment Successful</h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                        onClick={handleCloseModal}
-                      ></button>
                     </div>
                     <div className="modal-body">
                       <p>Your transaction has been completed successfully.</p>
@@ -87,7 +82,7 @@ const PaymentPage = () => {
                     <div className="modal-footer">
                       <button
                         type="button"
-                        className="btn btn-secondary"
+                        className="btn btn-danger"
                         data-bs-dismiss="modal"
                         onClick={handleCloseModal}
                       >
