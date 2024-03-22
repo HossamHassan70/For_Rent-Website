@@ -1,27 +1,35 @@
-
 h1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
   margin-top: 20px;
-padding-top: 10px;
-padding-bottom: 20px;}
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.mb-2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
 .prop-image-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  padding-top: 60px;
 }
 
 .prop-image {
-  width: 100%;
-  max-height: 400px;
+  max-width: 80%;
+  max-height: 500px;
   object-fit: cover;
 }
 
 .thumbnail-container {
   display: flex;
   justify-content: center;
-  gap: 10px;
   margin-top: 20px;
 }
 
@@ -52,46 +60,37 @@ padding-bottom: 20px;}
   border: 2px solid blue;
 }
 
-.price-card {
-  margin-top: 30px;
+.property-card {
+  margin-bottom: 20px;
 }
 
-
-
-.price-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.mb-2 {
-  text-align: center;
-  margin-bottom: 0.5rem;
-
-}
 .card-header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
-}
-
-.card-header:first-child {
   border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
 
 .card-title {
-  margin-bottom: 0;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.table {
+.card-content {
+  font-size: 16px;
+}
+
+.property-tabs {
   margin-top: 20px;
 }
 
-.table th,
-.table td {
-  vertical-align: middle;
+.property-tab-content {
+  padding: 20px;
 }
 
-.mt-4 {
-  margin-top: 1.5rem;
+.property-tab-content h5 {
+  margin-bottom: 10px;
+}
+
+.property-tab-content p {
+  margin-bottom: 5px;
 }

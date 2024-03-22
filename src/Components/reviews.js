@@ -124,21 +124,24 @@ function ReviewsList({ userId, propertyId }) {
       {error && <p>{error}</p>}
       {!isLoading && !error && (
         <>
+          {showAlert && (
+            <Alert variant="danger">
+              {userId ? (
+                <b>You have already reviewed this property.</b>
+              ) : (
+                <b>Please log in first to add a review.</b>
+              )}
+            </Alert>
+          )}
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-primary" onClick={handleAddReview}>
+              <FontAwesomeIcon icon={faPlus} /> Add Review
+            </button>
+          </div>
           {reviews.length === 0 ? (
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
             <>
-              {/* Render user's review first */}
-              {showAlert && (
-                <Alert variant="danger" >
-                  {userId ? 'You have already reviewed this property.' : 'Please log in first to add a review.'}
-                </Alert>
-              )}
-              <div className="d-flex justify-content-end">
-                <button className="btn btn-primary" onClick={handleAddReview}>
-                  <FontAwesomeIcon icon={faPlus} /> Add Review
-                </button>
-              </div>
               {userId && reviews.some(review => review.user === userId) && (
                 reviews
                   .filter(review => review.user === userId)
@@ -150,8 +153,6 @@ function ReviewsList({ userId, propertyId }) {
                       </div>
                       <p className="review-rating">{renderStars(review.rating)}</p>
                       <p className="review-content">{review.content}</p>
-                      <p className="review-user">User ID: {review.user} (test)</p>
-                      <p className="review-property">Property ID: {review.property} (test)</p>
 
                       {/* Action buttons */}
                       <div className="review-actions">
@@ -170,7 +171,6 @@ function ReviewsList({ userId, propertyId }) {
                   ))
               )}
 
-              {/* Render other reviews */}
               {reviews
                 .filter(review => !(review.user === userId))
                 .map(review => (
@@ -181,22 +181,6 @@ function ReviewsList({ userId, propertyId }) {
                     </div>
                     <p className="review-rating">{renderStars(review.rating)}</p>
                     <p className="review-content">{review.content}</p>
-                    <p className="review-user">User ID: {review.user} (test)</p>
-                    <p className="review-property">Property ID: {review.property} (test)</p>
-
-                    {/* Action buttons */}
-                    <div className="review-actions">
-                      {userId === review.user && (
-                        <>
-                          <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
-                            <FontAwesomeIcon icon={faEdit} /> Edit
-                          </button>
-                          <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
-                            <FontAwesomeIcon icon={faTrash} /> Delete
-                          </button>
-                        </>
-                      )}
-                    </div>
                   </div>
                 ))
               }

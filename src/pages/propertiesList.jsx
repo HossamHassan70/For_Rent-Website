@@ -6,8 +6,12 @@ import LoadingScreen from './loadingScreen';
 import './css/propertiesList.css';
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
-
+const formatDate = (dateString) => {
+  const date = parseISO(dateString);
+  return formatDistanceToNow(date, { addSuffix: true });
+};
 const PropertiesList = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.properties.error);
@@ -24,8 +28,6 @@ const PropertiesList = () => {
   if (loading) {
     return (
       <LoadingScreen />
-      
-
     );
   }
 
@@ -34,8 +36,8 @@ const PropertiesList = () => {
   }
 
   if (!properties || properties.length === 0) {
-    return <div>No properties found.</div>;
-  } 
+    return <div className="no-properties">Sorry, There is no properties at the moment.</div>;
+  }
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -57,7 +59,6 @@ const PropertiesList = () => {
                   <Col xs={12} md={6}>
                     <div className="card-img-container position-relative">
                       <img className='prop-image' src={product.image} alt={product.title} />
-                     
                     </div>
                   </Col>
                   <Col xs={12} md={6}>
@@ -69,7 +70,7 @@ const PropertiesList = () => {
                       <span>Price: ${product.price}</span>
                       <span>7.25% CAP</span>
                     </Card.Text>
-                    <Card.Text className='mx-2 since'>4 days ago</Card.Text>
+                    <Card.Text >{formatDate(product.created_at)}</Card.Text>
                     <Link to={`/property/${product.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>
