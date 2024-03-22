@@ -56,7 +56,7 @@ const PaymentPage = () => {
         <div className="vh-100 d-flex justify-content-center align-items-center flex-column">
           {" "}
           <h1>You Don't Have any accepted requests</h1>
-          <i class="fa-solid fa-ticket"></i>
+          <i class="iconz fa-solid fa-ticket"></i>
         </div>
       </>
     );
