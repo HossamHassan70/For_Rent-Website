@@ -83,3 +83,19 @@
     color: #fff;
     border-color: #007bff;
 }
+
+.not-available,
+.available {
+    width: fit-content;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 15px;
+}
+
+.not-available {
+    background-color: #dc3545;
+}
+
+.available {
+    background-color: #198754;
+}
