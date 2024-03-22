@@ -62,15 +62,15 @@ const Requests = () => {
         setPropertyRequests(filteredRequests);
 
         // Fetch property names
-        const propertyNames = await Promise.all(
+        const propertyDetails = await Promise.all(
           filteredRequests.map(async (request) => {
-            const name = await fetchPropertyName(request.property);
-            return { ...request, propertyName: name };
+            const details = await fetchPropertyDetails(request.property);
+            return { ...request, propertyDetails: details };
           })
         );
 
-        setPropertyRequests(propertyNames);
-        // console.log(propertyNames);
+        setPropertyRequests(propertyDetails);
+        console.log(propertyDetails);
 
         setLoading(false);
       } catch (error) {
@@ -82,14 +82,18 @@ const Requests = () => {
     fetchData();
   }, [page, userId, userRole]);
 
-  const fetchPropertyName = async (propertyId) => {
+  const fetchPropertyDetails = async (propertyId) => {
     try {
       const response = await axios.get(
         `http://127.0.0.1:8000/properties/${propertyId}`
       );
-      return response.data.title;
+      return {
+        title: response.data.title,
+        availability: response.data.availability,
+        image: response.data.image
+      };
     } catch (error) {
-      console.error("Error fetching property name:", error);
+      console.error("Error fetching property details:", error);
       return null;
     }
   };
@@ -157,19 +161,6 @@ const Requests = () => {
     }
   };
 
-  // reject button to open the modal (open modal)
-  const handleReject = (id) => {
-    setSelectedRequestId(id);
-    setShowRejectModal(true);
-  };
-
-  // reject button in modal (close modal)
-  const handleCloseRejectModal = () => {
-    setShowRejectModal(false);
-    setSelectedRequestId(null);
-    setRejectionReason("");
-  };
-
   // handle rejection in the modal
   const handleSubmitRejectModal = async () => {
     try {
@@ -225,6 +216,19 @@ const Requests = () => {
     }
   };
 
+  // reject button to open the modal (open modal)
+  const handleReject = (id) => {
+    setSelectedRequestId(id);
+    setShowRejectModal(true);
+  };
+
+  // reject button in modal (close modal)
+  const handleCloseRejectModal = () => {
+    setShowRejectModal(false);
+    setSelectedRequestId(null);
+    setRejectionReason("");
+  };
+
   const formatDate = (dateString) => {
     const date = parseISO(dateString);
     return formatDistanceToNow(date, { addSuffix: true });
@@ -235,7 +239,7 @@ const Requests = () => {
   }
 
   if (error) {
-    return <>Error: {error}</>;
+    return <>{error}</>;
   }
 
   return (
@@ -261,74 +265,117 @@ const Requests = () => {
       </div>
 
       {propertyRequests.length === 0 ? (
-        <p>No requests available.</p>
+        <p className="no-reviews">You haven't received any request yet.</p>
       ) : (
         <>
+          <h2 className="requests-header text-center">My Requests</h2>
           {propertyRequests
             .slice(page * itemsPerPage, (page + 1) * itemsPerPage)
             .map((request) => (
               <Card
-                className="mt-3"
+                className="mt-4"
                 key={request.id}
                 style={{ marginBottom: "10px" }}
               >
-                <Card.Body className="card-body">
-                  <div className="card-header">
-                    <Card.Title className="card-title">
-                      {request.title}
-                    </Card.Title>
-                    <Card.Text className="card-date">
-                      {formatDate(request.created_at)}
-                    </Card.Text>
-                  </div>
-                  <Card.Text className="card-property">
-                    {request.propertyName}
-                  </Card.Text>
-                  <Card.Text className="card-message">
-                    {request.message}
-                  </Card.Text>
-                  <Card.Text className="offered-price">
-                    {request.price} EGP
-                  </Card.Text>
-
-                  {request.is_accepted ? (
-                    <Badge className="my-1" bg="success">
-                      Accepted
-                    </Badge>
-                  ) : request.is_rejected ? (
-                    <>
-                      <Badge className="my-1" bg="danger">
-                        Rejected
-                      </Badge>
-                      {request.rejection_reason && (
-                        <span> - {request.rejection_reason}</span>
-                      )}
-                    </>
-                  ) : (
-                    <Badge className="my-1" bg="secondary">
-                      Pending
-                    </Badge>
+                <Card.Body className="card-body d-flex justify-content-between">
+                  {request.propertyDetails?.image && (
+                    <img
+                      src={request.propertyDetails.image}
+                      alt="Property"
+                      className="property-image mx-4"
+                      style={{
+                        width: "25rem",
+                        height: "auto",
+                        borderRadius: "5px",
+                        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)", // Drop shadow
+                      }}
+                    />
                   )}
 
-                  {userRole === "Owner" &&
-                    !request.is_accepted &&
-                    !request.is_rejected && (
-                      <div className="my-2">
-                        <Button
-                          variant="success"
-                          onClick={() => handleAccept(request.id)}
-                        >
-                          Accept
-                        </Button>{" "}
-                        <Button
-                          variant="danger"
-                          className="mx-2"
-                          onClick={() => handleReject(request.id)}
-                        >
-                          Reject
-                        </Button>
-                      </div>
+                  <div className="flex-grow-1">
+                    <div className="card-header">
+                      <Card.Title className="card-title">
+                        {request.title}
+                      </Card.Title>
+                      <Card.Text className="card-date">
+                        {formatDate(request.created_at)}
+                      </Card.Text>
+                    </div>
+
+                    <Card.Text className="card-property">
+                      {request.propertyDetails?.title}
+                      {request.propertyDetails?.availability ? (
+                        <Badge pill variant="success" className="mx-3">
+                          Available
+                        </Badge>
+                      ) : (
+                        <Badge pill variant="danger" className="mx-3">
+                          Not Available
+                        </Badge>
+                      )}
+                    </Card.Text>
+
+                    <Card.Text className="card-message">
+                      {request.message}
+                    </Card.Text>
+                    <Card.Text className="offered-price">
+                      {request.price} EGP
+                    </Card.Text>
+
+                    {request.is_accepted ? (
+                      <Badge className="my-1" bg="success">
+                        Accepted
+                      </Badge>
+                    ) : request.is_rejected ? (
+                      <>
+                        <Badge className="my-1" bg="danger">
+                          Rejected
+                        </Badge>
+                        <br />
+                        {request.rejection_reason && (
+                          <p><b>Rejection Reason:</b> <span> {request.rejection_reason}</span></p>
+                        )}
+                      </>
+                    ) : (
+                      <Badge className="my-1" bg="secondary">
+                        Pending
+                      </Badge>
                     )}
+
+                    {userRole === "Owner" &&
+                      !request.is_accepted &&
+                      !request.is_rejected && (
+                        <div className="my-2 reject-button">
+                          <Button
+                            variant="success"
+                            onClick={() => handleAccept(request.id)}
+                            style={{
+                              borderRadius: "10px",
+                              padding: "7px 25px",
+                              fontSize: "1.1rem",
+                              fontWeight: "bold",
+                              transition: "background-color 0.3s ease-in-out",
+                            }}
+                          >
+                            Accept
+                          </Button>{" "}
+                          <Button
+                            variant="danger"
+                            className="my-2 mx-2 accept-button"
+                            onClick={() => handleReject(request.id)}
+                            style={{
+                              borderRadius: "10px",
+                              padding: "7px 25px",
+                              fontSize: "1.1rem",
+                              fontWeight: "bold",
+                              transition: "background-color 0.3s ease-in-out",
+                            }}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      )}
+                  </div>
                 </Card.Body>
               </Card>
             ))}
