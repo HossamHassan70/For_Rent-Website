@@ -1,86 +1,85 @@
-.pagination {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    justify-content: center;
-}
-
-.pagination li {
-    margin: 0 5px;
-}
-
-.pagination li a {
-    color: #333;
-    text-decoration: none;
-    padding: 8px 12px;
+.card {
     border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.pagination li a:hover {
-    background-color: #f0f0f0;
-}
-
-.pagination .active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
-
-.pagination .disabled a {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-.pagination .break a {
-    cursor: default;
-}
-
-.card-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-}
-
-
-.my-card {
-    border: 1px solid #ddd;
     border-radius: 8px;
-    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
-.card-body {
-    padding: 20px;
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .card-title {
     font-size: 1.2rem;
-    margin-right: 10px;
+    font-weight: bold;
+    margin-bottom: 0;
 }
 
 .card-date {
-    font-size: 0.9rem;
-    color: #777;
+    color: #666;
 }
 
 .card-property {
-    font-size: 1rem;
-    color: #555;
+    margin: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
 }
 
 .card-message {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
 
 .offered-price {
     font-size: 1.2rem;
     font-weight: bold;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+}
+
+.my-1 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.my-2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.pagination li {
+    list-style: none;
+    margin: 0 0.5rem;
+}
+
+.pagination li a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+.pagination li.active a {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
 }
