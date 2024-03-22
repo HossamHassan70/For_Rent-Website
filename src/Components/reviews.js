@@ -10,7 +10,7 @@ import RatingMeter from './ratingMeter';
 import '../pages/css/reviews.css';
 import { Alert } from 'react-bootstrap';
 
-function ReviewsList({ userId, propertyId, userPicture, userName }) {
+function ReviewsList({ userId, propertyId }) {
   const dispatch = useDispatch();
   const reviews = useSelector(state => state.reviews.reviews);
   const isLoading = useSelector(state => state.reviews.loading);
@@ -148,18 +148,9 @@ function ReviewsList({ userId, propertyId, userPicture, userName }) {
                   .map(review => (
                     <div key={review.id} className="review-container mt-4">
                       <div className="review-header">
-                        <div className="user-profile">
-                          <img
-                            src={userPicture}
-                            alt="User Profile"
-                            className="user-profile-picture rounded-circle"
-                            style={{ width: '50px', height: '50px' }}
-                          />
-                          <p className="user-name">{userName}</p>
-                        </div>
+                        <h2 className="review-title">{review.title}</h2>
                         <p className="review-date">{formatDate(review.created_at)}</p>
                       </div>
-                      <h2 className="review-title">{review.title}</h2>
                       <p className="review-rating">{renderStars(review.rating)}</p>
                       <p className="review-content">{review.content}</p>
 
@@ -190,20 +181,6 @@ function ReviewsList({ userId, propertyId, userPicture, userName }) {
                     </div>
                     <p className="review-rating">{renderStars(review.rating)}</p>
                     <p className="review-content">{review.content}</p>
-
-                    {/* Action buttons */}
-                    <div className="review-actions">
-                      {userId === review.user && (
-                        <>
-                          <button className="mx-2 btn btn-info" onClick={() => handleEditReview(review)}>
-                            <FontAwesomeIcon icon={faEdit} /> Edit
-                          </button>
-                          <button className="mx-2 btn btn-danger" onClick={() => handleDeleteReview(review)}>
-                            <FontAwesomeIcon icon={faTrash} /> Delete
-                          </button>
-                        </>
-                      )}
-                    </div>
                   </div>
                 ))
               }
