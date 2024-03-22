@@ -1,16 +1,17 @@
 const initialState = {
-    products: [],
+    results: [],
     loading: false,
     error: null,
+    searchQuery: '',
 };
 
 const searchReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "SEARCH_REGION_REQUEST":
+        case "SEARCH_PROPERTIES_REQUEST":
             return { ...state, loading: true, error: null };
-        case "SEARCH_REGION_SUCCESS":
+        case "SEARCH_PROPERTIES_SUCCESS":
             return { ...state, products: action.payload, loading: false };
-        case "SEARCH_REGION_FAILURE":
+        case "SEARCH_PROPERTIES_FAILURE":
             return { ...state, loading: false, error: action.payload };
         default:
             return state;

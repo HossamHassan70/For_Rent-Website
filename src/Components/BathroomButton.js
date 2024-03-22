@@ -1,9 +1,14 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import { Button } from "react-bootstrap";
 
-const BathroomButton = ({ value }) => {
+const BathroomButton = ({ value, onClick, selected }) => {
   return (
-    <Button variant="light" href="#" className="mx-2 my-1 btn-sm" style={{ border: '1px solid #dee2e6' }}>
+    <Button
+      variant="light"
+      className={`${selected === value ? 'active' : ''} mx-2 my-1 btn-sm `}
+      style={{ border: "1px solid #dee2e6" }}
+      onClick={() => onClick(value)}
+    >
       {value}
     </Button>
   );
