@@ -2,49 +2,47 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "../pages/css/pay.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; 
 
 const PaymentPage = () => {
+  const { id: requestId } = useParams(); 
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const history = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [, setPropertyInfo] = useState({
-    rooms: "3",
-    bathrooms: "2",
-    owner: "John Doe",
-    availability: true,
-  });
 
   useEffect(() => {
     const fetchUserRequestStatus = async () => {
       setLoading(true);
       try {
-        let decodedToken = jwtDecode(refreshToken);
-        const response = await fetch("http://127.0.0.1:8000/requests");
-        const data = await response.json();
+        const decodedToken = jwtDecode(refreshToken);
 
-        const isAcceptedRequestFound = data.some(
-          (request) =>
-            decodedToken.user.id === request.renter && request.is_accepted
+        const response = await fetch(
+          `http://127.0.0.1:8000/requests/${requestId}`
         );
-        setIsAuthorized(isAcceptedRequestFound);
+        const request = await response.json();
+        if (decodedToken.user.id === request.renter && request.is_accepted) {
+          setIsAuthorized(true);
+        } else {
+          setIsAuthorized(false);
+        }
       } catch (error) {
         console.error("Error:", error);
+        setIsAuthorized(false);
       } finally {
         setLoading(false);
       }
     };
 
-    if (refreshToken) {
+    if (refreshToken && requestId) {
       fetchUserRequestStatus();
     } else {
       setLoading(false);
     }
-  }, [refreshToken]);
+  }, [refreshToken, requestId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -52,23 +50,19 @@ const PaymentPage = () => {
 
   if (!isAuthorized) {
     return (
-      <>
-        <div className="vh-100 d-flex justify-content-center align-items-center flex-column">
-          {" "}
-          <h1>You Don't Have any accepted requests</h1>
-          <i class="iconz fa-solid fa-ticket"></i>
-        </div>
-      </>
+      <div className="vh-100 d-flex justify-content-center align-items-center flex-column">
+        <h1>You Don't Have any accepted requests</h1>
+        <i className="iconz fa-solid fa-ticket"></i>{" "}
+      </div>
     );
   }
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Function to show the modal
+
   const handleShowModal = () => setShowModal(true);
 
-  // Function to hide the modal
   const handleCloseModal = () => {
     setShowModal(false);
     history("/");
@@ -76,10 +70,6 @@ const PaymentPage = () => {
   const handlePaymentSuccess = () => {
     handleShowModal();
     // Update the availability status to "Not Available"
-    setPropertyInfo((prevState) => ({
-      ...prevState,
-      availability: false,
-    }));
     // history("/");
   };
 
@@ -96,8 +86,6 @@ const PaymentPage = () => {
                     "ATthFd3bb8Sdh2LHawQGvfhMMCTcaVUOHP4X_mphtuMGojuMpUC5tbMY9hl4qxvQlicZLDQe-qnENIRT",
                 }}
               >
-                {/* Short circuit Condition */}
-                {/* showpage = true => show buttons */}
                 <PayPalButtons
                   style={{ layout: "vertical" }}
                   createOrder={(data, actions) => {
