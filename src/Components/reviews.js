@@ -22,7 +22,6 @@ function ReviewsList({ userId, propertyId, userPicture, userName }) {
   const [formErrors, setFormErrors] = useState({});
   const [modalMode, setModalMode] = useState('add');
   const [showAlert, setShowAlert] = useState(false);
-  console.log(userPicture)
 
   useEffect(() => {
     dispatch(fetchReviews());
@@ -125,6 +124,15 @@ function ReviewsList({ userId, propertyId, userPicture, userName }) {
       {error && <p>{error}</p>}
       {!isLoading && !error && (
         <>
+          {showAlert && (
+            <Alert variant="danger">
+              {userId ? (
+                <b>You have already reviewed this property.</b>
+              ) : (
+                <b>Please log in first to add a review.</b>
+              )}
+            </Alert>
+          )}
           <div className="d-flex justify-content-end">
             <button className="btn btn-primary" onClick={handleAddReview}>
               <FontAwesomeIcon icon={faPlus} /> Add Review
@@ -134,11 +142,6 @@ function ReviewsList({ userId, propertyId, userPicture, userName }) {
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
             <>
-              {showAlert && (
-                <Alert variant="danger">
-                  {userId ? 'You have already reviewed this property.' : 'Please log in first to add a review.'}
-                </Alert>
-              )}
               {userId && reviews.some(review => review.user === userId) && (
                 reviews
                   .filter(review => review.user === userId)
