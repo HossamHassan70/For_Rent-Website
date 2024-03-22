@@ -34,7 +34,7 @@ const App = () => {
             <Route path="/properties" element={<PropertiesPage />} />
 
             <Route
-              path="/payment"
+              path="/payment/:id"
               element={
                 <PrivateRoute>
                   <PaymentPage />
