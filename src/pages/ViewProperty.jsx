@@ -80,7 +80,6 @@ const PropertyView = () => {
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      // Perform form submission or other actions
       console.log("Form submitted successfully");
     }
   };
@@ -104,20 +103,19 @@ const PropertyView = () => {
       owner: propertyInfo.owner,
       property: id
     };
-    // console.log("Request Data:", requestData);
 
     axios
       .post(`http://localhost:8000/requests/`,
         requestData
       )
       .then((res) => {
-        // Handle success
+        
         console.log("Request submitted successfully");
         setSubmittingRequest(false);
         setShowModal(false);
       })
       .catch((err) => {
-        // Handle error
+        
         console.error("Error submitting request:", err);
         setSubmittingRequest(false);
       });

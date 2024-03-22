@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
-
 import "../pages/css/pay.css";
 import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
   const history = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
-
+ const [, setPropertyInfo] = useState({
+  rooms: "3",
+  bathrooms: "2",
+  owner: "John Doe",
+  availability: true
+});
   // Function to show the modal
   const handleShowModal = () => setShowModal(true);
 
   // Function to hide the modal
   const handleCloseModal = () => setShowModal(false);
+  const handlePaymentSuccess = () => {
+    handleShowModal();
+    // Update the availability status to "Not Available"
+    setPropertyInfo(prevState => ({
+      ...prevState,
+      availability: false
+    }));
+    history("/");
+  };
 
   return (
     <>
@@ -38,6 +51,7 @@ const PaymentPage = () => {
                   onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
                       handleShowModal();
+                      handlePaymentSuccess();
                       history("/");
                     });
                   }}

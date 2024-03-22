@@ -3,7 +3,7 @@ import queryString from 'query-string';
 
 // import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const searchProperties = (query) => {
+export const searchAction = (query) => {
     return (dispatch) => {
         dispatch({ type: "SEARCH_PROPERTIES_REQUEST" });
 

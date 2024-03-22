@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { searchAction } from "../MyStore/actions/searchAction";
+
+// Rest of the component code
 import {
   Dropdown,
   Button,
