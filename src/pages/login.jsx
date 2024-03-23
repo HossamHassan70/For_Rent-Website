@@ -93,8 +93,8 @@ export default function LoginPre() {
           <>
             <div>
               <Alert variant="danger" onClose={() => setIsSuccess(false)}>
-                <Alert.Heading>Account Already Registered</Alert.Heading>
-                <p>Please use different Email or Username</p>
+                <Alert.Heading>Wrong Email Or Password</Alert.Heading>
+                <p>Please Check email and Password</p>
               </Alert>
             </div>
           </>

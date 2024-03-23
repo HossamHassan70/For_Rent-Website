@@ -1,7 +1,15 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { jwtDecode } from "jwt-decode"; // Ensure correct import for jwtDecode
+
 import store, { persistor } from "./MyStore/store";
 import NavigationBar from "./Components/Navbar";
 import SignUp from "./pages/register";
@@ -16,12 +24,51 @@ import Requests from "./Components/requests";
 import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
-import SearchResults from "./Components/SearchResults";
+import VerifyEmailPage from "./pages/verifyEmail";
 
-const AuthRoute = ({ children }) => {
+function PrivateRoute({ children }) {
+  const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const location = useLocation();
+
+  // Assume isLoggedIn is derived from the presence of a valid accessToken
+  const isLoggedIn = !!accessToken;
+
+  let isEmailVerified = false;
+
+  // Decode the accessToken to check email verification status, if logged in
+  if (isLoggedIn && accessToken) {
+    try {
+      const decodedToken = jwtDecode(accessToken);
+      isEmailVerified = decodedToken.user?.validation_states;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      // Consider handling token decoding error, such as by logging out
+    }
+  }
+
+  // Redirect to login page if not logged in
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Allow access to the verify email page even if the email isn't verified
+  if (location.pathname === "/verify") {
+    return children;
+  }
+
+  // For all other routes, check email verification
+  if (!isEmailVerified) {
+    return <Navigate to="/verify" replace />;
+  }
+
+  return children;
+}
+
+function AuthRoute({ children }) {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  return isLoggedIn ? <Navigate to="/" /> : children;
-};
+  return isLoggedIn ? <Navigate to="/" replace /> : children;
+}
+
 const App = () => {
   return (
     <Provider store={store}>
@@ -33,12 +80,19 @@ const App = () => {
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/properties" element={<PropertiesPage />} />
-            <Route path="/search-results" element={<SearchResults />} />
             <Route
               path="/payment/:id"
               element={
                 <PrivateRoute>
                   <PaymentPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/verify"
+              element={
+                <PrivateRoute>
+                  <VerifyEmailPage />
                 </PrivateRoute>
               }
             />
@@ -82,7 +136,6 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
@@ -91,8 +144,5 @@ const App = () => {
     </Provider>
   );
 };
-function PrivateRoute({ children }) {
-  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
-}
+
 export default App;
