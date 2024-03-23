@@ -22,7 +22,6 @@ const VerifyEmailPage = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-
       } catch (error) {
         console.error("Error verifying email:", error);
       }
@@ -37,16 +36,20 @@ const VerifyEmailPage = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/verify/", {
-        code: inputValue,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+      await axios.post(
+        "http://localhost:8000/verify/",
+        {
+          code: inputValue,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
-      alert("Email verified successfully");
+      //   alert("Email verified successfully");
       dispatch(logout());
       navigate("/login");
       setInputValue("");

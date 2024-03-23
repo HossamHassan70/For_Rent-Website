@@ -1,7 +1,15 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { jwtDecode } from "jwt-decode"; // Ensure correct import for jwtDecode
+
 import store, { persistor } from "./MyStore/store";
 import NavigationBar from "./Components/Navbar";
 import SignUp from "./pages/register";
@@ -17,29 +25,38 @@ import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
 import VerifyEmailPage from "./pages/verifyEmail";
-import { jwtDecode } from "jwt-decode";
 
 function PrivateRoute({ children }) {
-  const isLoggedIn = useSelector((state) => state.authReducer?.isLoggedIn);
-  const token = useSelector((state) => state.authReducer?.refreshToken);
+  const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const location = useLocation();
 
-  if (!token || typeof token !== 'string') {
-    return <Navigate to="/login" replace />;
+  // Assume isLoggedIn is derived from the presence of a valid accessToken
+  const isLoggedIn = !!accessToken;
+
+  let isEmailVerified = false;
+
+  // Decode the accessToken to check email verification status, if logged in
+  if (isLoggedIn && accessToken) {
+    try {
+      const decodedToken = jwtDecode(accessToken);
+      isEmailVerified = decodedToken.user?.validation_states;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      // Consider handling token decoding error, such as by logging out
+    }
   }
 
-  let decodedToken;
-  try {
-    decodedToken = jwtDecode(token);
-  } catch (error) {
-    console.error('Error decoding token:', error);
-    return <Navigate to="/login" replace />;
-  }
-
+  // Redirect to login page if not logged in
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
-  const isEmailVerified = decodedToken.user?.validation_states;
+  // Allow access to the verify email page even if the email isn't verified
+  if (location.pathname === "/verify") {
+    return children;
+  }
+
+  // For all other routes, check email verification
   if (!isEmailVerified) {
     return <Navigate to="/verify" replace />;
   }
