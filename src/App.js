@@ -17,17 +17,30 @@ import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
 import VerifyEmailPage from "./pages/verifyEmail";
-import { jwtDecode } from "jwt-decode"; // Ensure this is correctly imported
+import { jwtDecode } from "jwt-decode";
 
 function PrivateRoute({ children }) {
-  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  const token = useSelector((state) => state.authReducer.refreshToken);
-  const decodedToken = jwtDecode(token);
-  const isEmailVerified = decodedToken.user.validation_states;
+  const isLoggedIn = useSelector((state) => state.authReducer?.isLoggedIn);
+  const token = useSelector((state) => state.authReducer?.refreshToken);
+
+  if (!token || typeof token !== 'string') {
+    return <Navigate to="/login" replace />;
+  }
+
+  let decodedToken;
+  try {
+    decodedToken = jwtDecode(token);
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return <Navigate to="/login" replace />;
+  }
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
-  } else if (!isEmailVerified) {
+  }
+
+  const isEmailVerified = decodedToken.user?.validation_states;
+  if (!isEmailVerified) {
     return <Navigate to="/verify" replace />;
   }
 
