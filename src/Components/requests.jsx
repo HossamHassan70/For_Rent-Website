@@ -16,6 +16,13 @@ const Requests = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [customRejectionReason, setCustomRejectionReason] = useState("");
+  const rejectionReasons = [
+    "Property already rented out",
+    "Request does not meet property requirements",
+    "Property is undergoing maintenance or renovations",
+    "Property is reserved for another applicant",
+  ];
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -23,6 +30,7 @@ const Requests = () => {
   const token = useSelector((state) => state.authReducer.refreshToken);
   const itemsPerPage = 5;
   const [page, setPage] = useState(0);
+  // console.log(propertyRequests)
 
   useEffect(() => {
     if (token) {
@@ -61,16 +69,16 @@ const Requests = () => {
         // Set property requests
         setPropertyRequests(filteredRequests);
 
-        // Fetch property names
-        const propertyDetails = await Promise.all(
+        // Fetch property and renter details
+        const addedDetails = await Promise.all(
           filteredRequests.map(async (request) => {
-            const details = await fetchPropertyDetails(request.property);
-            return { ...request, propertyDetails: details };
+            const propertyDetails = await fetchPropertyDetails(request.property);
+            const renterDetails = await fetchUserDetails(request.renter);
+            return { ...request, propertyDetails: propertyDetails, renterDetails: renterDetails };
           })
         );
 
-        setPropertyRequests(propertyDetails);
-        console.log(propertyDetails);
+        setPropertyRequests(addedDetails);
 
         setLoading(false);
       } catch (error) {
@@ -94,6 +102,22 @@ const Requests = () => {
       };
     } catch (error) {
       console.error("Error fetching property details:", error);
+      return null;
+    }
+  };
+
+
+  const fetchUserDetails = async (renterId) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/users/${renterId}`
+      );
+      return {
+        email: response.data.email,
+        name: response.data.name
+      };
+    } catch (error) {
+      console.error("Error fetching user details:", error);
       return null;
     }
   };
@@ -136,11 +160,11 @@ const Requests = () => {
         template_id: acceptanceTemplateId,
         user_id: acceptancePublicKey,
         template_params: {
-          username: requestToUpdate.username,
-          property_name: requestToUpdate.property_name,
+          username: requestToUpdate.renterDetails.name,
+          property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been accepted.",
-          payment_link: "http://localhost:3000/payment",
-          // reply_to: requestToUpdate.email,
+          payment_link: `http://localhost:3000/payment/${requestToUpdate.id}/`,
+          to_email: requestToUpdate.renterDetails.email
         },
       };
 
@@ -171,7 +195,7 @@ const Requests = () => {
         ...requestToUpdate,
         is_accepted: false,
         is_rejected: true,
-        rejection_reason: rejectionReason,
+        rejection_reason: rejectionReason === "Other" ? customRejectionReason : rejectionReason,
       };
       await axios.put(
         `http://127.0.0.1:8000/requests/${selectedRequestId}/`,
@@ -187,11 +211,11 @@ const Requests = () => {
         template_id: rejectionTemplateId,
         user_id: rejectionPublicKey,
         template_params: {
-          username: requestToUpdate.username,
-          property_name: requestToUpdate.property_name,
+          username: requestToUpdate.renterDetails.name,
+          property_name: requestToUpdate.propertyDetails.title,
           message: "Your request has been rejected.",
-          // reply_to: requestToUpdate.email,
-          rejection_reason: rejectionReason,
+          to_email: requestToUpdate.renterDetails.email,
+          rejection_reason: rejectionReason === "Other" ? customRejectionReason : rejectionReason,
         },
       };
 
@@ -227,6 +251,7 @@ const Requests = () => {
     setShowRejectModal(false);
     setSelectedRequestId(null);
     setRejectionReason("");
+    setCustomRejectionReason("");
   };
 
   const formatDate = (dateString) => {
@@ -277,17 +302,19 @@ const Requests = () => {
                 key={request.id}
                 style={{ marginBottom: "10px" }}
               >
-                <Card.Body className="card-body d-flex justify-content-between">
+                <Card.Body className="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between">
                   {request.propertyDetails?.image && (
                     <img
                       src={request.propertyDetails.image}
                       alt="Property"
-                      className="property-image mx-4"
+                      className="property-image mx-auto mx-md-4 mb-3 mb-md-0"
                       style={{
-                        width: "25rem",
-                        height: "auto",
+                        width: "100%",
+                        maxWidth: "23rem",
+                        maxHeight: "20rem",
+                        objectFit: "contain",
                         borderRadius: "5px",
-                        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)", // Drop shadow
+                        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
                       }}
                     />
                   )}
@@ -305,13 +332,13 @@ const Requests = () => {
                     <Card.Text className="card-property">
                       {request.propertyDetails?.title}
                       {request.propertyDetails?.availability ? (
-                        <Badge pill variant="success" className="mx-3">
+                        <span className="mx-3 available">
                           Available
-                        </Badge>
+                        </span>
                       ) : (
-                        <Badge pill variant="danger" className="mx-3">
-                          Not Available
-                        </Badge>
+                        <span className="mx-4 not-available">
+                          Rented
+                        </span>
                       )}
                     </Card.Text>
 
@@ -323,9 +350,15 @@ const Requests = () => {
                     </Card.Text>
 
                     {request.is_accepted ? (
-                      <Badge className="my-1" bg="success">
-                        Accepted
-                      </Badge>
+                      request.propertyDetails?.availability ? (
+                        <Badge className="my-1" bg="success">
+                          Accepted - Payment Pending
+                        </Badge>
+                      ) : (
+                        <Badge className="my-1" bg="success">
+                          Accepted - Payment Received
+                        </Badge>
+                      )
                     ) : request.is_rejected ? (
                       <>
                         <Badge className="my-1" bg="danger">
@@ -333,7 +366,7 @@ const Requests = () => {
                         </Badge>
                         <br />
                         {request.rejection_reason && (
-                          <p><b>Rejection Reason:</b> <span> {request.rejection_reason}</span></p>
+                          <p><b>Rejection Reason:</b> <span>{request.rejection_reason}</span></p>
                         )}
                       </>
                     ) : (
@@ -345,28 +378,29 @@ const Requests = () => {
                     {userRole === "Owner" &&
                       !request.is_accepted &&
                       !request.is_rejected && (
-                        <div className="my-2 reject-button">
-                          <Button
-                            variant="success"
-                            onClick={() => handleAccept(request.id)}
-                            style={{
-                              borderRadius: "10px",
-                              padding: "7px 25px",
-                              fontSize: "1.1rem",
-                              fontWeight: "bold",
-                              transition: "background-color 0.3s ease-in-out",
-                            }}
-                          >
-                            Accept
-                          </Button>{" "}
+                        <div className="my-2">
+                          {request.propertyDetails?.availability ? (
+                            <Button
+                              variant="success"
+                              onClick={() => handleAccept(request.id)}
+                              className="mr-2"
+                              style={{
+                                borderRadius: "10px",
+                                fontWeight: "bold",
+                                transition: "background-color 0.3s ease-in-out",
+                              }}
+                            >
+                              Accept
+                            </Button>
+                          ) : null}
+
+                          {/* Always render the "Reject" button */}
                           <Button
                             variant="danger"
-                            className="my-2 mx-2 accept-button"
                             onClick={() => handleReject(request.id)}
+                            className="mx-2"
                             style={{
                               borderRadius: "10px",
-                              padding: "7px 25px",
-                              fontSize: "1.1rem",
                               fontWeight: "bold",
                               transition: "background-color 0.3s ease-in-out",
                             }}
@@ -404,12 +438,35 @@ const Requests = () => {
         <Modal.Body>
           <Form.Group controlId="rejectionReason">
             <Form.Label>Reason for Rejection</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={rejectionReason}
-              onChange={(e) => setRejectionReason(e.target.value)}
-            />
+            <div>
+              {rejectionReasons.map((reason, index) => (
+                <Form.Check
+                  key={index}
+                  type="radio"
+                  id={`rejectionReason-${index}`}
+                  name="rejectionReason"
+                  label={reason}
+                  value={reason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                />
+              ))}
+              <Form.Check
+                type="radio"
+                id="rejectionReason-other"
+                name="rejectionReason"
+                label="Other"
+                value="Other"
+                onChange={(e) => setRejectionReason(e.target.value)}
+              />
+              {rejectionReason === "Other" && (
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={customRejectionReason}
+                  onChange={(e) => setCustomRejectionReason(e.target.value)}
+                />
+              )}
+            </div>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
@@ -421,6 +478,7 @@ const Requests = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
     </>
   );
 };

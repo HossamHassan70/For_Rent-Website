@@ -32,9 +32,10 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/search-results" element={<SearchResults />} />
             <Route
-              path="/payment"
+              path="/payment/:id"
               element={
                 <PrivateRoute>
                   <PaymentPage />
@@ -78,14 +79,6 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <OwnerProperties />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/properties"
-              element={
-                <PrivateRoute>
-                  <PropertiesPage />
                 </PrivateRoute>
               }
             />
