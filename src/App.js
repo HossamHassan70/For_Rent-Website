@@ -24,6 +24,7 @@ import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
 import VerifyEmailPage from "./pages/verifyEmail";
+import SearchResults from './Components/SearchResults';
 
 function PrivateRoute({ children }) {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
@@ -73,6 +74,7 @@ const App = () => {
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/properties" element={<PropertiesPage />} />
+            <Route path="/search-results" element={<SearchResults />} />
             <Route
               path="/payment/:id"
               element={
