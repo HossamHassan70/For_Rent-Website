@@ -4,6 +4,7 @@ const initialState = {
   isLoggedIn: false,
   refreshToken: null,
   accessToken: null,
+  isEmailVerified: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -21,6 +22,11 @@ const authReducer = (state = initialState, action) => {
         isLoggedIn: false,
         refreshToken: null,
         accessToken: null,
+      };
+    case 'UPDATE_EMAIL_VERIFICATION':
+      return {
+        ...state,
+        isEmailVerified: action.payload,
       };
     case LOGOUT:
       return {

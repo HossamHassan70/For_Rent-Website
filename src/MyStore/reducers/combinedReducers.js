@@ -4,7 +4,6 @@ import usersReducer from "./fetchUsers";
 import searchReducer from "./searchReducer";
 import reviewsReducer from "./reviews";
 import authReducer from "./authReducer";
-import verifyReducer from './verify';
 
 const rootReducer = combineReducers({
   properties: propertiesReducer,
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   search: searchReducer,
   reviews: reviewsReducer,
   authReducer: authReducer,
-  isVerified: verifyReducer,
 });
 
 export default rootReducer;

@@ -5,26 +5,13 @@ import { Button } from "react-bootstrap";
 import { logout } from "../MyStore/actions/authAction";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { updateEmailVerification } from './../MyStore/actions/verifyAction';
 
 const VerifyEmailPage = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const isEmailVerified = useSelector((state) => state.isVerified.isEmailVerified);
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleVerificationSuccess = async () => {
-    try {
-      const decodedToken = jwtDecode(refreshToken);
-      const isVerified = decodedToken.user?.validation_states;
-      dispatch(updateEmailVerification(isVerified));
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  };
 
   useEffect(() => {
     const verifyEmailAction = async () => {
@@ -39,7 +26,6 @@ const VerifyEmailPage = () => {
             },
           }
         );
-        handleVerificationSuccess();
       } catch (error) {
         console.error("Error verifying email:", error);
       }
@@ -67,7 +53,6 @@ const VerifyEmailPage = () => {
           },
         }
       );
-      handleVerificationSuccess();
 
       dispatch(logout());
       navigate("/login");
@@ -76,9 +61,6 @@ const VerifyEmailPage = () => {
       console.error("Error submitting form:", error);
     }
   };
-
-  // Debugging: Log isEmailVerified
-  console.log("isEmailVerified:", isEmailVerified);
 
   return (
     <>

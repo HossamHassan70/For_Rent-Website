@@ -17,6 +17,12 @@ export const logout = () => ({
   type: LOGOUT,
 });
 
+export const updateEmailVerification = (isVerified) => ({
+  type: 'UPDATE_EMAIL_VERIFICATION',
+  payload: isVerified,
+});
+
+
 export const loginAsync = (username, password) => {
   return (dispatch) => {
     return axios
