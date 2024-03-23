@@ -1,7 +1,5 @@
 import axios from "axios";
-import queryString from 'query-string';
-
-// import { createAsyncThunk } from "@reduxjs/toolkit";
+import queryString from "query-string";
 
 export const searchAction = (query) => {
     return (dispatch) => {

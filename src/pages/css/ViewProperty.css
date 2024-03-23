@@ -4,10 +4,13 @@ h1 {
   padding-top: 10px;
   padding-bottom: 20px;
 }
-
+.bold-title {
+  font-weight: bold;
+}
 .mb-2 {
-  text-align: center;
+
   margin-bottom: 0.5rem;
+
 }
 
 .mt-4 {
@@ -19,12 +22,16 @@ h1 {
   justify-content: center;
   margin-bottom: 20px;
   padding-top: 60px;
+  position: relative;
+  overflow: hidden;
+  
 }
 
 .prop-image {
   max-width: 80%;
   max-height: 500px;
   object-fit: cover;
+   position: relative;
 }
 
 .thumbnail-container {
@@ -94,3 +101,10 @@ h1 {
 .property-tab-content p {
   margin-bottom: 5px;
 }
+.display-5  {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
