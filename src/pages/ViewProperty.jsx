@@ -38,12 +38,8 @@ const PropertyView = () => {
     axios
       .get(`http://localhost:8000/properties/${id}`)
       .then((res) => {
-        const propertyData = res.data;
-        if (propertyData.renter) {
-          propertyData.availability = false;
-        }
-        setPropertyInfo(propertyData);
-        setSelectedImage(propertyData.image);
+        setPropertyInfo(res.data);
+        setSelectedImage(res.data.image);
       })
       .catch((err) => {
         console.log(err);
@@ -113,13 +109,13 @@ const PropertyView = () => {
         requestData
       )
       .then((res) => {
-
+        
         console.log("Request submitted successfully");
         setSubmittingRequest(false);
         setShowModal(false);
       })
       .catch((err) => {
-
+        
         console.error("Error submitting request:", err);
         setSubmittingRequest(false);
       });
@@ -136,87 +132,40 @@ const PropertyView = () => {
           {propertyInfo && (
             <div>
               <Card>
-               
-
-                <Card.Body>
                 <div className="prop-image-container">
-      <Image className="prop-image" src={selectedImage} />
-      {!propertyInfo.availability && (
-         <div class="black-tape">
-         <span class="tape-text">Rented</span>
-     </div>
-      )}
-    </div>
-                  {(propertyInfo.image1 || propertyInfo.image2 || propertyInfo.image3) && (
-                    <>
-                      <Card.Title className="display-5 mb-4 text-center bold-title">
-                        Additional Images
-                      </Card.Title>
-                      <div className="thumbnail-container">
-                        {propertyInfo.image && (
-                          <div
-                            className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""
-                              }`}
-                            onClick={() => handleThumbnailClick(propertyInfo.image)}
-
-                          >
-                            <Image
-                              className="thumbnail-image"
-                              src={propertyInfo.image}
-                            />
-                            <div className="thumbnail-title">Image 1</div>
-
-                          </div>
-                        )}
-                        {propertyInfo.image1 && (
-                          <div
-                            className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""
-                              }`}
-                            onClick={() => handleThumbnailClick(propertyInfo.image1)}
-                          >
-                            <Image
-                              className="thumbnail-image"
-                              src={propertyInfo.image1}
-                            />
-                            <div className="thumbnail-title">Image 2</div>
-                          </div>
-                        )}
-                        {propertyInfo.image2 && (
-                          <div
-                            className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""
-                              }`}
-                            onClick={() => handleThumbnailClick(propertyInfo.image2)}
-                          >
-                            <Image
-                              className="thumbnail-image"
-                              src={propertyInfo.image2}
-                            />
-                            <div className="thumbnail-title">Image 3</div>
-                          </div>
-                        )}
-                        {propertyInfo.image3 && (
-                          <div
-                            className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""
-                              }`}
-                            onClick={() => handleThumbnailClick(propertyInfo.image3)}
-                          >
-                            <Image
-                              className="thumbnail-image"
-                              src={propertyInfo.image3}
-                            />
-                            <div className="thumbnail-title">Image 4</div>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </Card.Body>
+                  <Image className="prop-image" src={selectedImage} />
+                </div>
+                {(propertyInfo.image1 || propertyInfo.image2 || propertyInfo.image3) && (
+                  <>
+                    <Card.Title className="display-5 mb-4 text-center">
+                      Additional Images
+                    </Card.Title>
+                    <div className="thumbnail-container">
+                      {propertyInfo.image && <div className={`thumbnail ${selectedImage === propertyInfo.image ? "selected" : ""}`} onClick={() => handleThumbnailClick(propertyInfo.image)}>
+                        <Image className="thumbnail-image" src={propertyInfo.image} />
+                        <div className="thumbnail-title">Image 1</div>
+                      </div>}
+                      {propertyInfo.image1 && <div className={`thumbnail ${selectedImage === propertyInfo.image1 ? "selected" : ""}`} onClick={() => handleThumbnailClick(propertyInfo.image1)}>
+                        <Image className="thumbnail-image" src={propertyInfo.image1} />
+                        <div className="thumbnail-title">Image 2</div>
+                      </div>}
+                      {propertyInfo.image2 && <div className={`thumbnail ${selectedImage === propertyInfo.image2 ? "selected" : ""}`} onClick={() => handleThumbnailClick(propertyInfo.image2)}>
+                        <Image className="thumbnail-image" src={propertyInfo.image2} />
+                        <div className="thumbnail-title">Image 3</div>
+                      </div>}
+                      {propertyInfo.image3 && <div className={`thumbnail ${selectedImage === propertyInfo.image3 ? "selected" : ""}`} onClick={() => handleThumbnailClick(propertyInfo.image3)}>
+                        <Image className="thumbnail-image" src={propertyInfo.image3} />
+                        <div className="thumbnail-title">Image 4</div>
+                      </div>}
+                    </div>
+                  </>
+                )}
               </Card>
             </div>
-          )
-          }
-        </Col >
+          )}
+        </Col>
         <Col className="my-2" xs={12} lg={8}>
+
           <Card>
             <Card.Body>
               <Card.Title>
@@ -234,7 +183,7 @@ const PropertyView = () => {
             </Card.Body>
           </Card>
 
-          <Card className="price-card1">
+          <Card className="price-card">
             <Card.Body>
               <Card.Title>Price</Card.Title>
               ${propertyInfo.price}
@@ -252,52 +201,45 @@ const PropertyView = () => {
               >
                 <Tab eventKey="property overview" title="Property Overview">
                   <div>
-                    <p>
-                      <b>Property Address:</b> {propertyInfo.address}
-                    </p>
-                    <p>
-                      <b>Property Price:</b> ${propertyInfo.price}
-                    </p>
-                    <p>
-                      <b>Property Type:</b> {propertyInfo.type}
-                    </p>
-                  
+                    <p><b>Property Address:</b> {propertyInfo.address}</p>
+                    <p><b>Property Price:</b> ${propertyInfo.price}</p>
+                    <p><b>Property Type:</b> {propertyInfo.type}</p>
+                    <p><b>Square Address:</b> {propertyInfo.address}</p>
                   </div>
                 </Tab>
                 <Tab eventKey="basic information" title="Basic Information">
                   <div>
-                    <p>
-                      <b>Rooms:</b> {propertyInfo.rooms}
-                    </p>
-                    <p>
-                      <b>Bathrooms:</b> {propertyInfo.bathrooms}
-                    </p>
-                    <p>
-                      <b>Owner:</b> {propertyInfo.owner}
-                    </p>
+                  <p><b>Rooms:</b> {propertyInfo.rooms}</p>
+                    <p><b>Bathrooms:</b> {propertyInfo.bathrooms}</p>
+                    <p><b>Owner:</b> {propertyInfo.owner}</p>
                     <p>
                       <b>Availability:</b>{" "}
-                      <span
-                        className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"
-                          }`}
-                      >
+                      <span className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"}`}>
                         {propertyInfo.availability ? "Available" : "Not Available"}
                       </span>
                     </p>
                   </div>
                 </Tab>
+                <Tab eventKey="property track" title="Property Track">
+                  <div>
+                    <p><b>Status:</b> Inspection</p>
+                    <p><b>Date:</b> 01/01/2023</p>
+                    <p><b>User:</b> John Doe</p>
+                    <p><b>Notes:</b> N/A</p>
+                  </div>
+                </Tab>
               </Tabs>
             </Card.Body>
           </Card>
-          {userRole === "Renter" && (
+          {userRole === "Renter" && propertyInfo.availability && (
             <div className="d-flex justify-content-end">
               <Button className="mt-3" variant="primary" onClick={handleButtonClick}>
                 Request Property
               </Button>
             </div>
           )}
-
         </Col>
+
         <Col className="my-2" xs={12} lg={4}>
           <h5 className="mt-4">Reviews:</h5>
           <ReviewsList userId={userId} propertyId={id} />
@@ -355,8 +297,8 @@ const PropertyView = () => {
             </Form>
           </Modal.Body>
         </Modal>
-      </Row >
-    </Container >
+      </Row>
+    </Container>
   );
 };
 
