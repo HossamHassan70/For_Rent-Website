@@ -4,17 +4,25 @@ import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import { logout } from "../MyStore/actions/authAction";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const VerifyEmailPage = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const [inputValue, setInputValue] = useState(""); // Corrected line
+  const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmailAction = async () => {
       try {
+        await axios.post("http://localhost:8000/verify/", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
       } catch (error) {
         console.error("Error verifying email:", error);
       }
@@ -22,33 +30,26 @@ const VerifyEmailPage = () => {
 
     if (refreshToken) {
       verifyEmailAction();
-    } else {
     }
-  }, [dispatch, refreshToken]);
+  }, [dispatch, refreshToken, accessToken]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/verify/", {
-        // Replace with your actual endpoint URL
-        method: "POST", // or 'PUT' if you are updating data
+      await axios.post("http://localhost:8000/verify/", {
+        code: inputValue,
+      }, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          code: inputValue, // Adjust this according to the expected payload structure of your endpoint
-        }),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      alert("tarsh");
+      alert("Email verified successfully");
       dispatch(logout());
       navigate("/login");
-      setInputValue(""); // Clear the input value on successful submission
+      setInputValue("");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
