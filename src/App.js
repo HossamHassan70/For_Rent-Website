@@ -28,10 +28,17 @@ import SearchResults from './Components/SearchResults';
 function PrivateRoute({ children }) {
   const isEmailVerified = useSelector((state) => state.authReducer.isEmailVerified);
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-
   const location = useLocation();
 
-  if (!isEmailVerified && isLoggedIn && location.pathname !== "/verify") {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (isEmailVerified && location.pathname === "/verify") {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!isEmailVerified && location.pathname !== "/verify") {
     return <Navigate to="/verify" replace />;
   }
 
@@ -42,11 +49,8 @@ function AuthRoute({ children }) {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
 
   if (isLoggedIn) {
-    // If user is already logged in, redirect to home page
     return <Navigate to="/" replace />;
   }
-
-  // Otherwise, allow access to the auth route
   return children;
 }
 
