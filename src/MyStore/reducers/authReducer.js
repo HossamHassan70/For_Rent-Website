@@ -1,9 +1,10 @@
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "../actions/authAction";
+import { UPDATE_EMAIL_VERIFICATION, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from "../actions/authAction";
 
 const initialState = {
   isLoggedIn: false,
   refreshToken: null,
   accessToken: null,
+  isEmailVerified: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -22,10 +23,16 @@ const authReducer = (state = initialState, action) => {
         refreshToken: null,
         accessToken: null,
       };
+    case UPDATE_EMAIL_VERIFICATION:
+      return {
+        ...state,
+        isEmailVerified: action.payload,
+      };
     case LOGOUT:
       return {
         ...initialState,
       };
+
     default:
       return state;
   }

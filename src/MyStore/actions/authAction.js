@@ -3,6 +3,7 @@ import axios from "axios";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGOUT = "LOGOUT";
+export const UPDATE_EMAIL_VERIFICATION = 'UPDATE_EMAIL_VERIFICATION';
 
 export const loginSuccess = (refreshToken) => ({
   type: LOGIN_SUCCESS,
@@ -32,3 +33,8 @@ export const loginAsync = (username, password) => {
       });
   };
 };
+
+export const updateEmailVerification = (isVerified) => ({
+  type: UPDATE_EMAIL_VERIFICATION,
+  payload: isVerified,
+});
