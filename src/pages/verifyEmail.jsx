@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
-import { logout } from "../MyStore/actions/authAction";
+import { logout, updateEmailVerification } from "../MyStore/actions/authAction";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const VerifyEmailPage = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
@@ -12,6 +13,13 @@ const VerifyEmailPage = () => {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleVerificationSuccess = () => {
+    const decodedToken = jwtDecode(refreshToken);
+    const isEmailVerified = decodedToken.user.validation_states;
+    console.log(isEmailVerified)
+    dispatch(updateEmailVerification(isEmailVerified));
+  };
 
   useEffect(() => {
     const verifyEmailAction = async () => {
@@ -26,6 +34,7 @@ const VerifyEmailPage = () => {
             },
           }
         );
+        handleVerificationSuccess();
       } catch (error) {
         console.error("Error verifying email:", error);
       }
@@ -34,6 +43,7 @@ const VerifyEmailPage = () => {
     if (refreshToken) {
       verifyEmailAction();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refreshToken, accessToken]);
 
   const handleSubmit = async (e) => {
@@ -52,6 +62,7 @@ const VerifyEmailPage = () => {
           },
         }
       );
+      handleVerificationSuccess();
 
       //   alert("Email verified successfully");
       dispatch(logout());
