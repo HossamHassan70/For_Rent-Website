@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
+import { logout } from "../MyStore/actions/authAction";
+import { useNavigate } from "react-router-dom";
 
 const VerifyEmailPage = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const [inputValue, setInputValue] = useState(""); // Corrected line
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmailAction = async () => {
@@ -26,7 +29,6 @@ const VerifyEmailPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Assuming inputValue is the data you want to send and accessToken is your token
     try {
       const response = await fetch("http://localhost:8000/verify/", {
         // Replace with your actual endpoint URL
@@ -43,9 +45,9 @@ const VerifyEmailPage = () => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const data = await response.json();
-      console.log("Server response:", data);
+      alert("tarsh");
+      dispatch(logout());
+      navigate("/login");
       setInputValue(""); // Clear the input value on successful submission
     } catch (error) {
       console.error("Error submitting form:", error);

@@ -50,12 +50,19 @@ const App = () => {
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/properties" element={<PropertiesPage />} />
-            <Route path="/verify" element={<VerifyEmailPage />} />
             <Route
               path="/payment/:id"
               element={
                 <PrivateRoute>
                   <PaymentPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/verify"
+              element={
+                <PrivateRoute>
+                  <VerifyEmailPage />
                 </PrivateRoute>
               }
             />
