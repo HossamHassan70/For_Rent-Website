@@ -8,8 +8,7 @@ import {
 } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { jwtDecode } from "jwt-decode"; // Ensure correct import for jwtDecode
-
+import { jwtDecode } from "jwt-decode";
 import store, { persistor } from "./MyStore/store";
 import NavigationBar from "./Components/Navbar";
 import SignUp from "./pages/register";
@@ -30,33 +29,27 @@ function PrivateRoute({ children }) {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const location = useLocation();
 
-  // Assume isLoggedIn is derived from the presence of a valid accessToken
   const isLoggedIn = !!accessToken;
 
   let isEmailVerified = false;
 
-  // Decode the accessToken to check email verification status, if logged in
   if (isLoggedIn && accessToken) {
     try {
       const decodedToken = jwtDecode(accessToken);
       isEmailVerified = decodedToken.user?.validation_states;
     } catch (error) {
       console.error("Error decoding token:", error);
-      // Consider handling token decoding error, such as by logging out
     }
   }
 
-  // Redirect to login page if not logged in
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
-  // Allow access to the verify email page even if the email isn't verified
   if (location.pathname === "/verify") {
     return children;
   }
 
-  // For all other routes, check email verification
   if (!isEmailVerified) {
     return <Navigate to="/verify" replace />;
   }
