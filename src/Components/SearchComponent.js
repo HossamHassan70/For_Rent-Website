@@ -26,10 +26,6 @@ const Search = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (query.trim() === "") {
-      // alert("Please enter a search query.");
-      return;
-    }
     dispatch(
       searchAction({
         query,
@@ -41,12 +37,6 @@ const Search = () => {
     navigate("/search-results");
   };
 
-  // const handleReset = () => {
-  //   setQuery("");
-  //   setSelectedBedroom(null);
-  //   setSelectedBathroom(null);
-  //   setSelectedPropertyType(null);
-  // };
 
   const handleBedroomSelect = (value) => {
     setSelectedBedroom(value);
@@ -186,17 +176,6 @@ const Search = () => {
                 >
                   {loading ? "Loading..." : "Search"}
                 </Button>
-                {/* <Button
-                className="btn-reset"
-                style={{
-                  backgroundColor: "#008f70",
-                  border: "1px  solid #006262",
-                  width: "100px",
-                }}
-                onClick={handleReset}
-              >
-                Reset
-              </Button> */}
               </InputGroup>
             </div>
           </Col>

@@ -16,25 +16,25 @@ const PropertyTypeDropdown = ({ selectedValue, onSelect }) => {
     >
       <Dropdown.Item
         active={selectedValue === "Apartment"}
-        onClick={() => handleSelect("Apartment")}
+        onClick={() => handleSelect("apartment")}
       >
         Apartment
       </Dropdown.Item>
       <Dropdown.Item
         active={selectedValue === "House"}
-        onClick={() => handleSelect("House")}
+        onClick={() => handleSelect("house")}
       >
         House
       </Dropdown.Item>
       <Dropdown.Item
         active={selectedValue === "Condo"}
-        onClick={() => handleSelect("Condo")}
+        onClick={() => handleSelect("condo")}
       >
         Condo
       </Dropdown.Item>
       <Dropdown.Item
         active={selectedValue === "Villa"}
-        onClick={() => handleSelect("Villa")}
+        onClick={() => handleSelect("villa")}
       >
         Villa
       </Dropdown.Item>
