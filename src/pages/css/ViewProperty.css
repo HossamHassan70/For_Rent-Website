@@ -107,4 +107,31 @@ h1 {
   margin-bottom: 10px;
 }
 
+.black-tape {
+  position: absolute;
+  top:0 ;
+  right: 0;
+  width: 200px;
+  height: 40px;
+  background-color: rgb(216, 11, 11);
+  transform: translateX(25%) translateY(100%) rotate(45deg);
+}
+
+
+
+.tape-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  text-align: center;
+  line-height: 1.5;
+
+
+
+}
 
