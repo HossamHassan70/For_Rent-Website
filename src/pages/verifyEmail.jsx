@@ -16,12 +16,16 @@ const VerifyEmailPage = () => {
   useEffect(() => {
     const verifyEmailAction = async () => {
       try {
-        await axios.post("http://localhost:8000/verify/", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        await axios.post(
+          "http://localhost:8000/verify/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`,
+            },
+          }
+        );
       } catch (error) {
         console.error("Error verifying email:", error);
       }
