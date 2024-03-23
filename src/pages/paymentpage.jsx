@@ -4,15 +4,19 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "../pages/css/pay.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const PaymentPage = () => {
-  const { id: requestId } = useParams(); 
+  const { id: requestId } = useParams();
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const history = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [uid, setUid] = useState("");
+  const [emails, setEmail] = useState("");
+  const [names, setName] = useState("");
 
   useEffect(() => {
     const fetchUserRequestStatus = async () => {
@@ -26,6 +30,7 @@ const PaymentPage = () => {
         const request = await response.json();
         if (decodedToken.user.id === request.renter && request.is_accepted) {
           setIsAuthorized(true);
+          setUid(request.renter);
         } else {
           setIsAuthorized(false);
         }
@@ -36,9 +41,18 @@ const PaymentPage = () => {
         setLoading(false);
       }
     };
+    const fetchUsers = async () => {
+      const response = await fetch(`http://127.0.0.1:8000/users/${uid}`);
+      const request = await response.json();
+      setEmail(request.email);
+      console.log(emails);
+      console.log(names);
+      setName(request.name);
+    };
 
     if (refreshToken && requestId) {
       fetchUserRequestStatus();
+      fetchUsers();
     } else {
       setLoading(false);
     }
@@ -60,12 +74,33 @@ const PaymentPage = () => {
     return <div>Loading...</div>;
   }
 
-
   const handleShowModal = () => setShowModal(true);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     setShowModal(false);
     history("/");
+    const acceptanceServiceId = "service_k4f3lsq";
+    const acceptanceTemplateId = "template_njhd8r2";
+    const acceptancePublicKey = "TlLQ9jr1P3LE_J3q-";
+    const acceptanceData = {
+      service_id: acceptanceServiceId,
+      template_id: acceptanceTemplateId,
+      user_id: acceptancePublicKey,
+      template_params: {
+        renter_name: names,
+        message: "Thank you your Payment Has been Accepted",
+        renter_email: emails,
+      },
+    };
+
+    try {
+      await axios.post(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        acceptanceData
+      );
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
   };
   const handlePaymentSuccess = () => {
     handleShowModal();
