@@ -16,11 +16,29 @@ import Requests from "./Components/requests";
 import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
+import VerifyEmailPage from "./pages/verifyEmail";
+import { jwtDecode } from "jwt-decode"; // Ensure this is correctly imported
 
-const AuthRoute = ({ children }) => {
+function PrivateRoute({ children }) {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  return isLoggedIn ? <Navigate to="/" /> : children;
-};
+  const token = useSelector((state) => state.authReducer.refreshToken);
+  const decodedToken = jwtDecode(token);
+  const isEmailVerified = decodedToken.user.validation_states;
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  } else if (!isEmailVerified) {
+    return <Navigate to="/verify" replace />;
+  }
+
+  return children;
+}
+
+function AuthRoute({ children }) {
+  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+  return isLoggedIn ? <Navigate to="/" replace /> : children;
+}
+
 const App = () => {
   return (
     <Provider store={store}>
@@ -32,7 +50,7 @@ const App = () => {
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/properties" element={<PropertiesPage />} />
-
+            <Route path="/verify" element={<VerifyEmailPage />} />
             <Route
               path="/payment/:id"
               element={
@@ -81,7 +99,6 @@ const App = () => {
                 </PrivateRoute>
               }
             />
-
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
@@ -90,8 +107,5 @@ const App = () => {
     </Provider>
   );
 };
-function PrivateRoute({ children }) {
-  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
-}
+
 export default App;
