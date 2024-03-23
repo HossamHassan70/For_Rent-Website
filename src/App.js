@@ -16,6 +16,7 @@ import Requests from "./Components/requests";
 import PropertiesPage from "./Components/PropertiesPage";
 import AboutUs from "./Components/About";
 import PaymentPage from "./pages/paymentpage";
+import SearchResults from "./Components/SearchResults";
 
 const AuthRoute = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
@@ -31,7 +32,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/property/:id" element={<PropertyView />} />
             <Route path="/about" element={<AboutUs />} />
-
+            <Route path="/search-results" element={<SearchResults />} />
             <Route
               path="/payment"
               element={

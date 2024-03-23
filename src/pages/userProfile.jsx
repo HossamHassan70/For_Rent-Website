@@ -10,88 +10,6 @@ import LoadingScreen from "./loadingScreen";
 import { jwtDecode } from "jwt-decode";
 import { useSelector } from "react-redux";
 
-// const Emails = ({ userId }) => {
-//   const [emails, setPosts] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//       try {
-//         const response = await axios.get(
-//           `https://jsonplaceholder.typicode.com/users/${userId}/posts`
-//         );
-//         setPosts(response.data);
-//         setLoading(false);
-//       } catch (error) {
-//         console.error("Error fetching posts:", error);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchPosts();
-//   }, [userId]);
-
-//   return (
-//     <div>
-//       {loading ? (
-//         <>
-//           <LoadingScreen />
-//         </>
-//       ) : (
-//         <ul className="email-list">
-//           {emails.map((email) => (
-//             <li key={email.id} className="email-item">
-//               <h3 className="email-title">{email.title}</h3>
-//               <p className="email-body">{email.body}</p>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
-
-// const Posts = ({ userId }) => {
-//   const [posts, setPosts] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchPosts = async () => {
-//       try {
-//         const response = await axios.get(
-//           `https://dummyjson.com/users/${userId}/posts`
-//         );
-//         setPosts(response.data.posts);
-//         setLoading(false);
-//       } catch (error) {
-//         console.error("Error fetching posts:", error);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchPosts();
-//   }, [userId]);
-
-//   return (
-//     <div>
-//       {loading ? (
-//         <>
-//           <LoadingScreen />
-//         </>
-//       ) : (
-//         <ul className="post-list">
-//           {posts.map((post) => (
-//             <li key={post.id} className="post-item">
-//               <h3 className="post-title">{post.title}</h3>
-//               <p className="post-body">{post.body}</p>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
-
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
   const { userId } = useParams();
@@ -101,7 +19,7 @@ const UserProfile = () => {
   const prevUserIdRef = useRef(null);
   const [uid, setUid] = useState("");
   const [infos, setInfos] = useState();
-  const useSel = useSelector((state) => state.authReducer.isLoggedIn);
+  // const useSel = useSelector((state) => state.authReducer.isLoggedIn);
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
 
   useEffect(() => {
@@ -112,7 +30,7 @@ const UserProfile = () => {
       setInfos(userInfos);
       setUid(userId);
     }
-  }, []);
+  }, [refreshToken]);
 
   console.log(uid);
 

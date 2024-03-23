@@ -10,7 +10,8 @@ const searchReducer = (state = initialState, action) => {
         case "SEARCH_PROPERTIES_REQUEST":
             return { ...state, loading: true, error: null };
         case "SEARCH_PROPERTIES_SUCCESS":
-            return { ...state, products: action.payload, loading: false };
+            // console.log('Search results:', action.payload);
+            return { ...state, results: action.payload, loading: false };
         case "SEARCH_PROPERTIES_FAILURE":
             return { ...state, loading: false, error: action.payload };
         default:

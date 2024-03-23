@@ -1,16 +1,19 @@
 import axios from "axios";
 import queryString from 'query-string';
 
-// import { createAsyncThunk } from "@reduxjs/toolkit";
-
-export const searchAction = (query) => {
+export const searchAction = ({ query, selectedBedroom, selectedBathroom, selectedPropertyType }) => {
     return (dispatch) => {
         dispatch({ type: "SEARCH_PROPERTIES_REQUEST" });
 
-        const queryParams = queryString.stringify({ search: query });
+        const queryParams = queryString.stringify({
+            title: query,
+            rooms: selectedBedroom,
+            bathrooms: selectedBathroom,
+            type: selectedPropertyType,
+        });
 
         axios
-            .get(`http://localhost:8000/properties/search?search=${queryParams}/`)
+            .get(`http://localhost:8000/properties/search?${queryParams}`)
             .then((response) => {
                 dispatch({ type: "SEARCH_PROPERTIES_SUCCESS", payload: response.data });
             })
@@ -20,12 +23,3 @@ export const searchAction = (query) => {
             });
     };
 };
-// export const searchProperties = createAsyncThunk(
-//     "search/properties",
-//     async (query) => {
-//         const response = await axios.get(
-//             `http://localhost:8000/properties/search?q=${query}`
-//         );
-//         return response.data;
-//     }
-// );
