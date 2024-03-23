@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { jwtDecode } from "jwt-decode";
 import store, { persistor } from "./MyStore/store";
 import NavigationBar from "./Components/Navbar";
 import SignUp from "./pages/register";
@@ -27,31 +26,12 @@ import VerifyEmailPage from "./pages/verifyEmail";
 import SearchResults from './Components/SearchResults';
 
 function PrivateRoute({ children }) {
-  const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const isEmailVerified = useSelector((state) => state.authReducer.isEmailVerified);
+  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+
   const location = useLocation();
 
-  const isLoggedIn = !!accessToken;
-
-  let isEmailVerified = false;
-
-  if (isLoggedIn && accessToken) {
-    try {
-      const decodedToken = jwtDecode(accessToken);
-      isEmailVerified = decodedToken.user?.validation_states;
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  }
-
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (location.pathname === "/verify") {
-    return children;
-  }
-
-  if (!isEmailVerified) {
+  if (!isEmailVerified && isLoggedIn && location.pathname !== "/verify") {
     return <Navigate to="/verify" replace />;
   }
 
@@ -60,7 +40,14 @@ function PrivateRoute({ children }) {
 
 function AuthRoute({ children }) {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  return isLoggedIn ? <Navigate to="/" replace /> : children;
+
+  if (isLoggedIn) {
+    // If user is already logged in, redirect to home page
+    return <Navigate to="/" replace />;
+  }
+
+  // Otherwise, allow access to the auth route
+  return children;
 }
 
 const App = () => {
@@ -75,6 +62,7 @@ const App = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/properties" element={<PropertiesPage />} />
             <Route path="/search-results" element={<SearchResults />} />
+
             <Route
               path="/payment/:id"
               element={
@@ -131,6 +119,7 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
