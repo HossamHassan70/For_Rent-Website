@@ -209,7 +209,7 @@ const PropertyView = () => {
                 </Tab>
                 <Tab eventKey="basic information" title="Basic Information">
                   <div>
-                    <p><b>Rooms:</b> {propertyInfo.rooms}</p>
+                  <p><b>Rooms:</b> {propertyInfo.rooms}</p>
                     <p><b>Bathrooms:</b> {propertyInfo.bathrooms}</p>
                     <p><b>Owner:</b> {propertyInfo.owner}</p>
                     <p>
@@ -231,7 +231,7 @@ const PropertyView = () => {
               </Tabs>
             </Card.Body>
           </Card>
-          {userRole === "Renter" && (
+          {userRole === "Renter" && propertyInfo.availability && (
             <div className="d-flex justify-content-end">
               <Button className="mt-3" variant="primary" onClick={handleButtonClick}>
                 Request Property

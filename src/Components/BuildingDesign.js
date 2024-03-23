@@ -11,7 +11,7 @@ import condaBuildingImage from '../images/conda1.jpg';
 const BuildingDesign = () => {
   return (
     <Container fluid className='mt-5'>
-      <h3 className='mb-2'><b>WHAT ARE YOU<span style={{ color: '#008f97' }}> SELLING</span></b></h3>
+      <h3><b>WHAT ARE We<span style={{ color: '#008f97' }}> SELLING</span></b></h3>
       <Row className="building-grid">
         <Col xs={6} sm={3} className="building-item">
           <Link to="/properties?type=house">
@@ -42,7 +42,7 @@ const BuildingDesign = () => {
             <Image src={condaBuildingImage} alt="Condo Building" fluid />
           </Link>
           <div className="building-text">
-            <p><strong>CONDA</strong></p>
+            <p><strong>CONDO</strong></p>
           </div>
         </Col>
       </Row>
