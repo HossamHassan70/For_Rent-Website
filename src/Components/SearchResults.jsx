@@ -47,11 +47,10 @@ const SearchResults = () => {
                                                 {product.availability ? 'Available' : 'Rented'}
                                             </span>
                                         </Card.Title>
-                                        <Card.Text className='price d-flex justify-content-between'>
-                                            <span>Price: ${product.price}</span>
-                                            <span>Address: {product.address}</span>
-                                        </Card.Text>
                                         <Card.Text >{formatDate(product.created_at)}</Card.Text>
+                                        <Card.Text className='price'>
+                                            <span>Price: {product.price} EGP </span>
+                                        </Card.Text>
                                         <Link to={`/property/${product.id}`}>
                                             <button className='btn more-details'><b>More Details</b></button>
                                         </Link>

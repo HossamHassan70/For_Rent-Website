@@ -12,7 +12,7 @@ import {
   ListGroup,
 
 } from "react-bootstrap";
-import "./OwnerProperties.css";
+import "../pages/css/OwnerProperties.css";
 import { jwtDecode } from "jwt-decode";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
