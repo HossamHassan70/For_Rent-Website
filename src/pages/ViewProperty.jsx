@@ -236,7 +236,7 @@ const PropertyView = () => {
           <Card className="price-card1">
             <Card.Body>
               <Card.Title>Price</Card.Title>
-              ${propertyInfo.price}
+              {propertyInfo.price} EGP
             </Card.Body>
           </Card>
 
@@ -255,7 +255,7 @@ const PropertyView = () => {
                       <b>Property Address:</b> {propertyInfo.address}
                     </p>
                     <p>
-                      <b>Property Price:</b> ${propertyInfo.price}
+                      <b>Property Price:</b> {propertyInfo.price} EGP
                     </p>
                     <p>
                       <b>Property Type:</b> {propertyInfo.type}
