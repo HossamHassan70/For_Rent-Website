@@ -10,7 +10,7 @@ import RatingMeter from './ratingMeter';
 import '../pages/css/reviews.css';
 import { Alert } from 'react-bootstrap';
 
-function ReviewsList({ userId, propertyId }) {
+function ReviewsList({ userRole, userId, propertyId }) {
   const dispatch = useDispatch();
   const reviews = useSelector(state => state.reviews.reviews);
   const isLoading = useSelector(state => state.reviews.loading);
@@ -35,6 +35,10 @@ function ReviewsList({ userId, propertyId }) {
       }, 4000);
       return;
     }
+    if (userRole === "Owner") {
+      return;
+    }
+
     const userReview = reviews.find(review => review.user === userId);
     if (userReview) {
       setShowAlert(true);
@@ -134,9 +138,11 @@ function ReviewsList({ userId, propertyId }) {
             </Alert>
           )}
           <div className="d-flex justify-content-end">
-            <button className="btn btn-primary" onClick={handleAddReview}>
-              <FontAwesomeIcon icon={faPlus} /> Add Review
-            </button>
+            {(userId && userRole !== "Owner") && (
+              <button className="btn btn-primary" onClick={handleAddReview}>
+                <FontAwesomeIcon icon={faPlus} /> Add Review
+              </button>
+            )}
           </div>
           {reviews.length === 0 ? (
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>

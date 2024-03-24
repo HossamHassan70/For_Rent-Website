@@ -295,7 +295,7 @@ const PropertyView = () => {
         </Col>
         <Col className="my-2" xs={12} lg={4}>
           <h5 className="mt-4">Reviews:</h5>
-          <ReviewsList userId={userId} propertyId={id} />
+          <ReviewsList userRole={userRole} userId={userId} propertyId={id} />
         </Col>
 
         <Modal show={showModal} onHide={handleCloseModal}>
