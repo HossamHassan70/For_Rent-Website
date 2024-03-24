@@ -295,12 +295,13 @@ const Requests = () => {
           </div>
         )}
       </div>
-
+      <h1 className="my-properties-heading">
+        <Badge bg="secondary">My Requests</Badge>
+      </h1>
       {propertyRequests.length === 0 ? (
-        <p className="no-requests">There Is No Requests At The Moment.</p>
+        <p className="no-requests">There Are No Requests At The Moment.</p>
       ) : (
         <>
-          <h2 className="requests-header text-center">My Requests</h2>
           {propertyRequests
             .slice(page * itemsPerPage, (page + 1) * itemsPerPage)
             .map((request) => (
@@ -359,12 +360,12 @@ const Requests = () => {
                     {request.is_accepted ? (
                       request.propertyDetails?.availability ? (
                         <>
-                        <Badge className="my-1" bg="success">
-                          Accepted
-                        </Badge>
-                        <Badge className="my-1 mx-1" bg="warning">
-                          Payment Pending
-                        </Badge>
+                          <Badge className="my-1" bg="success">
+                            Accepted
+                          </Badge>
+                          <Badge className="my-1 mx-1" bg="warning">
+                            Payment Pending
+                          </Badge>
                         </>
                       ) : (
                         <Badge className="my-1" bg="success">
