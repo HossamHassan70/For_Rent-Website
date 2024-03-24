@@ -278,9 +278,7 @@ const PropertyView = () => {
                     <p>
                       <b>Bathrooms:</b> {propertyInfo.bathrooms}
                     </p>
-                    <p>
-                      <b>Owner:</b> {propertyInfo.owner}
-                    </p>
+            
                   </div>
                 </Tab>
               </Tabs>
