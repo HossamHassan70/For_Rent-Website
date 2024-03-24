@@ -51,36 +51,38 @@ const PropertiesList = () => {
     <Container fluid className='mt-5'>
       <h3><b><span style={{ color: '#008f97' }}>NEWLY</span> ADDED</b></h3>
       <Row>
-        {currentProperties.slice().reverse().map(product => (
-          <Col key={product.id} xs={12} lg={6}>
-            <Card className='mb-3'>
-              <Card.Body>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <div className="card-img-container position-relative">
-                      <img className='prop-image' src={product.image} alt={product.title} />
-                    </div>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
-                      <span>{product.title}</span>
-                      <span style={{ color: product.availability ? 'green' : 'red' }}>
-                        {product.availability ? 'Available' : 'Rented'}
-                      </span>
-                    </Card.Title>
-                    <Card.Text >{formatDate(product.created_at)}</Card.Text>
-                    <Card.Text className='price'>
-                      <span>Price: {product.price} EGP </span>
-                    </Card.Text>
-                    <Link to={`/property/${product.id}`}>
-                      <button className='btn more-details'><b>More Details</b></button>
-                    </Link>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+        {currentProperties
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .map(product => (
+            <Col key={product.id} xs={12} lg={6}>
+              <Card className='mb-3'>
+                <Card.Body>
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <div className="card-img-container position-relative">
+                        <img className='prop-image' src={product.image} alt={product.title} />
+                      </div>
+                    </Col>
+                    <Col xs={12} md={6}>
+                      <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
+                        <span>{product.title}</span>
+                        <span style={{ color: product.availability ? 'green' : 'red' }}>
+                          {product.availability ? 'Available' : 'Rented'}
+                        </span>
+                      </Card.Title>
+                      <Card.Text >{formatDate(product.created_at)}</Card.Text>
+                      <Card.Text className='price'>
+                        <span>Price: {product.price} EGP </span>
+                      </Card.Text>
+                      <Link to={`/property/${product.id}`}>
+                        <button className='btn more-details'><b>More Details</b></button>
+                      </Link>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
       </Row>
       <div className='d-flex justify-content-center'>
         <Pagination
