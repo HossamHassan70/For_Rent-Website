@@ -102,8 +102,7 @@ export default function LoginPre() {
         )}
         <div className="container d-flex flex-column gap-3 pt-3">
           <div className="d-flex flex-column">
-            <h2 className="m-0 align-self-start">Login to ForRent</h2>
-            <p className="m-0 align-self-start">Enter Your Details Below</p>
+            <h2 className="m-0 text-center">Login to ForRent</h2>
             {formik.errors.server && (
               <AlertCom errorType="danger" errorMsg={formik.errors.server} />
             )}
@@ -149,7 +148,10 @@ export default function LoginPre() {
               />
             </div>
             <p className="pt-3">
-              Didn't Register Yet? <Link className="link-sign" to="/register">Signup</Link>
+              Didn't Register Yet?{" "}
+              <Link className="link-sign" to="/register">
+                Signup
+              </Link>
             </p>
           </Form>
         </div>

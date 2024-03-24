@@ -55,7 +55,7 @@ const VerifyEmailPage = () => {
         }
       );
 
-      setModalMessage("Email verified successfully!");
+      setModalMessage("Email verified successfully! Please login Again");
       setShowModal(true);
 
       setTimeout(() => {
@@ -63,16 +63,17 @@ const VerifyEmailPage = () => {
         dispatch(logout());
         navigate("/login");
         setInputValue("");
-      }, 2000);
+      }, 4000);
     } catch (error) {
       console.error("Error submitting form:", error);
-      // If there's an error in verification
-      setModalMessage("Error verifying email. Please try again.");
+      setModalMessage(
+        "error verifying email. Please check your spam or trash email"
+      );
       setShowModal(true);
 
       setTimeout(() => {
         setShowModal(false);
-      }, 2000);
+      }, 3000);
     }
   };
 

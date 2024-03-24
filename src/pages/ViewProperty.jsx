@@ -332,7 +332,7 @@ const PropertyView = () => {
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="formPrice">
-                <Form.Label>Price</Form.Label>
+                <Form.Label>Price EGP</Form.Label>
                 <Form.Control
                   type="number"
                   name="price"

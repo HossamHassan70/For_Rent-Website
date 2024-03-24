@@ -309,7 +309,7 @@ const OwnerProperties = () => {
                 </Card.Body>
                 <ListGroup className="list-group-flush">
                   <ListGroup.Item>Address: {property.address}</ListGroup.Item>
-                  <ListGroup.Item>Price: {property.price}</ListGroup.Item>
+                  <ListGroup.Item>Price: {property.price} EGP </ListGroup.Item>
                   <ListGroup.Item>Rooms: {property.rooms}</ListGroup.Item>
                   <ListGroup.Item>Bathrooms: {property.bathrooms}</ListGroup.Item>
                   <ListGroup.Item>{formatDate(property.created_at)}
@@ -390,7 +390,7 @@ const OwnerProperties = () => {
               )}
             </Form.Group>
             <Form.Group controlId="price">
-              <Form.Label>Price</Form.Label>
+              <Form.Label>Price  EGP</Form.Label>
               <Form.Control
                 type="number"
                 defaultValue={editPropertyData ? editPropertyData.price : ""}
