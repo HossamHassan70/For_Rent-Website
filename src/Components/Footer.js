@@ -7,11 +7,12 @@ import logo from '../images/logo.jpeg';
 
 function Footer() {
     return (
-        <div className="footer pt-3 pb-3 text-black text-center text-md-start" style={{ marginTop: "30px", background: "white" }}>
+        <div className="footer pt-3 pb-3 text-black text-center text-md-start"
+            style={{ marginTop: "30px", background: "white" }}>
             <Container>
                 <Row>
-                    <Col  className="d-flex justify-content-start">
-                    <div className="info mb-3">
+                    <Col className="d-flex justify-content-start">
+                        <div className="info mb-3">
                             <img src={logo} alt="FORENT Logo" style={{ width: "150px" }} />
                             <div className="copyright">
                                 <div>
@@ -23,26 +24,26 @@ function Footer() {
                             </div>
                         </div>
                     </Col>
-                    <Col  className="d-flex justify-content-center">
+                    <Col className="d-flex justify-content-center">
                         <div className="links">
-                            <h5 className="text-black">About Us</h5>
-                            <ul className="list-unstyled lh-lg">
-                                <li><Link to="/register" className="text-black text-decoration-none">Register</Link></li>
-                                <li><Link to="/login" className="text-black text-decoration-none">LogIn</Link></li>
+                            <h5 className="text-black me-3">About Us</h5>
+                            <ul className="list-unstyled d-flex mb-0 lh-lg mt-3">
+                                <li className="me-3"><Link to="/register" className="text-black text-decoration-none">Register</Link></li>
+                                <li className="me-3"><Link to="/login" className="text-black text-decoration-none">LogIn</Link></li>
                                 <li><Link to="/about" className="text-black text-decoration-none">About Us</Link></li>
                             </ul>
                         </div>
                     </Col>
-                    <Col  className="d-flex justify-content-end">
+                    <Col className="d-flex justify-content-end">
                         <div className="contact">
                             <h5 className="text-black  text-center justify-content-center">Contact Us</h5>
                             <div className="contact-info">
-                                <Row>
-                                    <Col>
-                                        <p className="lh-lg mt-2">Phone:6122089269</p>
+                                <Row className="justify-content-center justify-content-md-start">
+                                    <Col xs={12} md={6} className="text-center text-md-start">
+                                        <p className="lh-lg mt-2"> 6124152</p>
                                     </Col>
-                                    <Col>
-                                        <p className="lh-lg mt-2">Mail:info@gmail.com</p>
+                                    <Col xs={12} md={6} className="text-center text-md-start">
+                                        <p className="lh-lg mt-2"> info@gmail.com</p>
                                     </Col>
                                 </Row>
                             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
-import './BuildingDesign.css';
+import '../pages/css/BuildingDesign.css';
 
 import houseBuildingImage from '../images/house1.jpg';
 import apartmentBuildingImage from '../images/apartment1.jpg';
