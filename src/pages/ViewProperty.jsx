@@ -243,7 +243,7 @@ const PropertyView = () => {
           <Card>
             <Card.Header>Property Description:</Card.Header>
             <Card.Body>
-              <Tabs
+            <Tabs
                 defaultActiveKey="property overview"
                 transition={false}
                 id="noanim-tab-example"
@@ -263,13 +263,11 @@ const PropertyView = () => {
                     <p>
                       <b>Availability:</b>{" "}
                       <span
-                        className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"
-                          }`}
+                        className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"}`}
                       >
                         {propertyInfo.availability ? "Available" : "Not Available"}
                       </span>
                     </p>
-
                   </div>
                 </Tab>
                 <Tab eventKey="basic information" title="Basic Information">
@@ -288,14 +286,14 @@ const PropertyView = () => {
               </Tabs>
             </Card.Body>
           </Card>
-          {userRole === "Renter" && (
+          {/* Render "Request Property" button only if the property is available and user is a renter */}
+          {propertyInfo.availability && userRole === "Renter" && (
             <div className="d-flex justify-content-end">
               <Button className="mt-3" variant="primary" onClick={handleButtonClick}>
                 Request Property
               </Button>
             </div>
           )}
-
         </Col>
         <Col className="my-2" xs={12} lg={4}>
           <h5 className="mt-4">Reviews:</h5>
@@ -354,8 +352,8 @@ const PropertyView = () => {
             </Form>
           </Modal.Body>
         </Modal>
-      </Row >
-    </Container >
+      </Row>
+    </Container>
   );
 };
 
