@@ -84,7 +84,7 @@ const PaymentPage = () => {
   console.log(property);
   const handleCloseModal = async () => {
     setShowModal(false);
-    history("/");
+    // history("/");
     const acceptanceServiceId = "service_k4f3lsq";
     const acceptanceTemplateId = "template_njhd8r2";
     const acceptancePublicKey = "TlLQ9jr1P3LE_J3q-";
@@ -120,6 +120,10 @@ const PaymentPage = () => {
             body: JSON.stringify({ renter: renter }),
           }
         );
+
+        const updatedData = await response.json();
+        console.log(updatedData);
+        console.log("Property updated successfully:", updatedData);
       } catch (error) {
         console.error("Error updating property:", error.message);
       }
