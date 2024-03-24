@@ -19,10 +19,10 @@ const Requests = () => {
   const [rejectionReason, setRejectionReason] = useState("");
   const [customRejectionReason, setCustomRejectionReason] = useState("");
   const rejectionReasons = [
-    "Property already rented out",
-    "Request does not meet property requirements",
-    "Property is undergoing maintenance or renovations",
-    "Property is reserved for another applicant",
+    "Property already rented out.",
+    "Request does not meet property requirements.",
+    "Property is undergoing maintenance.",
+    "Property is reserved for another applicant.",
   ];
   // Acceptance alert
   const [showAlert, setShowAlert] = useState(false);
@@ -458,7 +458,7 @@ const Requests = () => {
       {/* reject modal */}
       <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Reject Request</Modal.Title>
+          <Modal.Title>What is the rejection reason</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="rejectionReason">
