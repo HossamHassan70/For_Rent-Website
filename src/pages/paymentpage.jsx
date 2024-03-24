@@ -19,6 +19,7 @@ const PaymentPage = () => {
   const [names, setName] = useState("");
   const [renter, setRenter] = useState("");
   const [property, setProperty] = useState("");
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   useEffect(() => {
     const fetchUserRequestStatus = async () => {
@@ -110,19 +111,16 @@ const PaymentPage = () => {
 
     const updateProperty = async () => {
       try {
-        await fetch(
-          `http://127.0.0.1:8000/properties/${property}/`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              renter: renter,
-              availability: false,
-            }),
-          }
-        );
+        await fetch(`http://127.0.0.1:8000/properties/${property}/`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            renter: renter,
+            availability: false,
+          }),
+        });
 
         // const updatedData = await response.json();
         // console.log(updatedData);
@@ -166,9 +164,7 @@ const PaymentPage = () => {
                   }}
                   onError={(err) => {
                     console.error("PayPal Payment Error", err);
-                    alert(
-                      "There was an error processing your payment with PayPal. Please try again or choose another payment method."
-                    );
+                    setShowErrorModal(true);
                   }}
                 />
               </PayPalScriptProvider>
@@ -195,6 +191,35 @@ const PaymentPage = () => {
                       >
                         Close
                       </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={`modal ${showErrorModal ? "show" : ""}`}
+                  tabIndex="-1"
+                  style={{ display: showErrorModal ? "block" : "none" }}
+                  role="dialog"
+                >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">Payment Error</h5>
+                      </div>
+                      <div className="modal-body">
+                        <p>
+                          There was an error processing your payment. Please try
+                          again or choose another payment method.
+                        </p>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => setShowErrorModal(false)} // Close the error modal
+                        >
+                          Close
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
