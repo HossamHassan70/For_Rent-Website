@@ -10,6 +10,7 @@ import "../pages/css/errors.css";
 import "../pages/css/register.css";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
+import "../pages/css/login.css";
 
 export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -23,8 +24,7 @@ export default function SignUp() {
         password: "",
         repeatPassword: "",
         role: "",
-        termsCheckbox: false,
-        phoneNumber: "+20",
+        phoneNumber: "",
       },
       validationSchema: ValidSchema,
       onSubmit: async (values, { resetForm, setSubmitting }) => {
@@ -39,7 +39,7 @@ export default function SignUp() {
               validation_states: true,
               registration_date: new Date().toISOString(),
               profile_picture: null,
-              phone_number: values.phoneNumber,
+              phone_number: "+2" + values.phoneNumber,
             };
 
             const response = await axios.post(
@@ -219,26 +219,6 @@ export default function SignUp() {
                     <p className="error">{errors.role}</p>
                   )}
                 </div>
-
-                <div className="pt-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="termsCheckbox"
-                    label="I accept Terms and Conditions"
-                    checked={values.termsCheckbox}
-                    onChange={handleChange}
-                    isInvalid={!!errors.termsCheckbox && touched.termsCheckbox}
-                    className={
-                      errors.termsCheckbox && touched.termsCheckbox
-                        ? "input-error"
-                        : ""
-                    }
-                  />
-
-                  {errors.termsCheckbox && touched.termsCheckbox && (
-                    <p className="error">{errors.termsCheckbox}</p>
-                  )}
-                </div>
               </Form.Group>
 
               <div className="container d-flex justify-conent-center flex-column gap-3">
@@ -255,7 +235,10 @@ export default function SignUp() {
                   btnStyle=""
                 />
                 <p>
-                  Already Have An Account? <Link to={"/login"}>SignIn</Link>{" "}
+                  Already Have An Account?{" "}
+                  <Link className="link-sign" to={"/login"}>
+                    SignIn
+                  </Link>{" "}
                 </p>
               </div>
             </Form>

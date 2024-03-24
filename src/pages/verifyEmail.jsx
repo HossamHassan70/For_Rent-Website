@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Form from "react-bootstrap/Form";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap"; // Import Modal here
 import { logout } from "../MyStore/actions/authAction";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,6 +10,8 @@ const VerifyEmailPage = () => {
   const refreshToken = useSelector((state) => state.authReducer.refreshToken);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const [inputValue, setInputValue] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ const VerifyEmailPage = () => {
           {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${accessToken}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
@@ -34,14 +36,13 @@ const VerifyEmailPage = () => {
     if (refreshToken) {
       verifyEmailAction();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refreshToken, accessToken]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/verify/",
         {
           code: inputValue,
@@ -54,11 +55,24 @@ const VerifyEmailPage = () => {
         }
       );
 
-      dispatch(logout());
-      navigate("/login");
-      setInputValue("");
+      setModalMessage("Email verified successfully!");
+      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(false);
+        dispatch(logout());
+        navigate("/login");
+        setInputValue("");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
+      // If there's an error in verification
+      setModalMessage("Error verifying email. Please try again.");
+      setShowModal(true);
+
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2000);
     }
   };
 
@@ -81,6 +95,13 @@ const VerifyEmailPage = () => {
           Submit
         </Button>
       </Form>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Email Verification</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalMessage}</Modal.Body>
+      </Modal>
     </>
   );
 };

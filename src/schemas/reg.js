@@ -3,6 +3,7 @@ import * as yup from "yup";
 const loginPat = /^[a-zA-Z0-9._]+@[a-z]{1,8}\.(com|eg|gov|edu)$/;
 const passwordRegex =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=])(?=.*[^\w\d\s]).{8,}$/;
+const phoneNumberRegex = /^01\d{9}$/;
 
 const ValidSchema = yup.object().shape({
   email: yup
@@ -23,8 +24,10 @@ const ValidSchema = yup.object().shape({
     .required("Must Fill this Field"),
   phoneNumber: yup
     .string()
-    .max(13, "Phone Number must be 11")
-    .min(13, "Phone Number must be 11")
+    .matches(
+      phoneNumberRegex,
+      "Phone Number must not exceed and not less than 11 numbers and must start with 01 "
+    )
     .required("Must Fill this Field"),
   username: yup
     .string()
@@ -37,9 +40,6 @@ const ValidSchema = yup.object().shape({
     .max(15, "Name must be Maximum 15 Letters")
     .required("Must Fill this Field"),
   role: yup.string().required("Please select a member type"),
-  termsCheckbox: yup
-    .boolean()
-    .oneOf([true], "Terms and Conditions must be accepted"),
 });
 
 export default ValidSchema;

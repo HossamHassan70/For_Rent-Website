@@ -13,6 +13,7 @@ import "../pages/css/errors.css";
 import loginSignUp from "../images/login-signup.jpeg";
 import BtnsCo from "../Components/Btns";
 import { Alert } from "react-bootstrap";
+import "../pages/css/login.css";
 
 const loginValidationSchema = Yup.object().shape({
   uName: Yup.string().required("Username is required"),
@@ -146,16 +147,9 @@ export default function LoginPre() {
                 btnCs={{ backgroundColor: "#008f97" }}
                 btnText="Login"
               />
-              <Link
-                to="/forgot-password"
-                className="btn btn-primary"
-                style={{ backgroundColor: "#008f97" }}
-              >
-                Forget Your password?
-              </Link>
             </div>
             <p className="pt-3">
-              Didn't Register Yet? <Link to="/register">Signup</Link>
+              Didn't Register Yet? <Link className="link-sign" to="/register">Signup</Link>
             </p>
           </Form>
         </div>
