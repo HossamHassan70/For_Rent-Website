@@ -4,6 +4,7 @@ import axios from "axios";
 import "./css/userProfile.css";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "./loadingScreen";
+import profile_photo from "../images/blank_profile.png"
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
@@ -12,8 +13,7 @@ const UserProfile = () => {
   const [userName, setUserName] = useState();
   const [userNum, setUserNum] = useState();
   const [loading, setLoading] = useState(true);
-  const [uplodedFile, setUplodedFile] = useState()
-  const editedData = { name: userName, phone_number: userNum, profile_picture: uplodedFile };
+  const editedData = { name: userName, phone_number: userNum };
 
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const UserProfile = () => {
       }
     };
     fetchData();
-  }, [userId]);
+  }, [userData.name, userData.phone_number, userId]);
 
 
   const handleEditClick = () => {
@@ -62,14 +62,10 @@ const UserProfile = () => {
     setUserNum(e.target.value);
   };
 
-  const handleFileInput = (e) => {
-    setUplodedFile(e.target.files[0])
-  }
-
   var dateObject = new Date(userData.registration_date);
 
   var year = dateObject.getFullYear();
-  var month = dateObject.getMonth() + 1; // JavaScript months are zero-based
+  var month = dateObject.getMonth() + 1;
   var day = dateObject.getDate();
 
   if (loading || !userData) return <LoadingScreen />;
@@ -83,7 +79,7 @@ const UserProfile = () => {
               {/* Editing form */}
               <div className="circle-image text-center">
                 <img
-                  src={userData.profile_picture}
+                  src={profile_photo}
                   alt="Profile"
                   className="rounded-circle img-thumbnail"
                   onError={(e) => {
@@ -92,13 +88,7 @@ const UserProfile = () => {
                 />
                 <p className="title">{userData.name}</p>
               </div>
-
               <div className="my-3 text-center icons-container">
-                <input
-                  type="file"
-                  className="profile-icon my-1 mx-2 far fa-edit"
-                  onChange={handleFileInput}
-                />
                 <i
                   className="profile-icon my-1 mx-2 far fa-save"
                   onClick={handleSaveClick}
@@ -147,7 +137,7 @@ const UserProfile = () => {
               {/* Display user information */}
               <div className="circle-image text-center">
                 <img
-                  src={userData.profile_picture}
+                  src={profile_photo}
                   alt="Profile"
                   className="rounded-circle img-thumbnail"
                   onError={(e) => {
