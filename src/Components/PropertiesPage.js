@@ -80,17 +80,14 @@ const PropertiesPage = () => {
                                             <Col xs={12} md={6}>
                                                 <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
                                                     <span>{property.title}</span>
-                                                    {/* <span>55408</span> */}
                                                     <span style={{ color: property.availability ? 'green' : 'red' }}>
                                                         {property.availability ? 'Available' : 'Rented'}
                                                     </span>
                                                 </Card.Title>
-                                                <Card.Text className='price d-flex justify-content-between'>
-                                                    <span>Price: ${property.price}</span>
-                                                    {/* <span>7.25% CAP</span> */}
-                                                    <span>Address: {property.address}</span>
-                                                </Card.Text>
                                                 <Card.Text >{formatDate(property.created_at)}</Card.Text>
+                                                <Card.Text className='price'>
+                                                    <span>Price: ${property.price}</span>
+                                                </Card.Text>
                                                 <Link to={`/property/${property.id}`}>
                                                     <button className='btn more-details'><b>More Details</b></button>
                                                 </Link>
