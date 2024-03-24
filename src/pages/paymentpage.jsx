@@ -35,8 +35,8 @@ const PaymentPage = () => {
           setUid(request.renter);
           setRenter(request.renter);
           setProperty(request.property);
-          console.log(property);
-          console.log(request);
+          // console.log(property);
+          // console.log(request);
         } else {
           setIsAuthorized(false);
         }
@@ -51,8 +51,8 @@ const PaymentPage = () => {
       const response = await fetch(`http://127.0.0.1:8000/users/${uid}`);
       const request = await response.json();
       setEmail(request.email);
-      console.log(emails);
-      console.log(names);
+      // console.log(emails);
+      // console.log(names);
       setName(request.name);
     };
 
@@ -81,10 +81,10 @@ const PaymentPage = () => {
   }
 
   const handleShowModal = () => setShowModal(true);
-  console.log(property);
+  // console.log(property);
   const handleCloseModal = async () => {
     setShowModal(false);
-    // history("/");
+    history("/");
     const acceptanceServiceId = "service_k4f3lsq";
     const acceptanceTemplateId = "template_njhd8r2";
     const acceptancePublicKey = "TlLQ9jr1P3LE_J3q-";
@@ -110,20 +110,23 @@ const PaymentPage = () => {
 
     const updateProperty = async () => {
       try {
-        const response = await fetch(
+        await fetch(
           `http://127.0.0.1:8000/properties/${property}/`,
           {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ renter: renter }),
+            body: JSON.stringify({
+              renter: renter,
+              availability: false,
+            }),
           }
         );
 
-        const updatedData = await response.json();
-        console.log(updatedData);
-        console.log("Property updated successfully:", updatedData);
+        // const updatedData = await response.json();
+        // console.log(updatedData);
+        // console.log("Property updated successfully:", updatedData);
       } catch (error) {
         console.error("Error updating property:", error.message);
       }
@@ -133,8 +136,6 @@ const PaymentPage = () => {
   };
   const handlePaymentSuccess = () => {
     handleShowModal();
-    // Update the availability status to "Not Available"
-    // history("/");
   };
 
   return (
