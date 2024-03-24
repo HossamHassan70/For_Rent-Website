@@ -92,10 +92,18 @@ const OwnerProperties = () => {
     axios
       .get("http://localhost:8000/properties/")
       .then((response) => {
-        setProperties(response.data);
+        const filteredProperties = response.data.filter(property => {
+          if (userRole === 'Owner') {
+            return property.owner === userId;
+          } else if (userRole === 'Renter') {
+            return property.renter === userId;
+          }
+          return false;
+        });
+        setProperties(filteredProperties);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [userId, userRole]);
 
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
@@ -311,21 +319,19 @@ const OwnerProperties = () => {
 
                   {userRole === 'Owner' && (
                     <>
-                   
-
-                  <Button variant="primary" onClick={() => handleShowForm(property.id)}>
-                    Edit Property
-                  </Button>{" "}
-                  <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
-                    Delete Property
-                  </Button>
+                      <Button variant="primary" onClick={() => handleShowForm(property.id)}>
+                        Edit Property
+                      </Button>{" "}
+                      <Button variant="danger" onClick={() => handleShowConfirmation(property.id)}>
+                        Delete Property
+                      </Button>
                     </>
                   )}
-               
+
                   <Link to={`/property/${property.id}`}>
 
-                      <button className='btn more-details'><b>More Details</b></button>
-                    </Link>
+                    <button className='btn more-details'><b>More Details</b></button>
+                  </Link>
                 </Card.Body>
               </Card>
             ))}
