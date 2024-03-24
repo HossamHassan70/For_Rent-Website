@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../MyStore/actions/authAction";
 import { jwtDecode } from "jwt-decode";
 import '../pages/css/Navbar.css'
+import LogoImage from '../images/logo1.png';
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,8 +38,12 @@ const NavigationBar = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Container>
-        <Navbar.Brand className="logo" as={Link} to="/" style={{ fontWeight: "bold" }}>
-          FoRent
+        <Navbar.Brand as={Link} to="/">
+          <img
+            src={LogoImage}
+            alt="FoRent Logo"
+            style={{ height: '35px', width: 'auto', marginRight: '10px' }}
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
