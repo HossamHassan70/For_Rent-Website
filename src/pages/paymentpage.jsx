@@ -17,6 +17,8 @@ const PaymentPage = () => {
   const [uid, setUid] = useState("");
   const [emails, setEmail] = useState("");
   const [names, setName] = useState("");
+  const [renter, setRenter] = useState("");
+  const [property, setProperty] = useState("");
 
   useEffect(() => {
     const fetchUserRequestStatus = async () => {
@@ -31,6 +33,10 @@ const PaymentPage = () => {
         if (decodedToken.user.id === request.renter && request.is_accepted) {
           setIsAuthorized(true);
           setUid(request.renter);
+          setRenter(request.renter);
+          setProperty(request.property);
+          console.log(property);
+          console.log(request);
         } else {
           setIsAuthorized(false);
         }
@@ -56,7 +62,7 @@ const PaymentPage = () => {
     } else {
       setLoading(false);
     }
-  }, [refreshToken, requestId]);
+  }, [refreshToken, requestId, uid, emails, names, property, renter]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -75,7 +81,7 @@ const PaymentPage = () => {
   }
 
   const handleShowModal = () => setShowModal(true);
-
+  console.log(property);
   const handleCloseModal = async () => {
     setShowModal(false);
     history("/");
@@ -101,6 +107,25 @@ const PaymentPage = () => {
     } catch (error) {
       console.error("Error sending email:", error);
     }
+
+    const updateProperty = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/properties/${property}/`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ renter: renter }),
+          }
+        );
+      } catch (error) {
+        console.error("Error updating property:", error.message);
+      }
+    };
+
+    updateProperty();
   };
   const handlePaymentSuccess = () => {
     handleShowModal();
