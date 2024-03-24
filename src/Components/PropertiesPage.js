@@ -86,7 +86,7 @@ const PropertiesPage = () => {
                                                 </Card.Title>
                                                 <Card.Text >{formatDate(property.created_at)}</Card.Text>
                                                 <Card.Text className='price'>
-                                                    <span>Price: ${property.price}</span>
+                                                    <span>Price: {property.price} EGP</span>
                                                 </Card.Text>
                                                 <Link to={`/property/${property.id}`}>
                                                     <button className='btn more-details'><b>More Details</b></button>
