@@ -15,7 +15,10 @@ const ValidSchema = yup.object().shape({
     .string()
     .min(8)
     .max(20)
-    .matches(passwordRegex, "Password Requriment Error")
+    .matches(
+      passwordRegex,
+      "Please ensure that it includes at least one uppercase letter, one lowercase letter, one digit, one special character from the set @#$%^&+=, one character that is not a letter or digit, and has a minimum length of 8 characters."
+    )
     .required("Password Must Match")
     .required("Must Fill this Field"),
   repeatPassword: yup

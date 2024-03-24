@@ -228,12 +228,6 @@ export default function SignUp() {
                   btnCo="primary"
                   btnText="SignUp"
                 />
-                <BtnsCo
-                  btnCo="secondary"
-                  btnLogo="fab fa-google"
-                  btnText="SignUp With Google"
-                  btnStyle=""
-                />
                 <p>
                   Already Have An Account?{" "}
                   <Link className="link-sign" to={"/login"}>
