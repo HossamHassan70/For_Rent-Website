@@ -70,7 +70,7 @@ const PropertiesList = () => {
                     </Card.Title>
                     <Card.Text >{formatDate(product.created_at)}</Card.Text>
                     <Card.Text className='price'>
-                      <span>Price: ${product.price}</span>
+                      <span>Price: {product.price} EGP </span>
                     </Card.Text>
                     <Link to={`/property/${product.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
