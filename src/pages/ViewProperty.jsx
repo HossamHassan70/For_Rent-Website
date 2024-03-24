@@ -163,7 +163,6 @@ const PropertyView = () => {
                               className="thumbnail-image"
                               src={propertyInfo.image}
                             />
-                            <div className="thumbnail-title">Image 1</div>
 
                           </div>
                         )}
@@ -177,7 +176,6 @@ const PropertyView = () => {
                               className="thumbnail-image"
                               src={propertyInfo.image1}
                             />
-                            <div className="thumbnail-title">Image 2</div>
                           </div>
                         )}
                         {propertyInfo.image2 && (
@@ -190,7 +188,6 @@ const PropertyView = () => {
                               className="thumbnail-image"
                               src={propertyInfo.image2}
                             />
-                            <div className="thumbnail-title">Image 3</div>
                           </div>
                         )}
                         {propertyInfo.image3 && (
@@ -203,7 +200,6 @@ const PropertyView = () => {
                               className="thumbnail-image"
                               src={propertyInfo.image3}
                             />
-                            <div className="thumbnail-title">Image 4</div>
                           </div>
                         )}
                       </div>
