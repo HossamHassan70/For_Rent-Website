@@ -297,7 +297,7 @@ const Requests = () => {
       </div>
 
       {propertyRequests.length === 0 ? (
-        <p className="no-reviews">You haven't received any request yet.</p>
+        <p className="no-requests">There Is No Requests At The Moment.</p>
       ) : (
         <>
           <h2 className="requests-header text-center">My Requests</h2>
@@ -358,9 +358,14 @@ const Requests = () => {
 
                     {request.is_accepted ? (
                       request.propertyDetails?.availability ? (
+                        <>
                         <Badge className="my-1" bg="success">
-                          Accepted - Payment Pending
+                          Accepted
                         </Badge>
+                        <Badge className="my-1 mx-1" bg="warning">
+                          Payment Pending
+                        </Badge>
+                        </>
                       ) : (
                         <Badge className="my-1" bg="success">
                           Accepted - Payment Received

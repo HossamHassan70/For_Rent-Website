@@ -99,3 +99,11 @@
 .available {
     background-color: #198754;
 }
+
+.no-requests {
+    font-size: 2rem;
+    color: #dc3545;
+    font-weight: 600;
+    text-align: center;
+    height: 60vh;
+}
