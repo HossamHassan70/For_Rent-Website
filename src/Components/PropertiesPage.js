@@ -6,6 +6,12 @@ import { Link } from 'react-router-dom';
 import LoadingScreen from '../pages/loadingScreen';
 import Pagination from 'react-js-pagination';
 import '../pages/css/propertiesList.css';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+
+const formatDate = (dateString) => {
+    const date = parseISO(dateString);
+    return formatDistanceToNow(date, { addSuffix: true });
+};
 
 const PropertiesPage = () => {
     const location = useLocation();
@@ -55,7 +61,7 @@ const PropertiesPage = () => {
         <Container fluid className='mt-5'>
             <Row>
                 <Col className="text-center">
-                    <h3 className='mb-2'><b>PROPERTIES - {type && type.toUpperCase()}</b></h3>
+                    <h3><b>PROPERTIES - {type && type.toUpperCase()}</b></h3>
                 </Col>
             </Row>
             <Row>
@@ -74,13 +80,14 @@ const PropertiesPage = () => {
                                             <Col xs={12} md={6}>
                                                 <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
                                                     <span>{property.title}</span>
-                                                    <span>55408</span>
+                                                    <span style={{ color: property.availability ? 'green' : 'red' }}>
+                                                        {property.availability ? 'Available' : 'Rented'}
+                                                    </span>
                                                 </Card.Title>
-                                                <Card.Text className='price d-flex justify-content-between'>
+                                                <Card.Text >{formatDate(property.created_at)}</Card.Text>
+                                                <Card.Text className='price'>
                                                     <span>Price: ${property.price}</span>
-                                                    <span>7.25% CAP</span>
                                                 </Card.Text>
-                                                <Card.Text className='mx-2 since'>4 days ago</Card.Text>
                                                 <Link to={`/property/${property.id}`}>
                                                     <button className='btn more-details'><b>More Details</b></button>
                                                 </Link>

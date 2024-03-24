@@ -42,7 +42,7 @@ const BuildingDesign = () => {
             <Image src={condaBuildingImage} alt="Condo Building" fluid />
           </Link>
           <div className="building-text">
-            <p><strong>CONDA</strong></p>
+            <p><strong>CONDO</strong></p>
           </div>
         </Col>
       </Row>

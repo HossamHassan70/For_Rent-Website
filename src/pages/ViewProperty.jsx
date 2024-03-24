@@ -136,17 +136,16 @@ const PropertyView = () => {
           {propertyInfo && (
             <div>
               <Card>
-               
 
                 <Card.Body>
-                <div className="prop-image-container">
-      <Image className="prop-image" src={selectedImage} />
-      {!propertyInfo.availability && (
-         <div class="black-tape">
-         <span class="tape-text">Rented</span>
-     </div>
-      )}
-    </div>
+                  <div className="prop-image-container">
+                    <Image className="prop-image" src={selectedImage} />
+                    {!propertyInfo.availability && (
+                      <div className="black-tape">
+                        <span className="tape-text">Rented</span>
+                      </div>
+                    )}
+                  </div>
                   {(propertyInfo.image1 || propertyInfo.image2 || propertyInfo.image3) && (
                     <>
                       <Card.Title className="display-5 mb-4 text-center bold-title">
@@ -261,7 +260,16 @@ const PropertyView = () => {
                     <p>
                       <b>Property Type:</b> {propertyInfo.type}
                     </p>
-                  
+                    <p>
+                      <b>Availability:</b>{" "}
+                      <span
+                        className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"
+                          }`}
+                      >
+                        {propertyInfo.availability ? "Available" : "Not Available"}
+                      </span>
+                    </p>
+
                   </div>
                 </Tab>
                 <Tab eventKey="basic information" title="Basic Information">
@@ -274,15 +282,6 @@ const PropertyView = () => {
                     </p>
                     <p>
                       <b>Owner:</b> {propertyInfo.owner}
-                    </p>
-                    <p>
-                      <b>Availability:</b>{" "}
-                      <span
-                        className={`badge ${propertyInfo.availability ? "bg-success" : "bg-danger"
-                          }`}
-                      >
-                        {propertyInfo.availability ? "Available" : "Not Available"}
-                      </span>
                     </p>
                   </div>
                 </Tab>
@@ -349,7 +348,7 @@ const PropertyView = () => {
                   {formErrors.price}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Button variant="primary" type="submit" disabled={submittingRequest}>
+              <Button className="mt-3" variant="primary" type="submit" disabled={submittingRequest}>
                 {submittingRequest ? "Submitting..." : "Submit Request"}
               </Button>
             </Form>

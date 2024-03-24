@@ -49,7 +49,7 @@ const PropertiesList = () => {
 
   return (
     <Container fluid className='mt-5'>
-      <h3 className='mb-2'><b><span style={{ color: '#008f97' }}>NEWLY</span> ADDED</b></h3>
+      <h3><b><span style={{ color: '#008f97' }}>NEWLY</span> ADDED</b></h3>
       <Row>
         {currentProperties.map(product => (
           <Col key={product.id} xs={12} lg={6}>
@@ -64,13 +64,14 @@ const PropertiesList = () => {
                   <Col xs={12} md={6}>
                     <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
                       <span>{product.title}</span>
-                      <span>55408</span>
+                      <span style={{ color: product.availability ? 'green' : 'red' }}>
+                        {product.availability ? 'Available' : 'Rented'}
+                      </span>
                     </Card.Title>
-                    <Card.Text className='price d-flex justify-content-between'>
-                      <span>Price: ${product.price}</span>
-                      <span>7.25% CAP</span>
-                    </Card.Text>
                     <Card.Text >{formatDate(product.created_at)}</Card.Text>
+                    <Card.Text className='price'>
+                      <span>Price: ${product.price}</span>
+                    </Card.Text>
                     <Link to={`/property/${product.id}`}>
                       <button className='btn more-details'><b>More Details</b></button>
                     </Link>

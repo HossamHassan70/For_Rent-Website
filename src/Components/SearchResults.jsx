@@ -44,10 +44,14 @@ const SearchResults = () => {
                                         <Card.Title className='mt-2 prop-title d-flex justify-content-between'>
                                             <span>{product.title}</span>
                                             {/* <span>55408</span> */}
+                                            <span style={{ color: product.availability ? 'green' : 'red' }}>
+                                                {product.availability ? 'Available' : 'Rented'}
+                                            </span>
                                         </Card.Title>
                                         <Card.Text className='price d-flex justify-content-between'>
                                             <span>Price: ${product.price}</span>
                                             {/* <span>7.25% CAP</span> */}
+                                            <span>Address: {product.address}</span>
                                         </Card.Text>
                                         <Card.Text >{formatDate(product.created_at)}</Card.Text>
                                         <Link to={`/property/${product.id}`}>

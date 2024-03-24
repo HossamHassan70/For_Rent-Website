@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faTwitter, faInstagram, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Container, Row, Col } from 'react-bootstrap';
+import logo from '../images/logo.jpeg';
 
 function Footer() {
     return (
@@ -10,10 +11,8 @@ function Footer() {
             <Container>
                 <Row>
                     <Col  className="d-flex justify-content-start">
-                        <div className="info mb-3">
-                            <p className="mb-3">
-                                Elevate your rental experience with FORENT. Find, lease, and enjoy your new home hassle-free.
-                            </p>
+                    <div className="info mb-3">
+                            <img src={logo} alt="FORENT Logo" style={{ width: "150px" }} />
                             <div className="copyright">
                                 <div>
                                     &copy; 2024 -{" "}

@@ -16,12 +16,16 @@ const VerifyEmailPage = () => {
   useEffect(() => {
     const verifyEmailAction = async () => {
       try {
-        await axios.post("http://localhost:8000/verify/", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        await axios.post(
+          "http://localhost:8000/verify/",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`,
+            },
+          }
+        );
       } catch (error) {
         console.error("Error verifying email:", error);
       }
@@ -30,6 +34,7 @@ const VerifyEmailPage = () => {
     if (refreshToken) {
       verifyEmailAction();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refreshToken, accessToken]);
 
   const handleSubmit = async (e) => {
@@ -49,7 +54,6 @@ const VerifyEmailPage = () => {
         }
       );
 
-      //   alert("Email verified successfully");
       dispatch(logout());
       navigate("/login");
       setInputValue("");
