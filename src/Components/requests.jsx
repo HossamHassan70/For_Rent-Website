@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import ReactPaginate from "react-paginate";
 import "../pages/css/requests.css";
+import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
   const [propertyRequests, setPropertyRequests] = useState([]);
@@ -30,6 +31,7 @@ const Requests = () => {
   const token = useSelector((state) => state.authReducer.refreshToken);
   const itemsPerPage = 5;
   const [page, setPage] = useState(0);
+  const navigate = useNavigate();
   // console.log(propertyRequests)
 
   useEffect(() => {
@@ -246,6 +248,11 @@ const Requests = () => {
     setShowRejectModal(true);
   };
 
+  // // checkout button
+  const handleCheckout = (requestId) => {
+    navigate(`/payment/${requestId}/`);
+  };
+
   // reject button in modal (close modal)
   const handleCloseRejectModal = () => {
     setShowRejectModal(false);
@@ -394,7 +401,6 @@ const Requests = () => {
                             </Button>
                           ) : null}
 
-                          {/* Always render the "Reject" button */}
                           <Button
                             variant="danger"
                             onClick={() => handleReject(request.id)}
@@ -407,6 +413,25 @@ const Requests = () => {
                           >
                             Reject
                           </Button>
+                        </div>
+                      )}
+                    {userRole === "Renter" &&
+                      request.is_accepted && (
+                        <div className="my-2">
+                          {request.propertyDetails?.availability ? (
+                            <Button
+                              variant="primary"
+                              onClick={() => handleCheckout(request.id)}
+                              className="mr-2"
+                              style={{
+                                borderRadius: "10px",
+                                fontWeight: "bold",
+                                transition: "background-color 0.3s ease-in-out",
+                              }}
+                            >
+                              CheckOut
+                            </Button>
+                          ) : null}
                         </div>
                       )}
                   </div>
