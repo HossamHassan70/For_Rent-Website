@@ -41,7 +41,7 @@ function ReviewsList({ userRole, userId, propertyId }) {
       return;
     }
 
-    const userReview = reviews.find(review => review.user === userId);
+    const userReview = propertyReviews.find(review => review.user === userId);
     if (userReview) {
       setShowAlert(true);
       setTimeout(() => {
