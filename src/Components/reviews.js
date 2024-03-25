@@ -22,6 +22,8 @@ function ReviewsList({ userRole, userId, propertyId }) {
   const [formErrors, setFormErrors] = useState({});
   const [modalMode, setModalMode] = useState('add');
   const [showAlert, setShowAlert] = useState(false);
+  const propertyReviews = reviews.filter(review => review.property.toString() === propertyId);
+  // console.log(propertyReviews)
 
   useEffect(() => {
     dispatch(fetchReviews());
@@ -144,12 +146,12 @@ function ReviewsList({ userRole, userId, propertyId }) {
               </button>
             )}
           </div>
-          {reviews.length === 0 ? (
+          {propertyReviews.length === 0 ? (
             <p className="text-center no-reviews mt-4">No reviews available at the moment.</p>
           ) : (
             <>
-              {userId && reviews.some(review => review.user === userId) && (
-                reviews
+              {userId && propertyReviews.some(review => review.user === userId) && (
+                propertyReviews
                   .filter(review => review.user === userId)
                   .map(review => (
                     <div key={review.id} className="review-container mt-4">
@@ -177,7 +179,7 @@ function ReviewsList({ userRole, userId, propertyId }) {
                   ))
               )}
 
-              {reviews
+              {propertyReviews
                 .filter(review => !(review.user === userId))
                 .map(review => (
                   <div key={review.id} className="review-container mt-4">
