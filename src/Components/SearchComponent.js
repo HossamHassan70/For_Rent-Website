@@ -86,11 +86,6 @@ const Search = () => {
                   <Dropdown.Menu>
                     <Dropdown.Header>Bedrooms</Dropdown.Header>
                     <BedroomButton
-                      value="Studio"
-                      selectedValue={selectedBedroom}
-                      onSelect={handleBedroomSelect}
-                    />
-                    <BedroomButton
                       value="1"
                       selectedValue={selectedBedroom}
                       onSelect={handleBedroomSelect}

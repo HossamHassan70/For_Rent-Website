@@ -6,8 +6,8 @@ import Image3 from '../images/image2.jpeg';
 
 function AboutUs() {
     return (
-        <div className="about_section layout_padding">
-            <Container className="text-center">
+        <div className="about_section layout_padding" style={{height: "64vh"}}>
+            <Container className="text-center mt-5">
                 <div className="about_section_main">
                     <Row>
                         <Col md={6}>

@@ -295,7 +295,7 @@ const OwnerProperties = () => {
       </h1>
       <div className="card-container">
         {currentProperties.length === 0 ? (
-          <p style={{ fontWeight: 'bold', color: 'red' }}>
+          <p className="no-properties">
             You haven't added any properties yet.
           </p>
         ) : (
